@@ -92,12 +92,12 @@
       "nombreBase": "BAND"
     },
     {
-      "nombre": "CAMB POSIC",
+      "nombre": "CAMBIO POSIC",
       "estilo": "Libre",
       "descripcion": "Cambios de posiciones en libre solo en patada: ventral, dorsal, lateral izq. y der.",
       "errorQueCorrige": "Control corporal y equilibrio en el eje longitudinal",
       "requiereDesambiguacion": false,
-      "nombreBase": "CAMB POSIC"
+      "nombreBase": "CAMBIO POSIC"
     },
     {
       "nombre": "RUT L",

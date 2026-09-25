@@ -1,12 +1,18 @@
 {
-  "version": "3.4",
+  "version": "3.4.1",
   "fecha": "2026-09-25",
   "descripcion": "Version vigente de la metodologia del entrenador. La app estampa esta version en cada plan aprobado (FR-026).",
+  "correccionesDeEstaVersion": [
+    "Nombre unificado del ejercicio de cambios de posicion: CAMBIO POSIC en la seccion 14 y en la seccion 19. Antes la seccion 14 escribia CAMBIO POSI y la seccion 19 definia CAMB POSIC.",
+    "Seccion 7 completada: los ejercicios que exigen desambiguacion son cinco, no tres. Se anaden 3+3 PATADA LATERAL y PULGAR ROZA EL MUSLO."
+  ],
+  "nota_version": "Es una correccion, no una revision metodologica: no cambia ninguna regla de entrenamiento. Por eso 3.4.1 y no 3.5. Los planes aprobados antes siguen sellados con 3.4 y su contenido no se reescribe (FR-026).",
+  "nota_nombre_archivo": "El nombre del archivo conserva V3.4 a proposito. La version de referencia es la de este manifiesto, no la del nombre: renombrarlo alteraria la trazabilidad de los planes ya aprobados (decision D4 de research.md).",
   "documentos": [
     {
       "ruta": "docs/metodologia/PROMPT_MAESTRO_V3.4.md",
       "papel": "Fuente normativa. La seccion 19 es la Biblioteca Oficial de ejercicios.",
-      "sha256": "cd8b36cd8f31dc0295fb33790a1a7c50b8d6b203fdf9e2eb3708b95c54816a00"
+      "sha256": "ee529ae181c840a181baca8b96c2b2e69eab95b06b44043f16c43c890dafaaf1"
     },
     {
       "ruta": "docs/metodologia/Biblioteca de ejercicios.docx",

@@ -116,8 +116,42 @@ class Analizador {
     return finales;
   }
 
+  /// Posiciones de `+` que forman parte del nombre de un ejercicio de la
+  /// Biblioteca y por tanto **no** separan series.
+  ///
+  /// Hay ejercicios cuyo nombre lleva un `+`: `3+3 PATADA LATERAL`,
+  /// `CLAVADO + FLECHA ESTÁTICA`, `CLAVADO + SUB + 6 BRAZADAS`. Partir ahí
+  /// destruiría el nombre y el ejercicio quedaría marcado como inventado. El
+  /// nombre de la Biblioteca manda sobre la puntuación.
+  Set<int> _masProtegidos(String texto) {
+    final protegidos = <int>{};
+    final enMayusculas = texto.toUpperCase();
+
+    for (final nombre in _nombresConMas) {
+      var desde = 0;
+      while (true) {
+        final posicion = enMayusculas.indexOf(nombre, desde);
+        if (posicion == -1) break;
+        for (var i = posicion; i < posicion + nombre.length; i++) {
+          if (texto[i] == '+') protegidos.add(i);
+        }
+        desde = posicion + 1;
+      }
+    }
+
+    return protegidos;
+  }
+
+  late final List<String> _nombresConMas = biblioteca.todos
+      .map((e) => e.nombreBase.toUpperCase())
+      .where((nombre) => nombre.contains('+'))
+      .toSet()
+      .toList()
+    ..sort((a, b) => b.length.compareTo(a.length));
+
   List<_Trozo> _partirPorMasDeNivelSuperior(_Trozo trozo) {
     final partes = <_Trozo>[];
+    final protegidos = _masProtegidos(trozo.texto);
     var profundidad = 0;
     var inicio = 0;
 
@@ -125,7 +159,7 @@ class Analizador {
       final c = trozo.texto[i];
       if (c == '(') profundidad++;
       if (c == ')') profundidad--;
-      if (c == '+' && profundidad == 0) {
+      if (c == '+' && profundidad == 0 && !protegidos.contains(i)) {
         final fragmento = trozo.texto.substring(inicio, i);
         if (fragmento.trim().isNotEmpty) {
           partes.add(_Trozo(fragmento, trozo.desplazamiento + inicio));
@@ -333,8 +367,16 @@ class Analizador {
       }
     }
 
-    // Resolver el nombre del ejercicio a partir de las palabras sobrantes.
-    final resolucion = _resolverEjercicio(
+    // Resolver el nombre del ejercicio.
+    //
+    // Primero sobre el texto crudo, porque hay nombres de la Biblioteca que el
+    // tokenizador parte en pedazos: `3+3 PATADA LATERAL`, `BRAZA 1-2-3`,
+    // `2-2-2`, `CLAVADO + SUB + 6 BRAZADAS`. Buscarlos por palabras sueltas
+    // los daría por inexistentes.
+    var resolucion = _buscarEnTextoCrudo(texto, desplazamiento, estilo);
+
+    // Si el texto crudo no dio nada, se intenta con las palabras sobrantes.
+    resolucion ??= _resolverEjercicio(
       nombresCandidatos,
       texto,
       desplazamiento,
@@ -380,6 +422,72 @@ class Analizador {
       pendientes: pendientes,
       avisos: avisos,
     );
+  }
+
+  /// Todos los nombres base de la Biblioteca, del más largo al más corto.
+  ///
+  /// El orden importa: `ROLIDO CON 1 BRAZO` debe probarse antes que `ROLIDO`,
+  /// o el nombre largo nunca se reconocería.
+  late final List<String> _nombresOrdenados = biblioteca.todos
+      .map((e) => e.nombreBase.toUpperCase())
+      .toSet()
+      .toList()
+    ..sort((a, b) => b.length.compareTo(a.length));
+
+  /// Busca un nombre de la Biblioteca directamente en el texto de la serie.
+  ///
+  /// Exige frontera de palabra a ambos lados, para que `N` no coincida dentro
+  /// de cualquier palabra. Devuelve `null` si no encuentra nada, para que el
+  /// llamante pruebe la resolución por palabras.
+  _Resolucion? _buscarEnTextoCrudo(
+    String texto,
+    int desplazamiento,
+    Estilo? estilo,
+  ) {
+    final enMayusculas = texto.toUpperCase();
+
+    for (final nombre in _nombresOrdenados) {
+      if (nombre.length < 3) continue;
+
+      final posicion = enMayusculas.indexOf(nombre);
+      if (posicion == -1) continue;
+      if (!_tieneFronteraDePalabra(enMayusculas, posicion, nombre.length)) {
+        continue;
+      }
+
+      final resultado = biblioteca.buscar(nombre, estilo: estilo);
+
+      if (resultado is EjercicioEncontrado) {
+        return _Resolucion(resultado.ejercicio, const []);
+      }
+      if (resultado is EjercicioAmbiguo) {
+        return _Resolucion(null, [
+          FragmentoPendiente(
+            texto: nombre,
+            posicionInicio: desplazamiento + posicion,
+            posicionFin: desplazamiento + posicion + nombre.length,
+            motivo: MotivoPendiente.ambiguo,
+            detalle: 'Existe en '
+                '${resultado.estilosPosibles.map((e) => e.nombre).join(', ')}. '
+                'Indique el estilo',
+          ),
+        ]);
+      }
+    }
+
+    return null;
+  }
+
+  static bool _tieneFronteraDePalabra(String texto, int inicio, int longitud) {
+    bool esAlfanumerico(String c) =>
+        RegExp(r'[A-Za-zÁÉÍÓÚÜÑ0-9]').hasMatch(c);
+
+    if (inicio > 0 && esAlfanumerico(texto[inicio - 1])) return false;
+
+    final fin = inicio + longitud;
+    if (fin < texto.length && esAlfanumerico(texto[fin])) return false;
+
+    return true;
   }
 
   /// Intenta formar el nombre de un ejercicio con las palabras sobrantes.

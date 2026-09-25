@@ -51,7 +51,7 @@ historias necesitan.
 
 - [X] T007 Crear `docs/metodologia/metodologia.json` declarando `version: "3.4"`, fecha y huella SHA-256 de `PROMPT_MAESTRO_V3.4.md` y de `Biblioteca de ejercicios.docx`, según la decisión D4 de `research.md`
 - [X] T008 Escribir un script de extracción de la sección 19 de `docs/metodologia/PROMPT_MAESTRO_V3.4.md` que genere `assets/biblioteca/ejercicios.json` con los campos `nombre`, `estilo`, `descripcion`, `errorQueCorrige` y `requiereDesambiguacion`
-- [ ] T009 Revisar a mano el resultado de T008 con el entrenador: confirmar el conteo de ejercicios por estilo y marcar los nombres que se repiten entre estilos (`FLECHA`, `ROLIDO`, `ROLIDO CON 1 BRAZO`) con `requiereDesambiguacion: true`. **Un ejercicio mal transcrito es una regla mal aplicada**
+- [X] T009 Revisar a mano el resultado de T008 con el entrenador: confirmar el conteo de ejercicios por estilo y marcar los nombres que se repiten entre estilos (`FLECHA`, `ROLIDO`, `ROLIDO CON 1 BRAZO`) con `requiereDesambiguacion: true`. **Un ejercicio mal transcrito es una regla mal aplicada**
 - [X] T010 [P] Implementar las constantes de categoría en `lib/dominio/metodologia/categorias.dart`: Iniciación 500–800 m / 2 sesiones / sin ATR; Tecnificación 800–1000 m / 2 / sin ATR; Precompetitivo 1800–2200 m / 3 / con ATR; Competitivo 4000–5000 m / 5 / con ATR; Alto Rendimiento 5000–6000 m / 10 / con ATR
 - [X] T011 [P] Implementar las seis zonas en `lib/dominio/metodologia/zonas.dart` con bandas contiguas y sin solapamiento: A1 60–70%, A2 70–80%, A3 80–85%, AT 85–92%, Máx 92%+, Velocidad (controlada por ritmo, no por frecuencia cardíaca)
 - [X] T012 [P] Implementar las distribuciones de fase ATR en `lib/dominio/metodologia/fases_atr.dart`: Acumulación A1 60 / A2 25 / A3 10 / AT 5, técnico 50%; Transformación A1 30 / A2 35 / A3 15 / AT 15 / Máx 5, técnico 30%; Realización A1 25 / A2 25 / A3 15 / AT 10 / Máx 15 / Velocidad 10, técnico 20%
@@ -325,12 +325,13 @@ manual que hoy hace el entrenador.
 **92 de 96 tareas completadas.** Las cuatro restantes dependen del entrenador o
 quedaron sin aplicar:
 
-- **T009 — Revisión de la Biblioteca extraída.** Pendiente del entrenador. La
-  extracción dio **70 ejercicios** (Libre 23, General 18, Espalda 10, Pecho 10,
-  Mariposa 9). Detectó **cinco** nombres base ambiguos, no los tres que nombra
-  la sección 7: además de `FLECHA`, `ROLIDO` y `ROLIDO CON 1 BRAZO`, también se
-  repiten entre estilos `3+3 PATADA LATERAL` (Libre y Espalda) y
-  `PULGAR ROZA EL MUSLO` (Libre y Mariposa).
+- **T009 — Revisión de la Biblioteca extraída. CONFIRMADA por el entrenador el
+  2026-09-25.** La extracción dio **70 ejercicios** (Libre 23, General 18,
+  Espalda 10, Pecho 10, Mariposa 9). Los **cinco** nombres ambiguos quedan
+  confirmados como ejercicios distintos, cada uno con su forma de ejecución y su
+  error a corregir: `FLECHA`, `ROLIDO`, `ROLIDO CON 1 BRAZO`, `3+3 PATADA
+  LATERAL` y `PULGAR ROZA EL MUSLO`. La sección 7 del documento normativo se
+  completó de tres a cinco en la metodología 3.4.1.
 
 - **T091 — No aplica.** Solo entraba en juego si V10 no cuadraba, y cuadró: la
   sesión S2 del 04/08 da 1.900 m exactos y la semana 5.700 m. Los dos defectos
@@ -354,3 +355,29 @@ quedaron sin aplicar:
    dos nombres es el bueno y corregir el documento.
 
 2. **Cinco ejercicios ambiguos, no tres** (ver T009).
+
+### Resolución de los hallazgos (metodología 3.4.1, 2026-09-25)
+
+El entrenador confirmó ambos hallazgos y la metodología pasó a **3.4.1**. Es una
+corrección, no una revisión metodológica: no cambia ninguna regla de
+entrenamiento, por eso 3.4.1 y no 3.5.
+
+1. **`CAMBIO POSI` / `CAMB POSIC` → `CAMBIO POSIC`.** Son el mismo ejercicio.
+   Unificado en las secciones 14 y 19 del documento normativo. Los dos nombres
+   antiguos **no** se aceptan por compatibilidad: aceptarlos sería corregir por
+   aproximación, que es lo que la regla R2 prohíbe. Hay una prueba que lo vigila.
+
+2. **Cinco ejercicios ambiguos, no tres.** Sección 7 completada con
+   `3+3 PATADA LATERAL` y `PULGAR ROZA EL MUSLO`. Hay una prueba por cada uno de
+   los cinco.
+
+Corregir esto destapó un tercer defecto del analizador: los nombres de la
+Biblioteca que llevan signos que el tokenizador parte —`3+3 PATADA LATERAL`,
+`CLAVADO + SUB + 6 BRAZADAS`, `BRAZA 1-2-3`— se daban por inexistentes. Ahora los
+nombres se buscan primero sobre el texto crudo, del más largo al más corto y con
+frontera de palabra, así que el nombre de la Biblioteca manda sobre la
+puntuación.
+
+El nombre del archivo conserva `V3.4` a propósito: la versión de referencia es la
+del manifiesto, no la del nombre. Renombrarlo alteraría la trazabilidad de los
+planes ya aprobados bajo la 3.4 (decisión D4).

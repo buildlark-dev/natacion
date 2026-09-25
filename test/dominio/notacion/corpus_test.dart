@@ -94,7 +94,7 @@ const corpus = <CasoCorpus>[
 /// pendientes, porque el propio documento se aparta de su Biblioteca.
 const corpusConDiscrepancia = <CasoCorpus>[
   CasoCorpus(
-    '200 AL CAMBIO POSI',
+    '200 AL CAMBIO POSI',  // nombre retirado en 3.4.1
     metros: 200,
     implementos: [Implemento.aletas],
   ),
@@ -194,46 +194,80 @@ void main() {
     });
   });
 
-  group('discrepancia real del documento normativo', () {
-    // HALLAZGO (2026-09-25): la sesión de ejemplo de la sección 14 escribe
-    // "CAMBIO POSI", pero la sección 19 define el ejercicio como
-    // "CAMB POSIC". La regla R2 exige coincidencia exacta, así que marcarlo
-    // como fuera de biblioteca es el comportamiento correcto, no un fallo del
-    // analizador.
+  group('discrepancia resuelta en la metodología 3.4.1', () {
+    // HALLAZGO (2026-09-25), ya corregido: la sesión de ejemplo de la
+    // sección 14 escribía "CAMBIO POSI" y la sección 19 definía
+    // "CAMB POSIC". El entrenador confirmó que son el mismo ejercicio y el
+    // nombre unificado es "CAMBIO POSIC", corregido en ambas secciones.
     //
-    // Pendiente de que el entrenador decida cuál de los dos nombres es el
-    // bueno y corrija su documento (tarea T009).
+    // Estas pruebas vigilan que el nombre unificado funcione y que los
+    // antiguos NO se acepten: aceptarlos por compatibilidad sería corregir
+    // por aproximación, que es lo que la regla R2 prohíbe.
 
-    test('"CAMBIO POSI" se marca como fuera de la Biblioteca', () {
-      final resultado = analizador.analizar('200 AL CAMBIO POSI');
-
-      expect(resultado.metros, 200, reason: 'los metros sí se leen');
-      expect(resultado.pendientes, hasLength(1));
-      expect(
-        resultado.pendientes.first.motivo.name,
-        'ejercicioFueraDeBiblioteca',
-      );
-    });
-
-    test('"CAMB POSIC", el nombre de la sección 19, sí se reconoce', () {
-      final resultado = analizador.analizar('200 AL CAMB POSIC');
+    test('"CAMBIO POSIC", el nombre unificado, se reconoce', () {
+      final resultado = analizador.analizar('200 AL CAMBIO POSIC');
 
       expect(resultado.metros, 200);
       expect(
         resultado.pendientes,
         isEmpty,
-        reason: 'El nombre exacto de la Biblioteca debe reconocerse',
+        reason: 'Es el nombre vigente en las secciones 14 y 19',
       );
       expect(resultado.series.first.ejercicio, isNotNull);
       expect(resultado.series.first.esTecnica, isTrue);
     });
 
-    test('los metros siguen contando aunque el ejercicio quede pendiente', () {
+    test('la sesión de la sección 14 ya no deja pendientes', () {
+      final resultado = analizador.analizar('200 AL CAMBIO POSIC');
+      expect(resultado.pendientes, isEmpty);
+    });
+
+    test('los nombres antiguos no se aceptan por compatibilidad', () {
+      for (final antiguo in ['CAMBIO POSI', 'CAMB POSIC']) {
+        final resultado = analizador.analizar('200 AL $antiguo');
+        expect(
+          resultado.pendientes,
+          isNotEmpty,
+          reason: '"$antiguo" ya no está en la Biblioteca. Aceptarlo sería '
+              'corregir por aproximación, que la regla R2 prohíbe',
+        );
+      }
+    });
+
+    test('los metros se cuentan aunque el ejercicio quede pendiente', () {
       for (final caso in corpusConDiscrepancia) {
         final resultado = analizador.analizar(caso.texto);
         expect(resultado.metros, caso.metros, reason: caso.texto);
       }
     });
+  });
+
+  group('los cinco ejercicios ambiguos de la sección 7', () {
+    // El entrenador confirmó que son ejercicios distintos, cada uno con su
+    // forma de ejecución y su error a corregir. La lista de la sección 7 se
+    // completó de tres a cinco en la versión 3.4.1.
+
+    const ambiguos = [
+      'FLECHA',
+      'ROLIDO',
+      'ROLIDO CON 1 BRAZO',
+      '3+3 PATADA LATERAL',
+      'PULGAR ROZA EL MUSLO',
+    ];
+
+    for (final nombre in ambiguos) {
+      test('"$nombre" sin estilo queda marcado como ambiguo', () {
+        final resultado = analizador.analizar('200 $nombre');
+
+        expect(
+          resultado.pendientes.any((p) => p.motivo.name == 'ambiguo'),
+          isTrue,
+          reason: 'Existe en varios estilos: usarlo sin indicar cuál es '
+              'ambiguo. Pendientes: '
+              '${resultado.pendientes.map((p) => p.toString()).join(', ')}',
+        );
+      });
+    }
   });
 
   group('notación en desuso', () {
