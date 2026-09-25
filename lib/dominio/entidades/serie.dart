@@ -54,6 +54,7 @@ class Serie {
     this.modificadores = const <Modificador>[],
     this.ejercicio,
     this.estilo,
+    this.bloqueTecnico,
     this.zona,
     this.respiracionCada,
     this.origen = OrigenDato.interpretado,
@@ -71,6 +72,11 @@ class Serie {
   final Ejercicio? ejercicio;
 
   final Estilo? estilo;
+
+  /// Etiqueta de bloque tecnico (`TEC L`, `TEC E`, ...). Valida solo como
+  /// etiqueta de un bloque compuesto por ejercicios de la Biblioteca, nunca
+  /// como nombre de un nado completo (seccion 8).
+  final Estilo? bloqueTecnico;
 
   /// La asigna el entrenador. El analizador no la adivina (FR-011).
   final Zona? zona;
@@ -92,7 +98,7 @@ class Serie {
   /// Alimenta el porcentaje de trabajo técnico: cuenta como técnica toda serie
   /// que referencia un ejercicio de la Biblioteca, no el nado completo de
   /// estilo (definición de la sección 12).
-  bool get esTecnica => ejercicio != null;
+  bool get esTecnica => ejercicio != null || bloqueTecnico != null;
 
   Serie copiarCon({
     int? repeticiones,
@@ -102,6 +108,7 @@ class Serie {
     List<Modificador>? modificadores,
     Ejercicio? ejercicio,
     Estilo? estilo,
+    Estilo? bloqueTecnico,
     Zona? zona,
     int? respiracionCada,
     OrigenDato? origen,
@@ -116,6 +123,7 @@ class Serie {
       modificadores: modificadores ?? this.modificadores,
       ejercicio: ejercicio ?? this.ejercicio,
       estilo: estilo ?? this.estilo,
+      bloqueTecnico: bloqueTecnico ?? this.bloqueTecnico,
       zona: zona ?? this.zona,
       respiracionCada: respiracionCada ?? this.respiracionCada,
       origen: origen ?? this.origen,

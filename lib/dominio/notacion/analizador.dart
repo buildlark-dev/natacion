@@ -156,6 +156,7 @@ class Analizador {
     final implementos = <Implemento>[];
     final modificadores = <Modificador>[];
     Estilo? estilo;
+    Estilo? bloqueTecnico;
     int? respiracionCada;
     final nombresCandidatos = <Token>[];
 
@@ -230,6 +231,36 @@ class Analizador {
               i += 2;
               continue;
             }
+            i++;
+            continue;
+          }
+
+          // Etiqueta de bloque técnico: `TEC L`, `TEC E`, `TEC EST`
+          // (sección 8). Válida solo como etiqueta de bloque, nunca como
+          // nombre de un nado completo.
+          if (palabra.toUpperCase() == 'TEC') {
+            if (i + 1 < tokens.length &&
+                tokens[i + 1].tipo == TipoToken.palabra) {
+              final etiqueta = 'TEC ${tokens[i + 1].texto.toUpperCase()}';
+              final estiloEtiqueta = Glosario.etiquetasTecnicas[etiqueta];
+              if (estiloEtiqueta != null) {
+                bloqueTecnico = estiloEtiqueta;
+                estilo ??= estiloEtiqueta == Estilo.general
+                    ? null
+                    : estiloEtiqueta;
+                i += 2;
+                continue;
+              }
+            }
+            // `TEC` sin estilo reconocible no es una etiqueta válida.
+            pendientes.add(FragmentoPendiente(
+              texto: palabra,
+              posicionInicio: desplazamiento + token.inicio,
+              posicionFin: desplazamiento + token.fin,
+              motivo: MotivoPendiente.estructuraNoReconocida,
+              detalle: 'Etiqueta de bloque técnico sin estilo: use '
+                  'TEC L, TEC E, TEC P, TEC M o TEC EST',
+            ));
             i++;
             continue;
           }
@@ -312,6 +343,7 @@ class Analizador {
       modificadores: modificadores,
       ejercicio: resolucion.ejercicio,
       estilo: estilo ?? resolucion.ejercicio?.estilo,
+      bloqueTecnico: bloqueTecnico,
       respiracionCada: respiracionCada,
       textoOriginal: texto.trim(),
     );
