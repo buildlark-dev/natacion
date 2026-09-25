@@ -63,8 +63,8 @@ historias necesitan.
 - [X] T018 [P] Implementar `lib/datos/recursos/biblioteca_empaquetada.dart`, que carga `assets/biblioteca/ejercicios.json` y satisface `RepositorioBiblioteca` con búsqueda por coincidencia exacta de (`nombre`, `estilo`)
 - [ ] T019 [P] Implementar repositorios en memoria en `test/dominio/dobles/` para poder probar el dominio sin Firestore
 - [ ] T020 Implementar los conversores documento a entidad en `lib/datos/firestore/` para plan (con microciclos embebidos) y sesión (en subcolección `sesiones`), según la estructura de `contracts/almacenamiento.md`
-- [ ] T021 Escribir `firebase/firestore.rules` con postura de **denegar por defecto**: ninguna colección legible ni escribible sin concesión explícita, y prohibida toda escritura sobre un plan en estado `aprobado` o `publicado`. Sin reglas permisivas provisionales
-- [ ] T022 Escribir las pruebas de reglas en `firebase/test/reglas.test.js` con los seis casos de `contracts/almacenamiento.md`, incluidos los negativos: cliente sin autenticar no lee ni escribe `planes` ni `nadadores`, y no se puede escribir sobre un plan aprobado o publicado
+- [X] T021 Escribir `firebase/firestore.rules` con postura de **denegar por defecto**: ninguna colección legible ni escribible sin concesión explícita, y prohibida toda escritura sobre un plan en estado `aprobado` o `publicado`. Sin reglas permisivas provisionales
+- [X] T022 Escribir las pruebas de reglas en `firebase/test/reglas.test.js` con los seis casos de `contracts/almacenamiento.md`, incluidos los negativos: cliente sin autenticar no lee ni escribe `planes` ni `nadadores`, y no se puede escribir sobre un plan aprobado o publicado
 - [ ] T023 Conectar la app a los emuladores en `lib/datos/firestore/configuracion.dart` cuando `USAR_EMULADORES` esté activa, de modo que nunca apunte por accidente a un proyecto real
 
 **Checkpoint**: las reglas de la metodología están codificadas y probadas, las entidades existen, el acceso a datos funciona contra emuladores y la frontera del dominio está vigilada.

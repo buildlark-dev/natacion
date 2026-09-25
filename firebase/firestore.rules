@@ -1,0 +1,82 @@
+rules_version = '2';
+
+// Reglas de acceso de Firestore.
+//
+// Postura: DENEGAR POR DEFECTO. Ninguna coleccion es legible ni escribible
+// salvo por concesion explicita.
+//
+// Hoy no hay autenticacion: esa feature esta aplazada. Pero las reglas se
+// escriben y se prueban desde ahora, como exige el principio III de la
+// constitucion. NO se deja ninguna regla permisiva "provisional": una regla
+// abierta puesta para salir del paso es exactamente lo que se queda puesto.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Funciones de apoyo -------------------------------------------
+
+    // Un plan aprobado o publicado es inmutable (FR-025). Ni el entrenador
+    // puede escribir sobre el: editarlo crea una version nueva.
+    function estadoEsInmutable(estado) {
+      return estado == 'aprobado' || estado == 'publicado';
+    }
+
+    function planExistenteEsInmutable() {
+      return resource != null && estadoEsInmutable(resource.data.estado);
+    }
+
+    // Marcador de la feature de cuentas. Mientras no exista autenticacion,
+    // ninguna peticion la satisface, y por tanto todo queda denegado.
+    function esEntrenador() {
+      return request.auth != null
+          && request.auth.token.get('rol', '') == 'entrenador';
+    }
+
+    // --- Planes --------------------------------------------------------
+
+    match /planes/{planId} {
+      allow read: if esEntrenador();
+
+      // Crear: solo el entrenador, y solo en estado borrador.
+      allow create: if esEntrenador()
+                    && request.resource.data.estado == 'borrador';
+
+      // Actualizar: solo el entrenador, y nunca sobre un plan ya aprobado o
+      // publicado.
+      allow update: if esEntrenador() && !planExistenteEsInmutable();
+
+      allow delete: if esEntrenador() && !planExistenteEsInmutable();
+
+      // Sesiones del plan.
+      match /sesiones/{sesionId} {
+        allow read: if esEntrenador();
+        allow write: if esEntrenador()
+                     && !estadoEsInmutable(
+                          get(/databases/$(database)/documents/planes/$(planId))
+                            .data.estado
+                        );
+      }
+    }
+
+    // --- Nadadores -----------------------------------------------------
+
+    match /nadadores/{nadadorId} {
+      allow read, write: if esEntrenador();
+    }
+
+    // --- Propuestas de ejercicio y glosario -----------------------------
+
+    match /propuestasEjercicio/{propuestaId} {
+      allow read, write: if esEntrenador();
+    }
+
+    match /glosario/{terminoId} {
+      allow read, write: if esEntrenador();
+    }
+
+    // --- Todo lo demas --------------------------------------------------
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
