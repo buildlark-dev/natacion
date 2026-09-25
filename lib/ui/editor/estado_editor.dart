@@ -1,0 +1,146 @@
+/// Estado del editor de sesión.
+///
+/// Mantiene el árbol vivo —sesión, partes, series— y reinterpreta y recalcula
+/// a medida que el entrenador escribe. Es la razón declarada para depender de
+/// `provider` (decisión D8 de `research.md`).
+library;
+
+import 'package:flutter/foundation.dart';
+import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/calculo/calculo_sesion.dart';
+import 'package:natacion_app/dominio/entidades/parte.dart';
+import 'package:natacion_app/dominio/entidades/serie.dart';
+import 'package:natacion_app/dominio/entidades/sesion.dart';
+import 'package:natacion_app/dominio/metodologia/categorias.dart';
+import 'package:natacion_app/dominio/metodologia/estilos.dart';
+import 'package:natacion_app/dominio/metodologia/zonas.dart';
+import 'package:natacion_app/dominio/notacion/analizador.dart';
+
+class EstadoEditor extends ChangeNotifier {
+  EstadoEditor({
+    required Biblioteca biblioteca,
+    Categoria categoria = Categoria.precompetitivo,
+  })  : _analizador = Analizador(biblioteca: biblioteca),
+        _sesion = Sesion() {
+    _categoria = categoria;
+  }
+
+  final Analizador _analizador;
+
+  Sesion _sesion;
+  Categoria _categoria = Categoria.precompetitivo;
+
+  Sesion get sesion => _sesion;
+  Categoria get categoria => _categoria;
+
+  CalculoSesion get calculo => CalculoSesion(_sesion);
+
+  ComprobacionVolumen get volumen => calculo.comprobarVolumen(_categoria);
+
+  List<FragmentoPendiente> get pendientes => _sesion.todosLosPendientes;
+
+  List<String> avisos = <String>[];
+
+  void cambiarCategoria(Categoria nueva) {
+    _categoria = nueva;
+    notifyListeners();
+  }
+
+  void cambiarObjetivoTecnico(String texto) {
+    _sesion = _sesion.copiarCon(objetivoTecnico: texto);
+    notifyListeners();
+  }
+
+  void cambiarObjetivoFisiologico(String texto) {
+    _sesion = _sesion.copiarCon(objetivoFisiologico: texto);
+    notifyListeners();
+  }
+
+  void cambiarRpe(int? rpe) {
+    _sesion = _sesion.copiarCon(rpePrevisto: rpe);
+    notifyListeners();
+  }
+
+  /// Reinterpreta el texto de una parte.
+  ///
+  /// Las series con campos corregidos a mano conservan esos valores: una
+  /// reinterpretación no los sobrescribe (FR-035).
+  void escribirParte(TipoParte tipo, String texto) {
+    final anterior = _sesion.parteDe(tipo);
+    final resultado = _analizador.analizar(texto);
+
+    final fusionadas = _fusionarCorrecciones(anterior.series, resultado.series);
+
+    _sesion = _sesion.conParte(
+      anterior.copiarCon(
+        textoOriginal: texto,
+        series: fusionadas,
+        fragmentosPendientes: resultado.pendientes,
+      ),
+    );
+    avisos = resultado.avisos;
+    notifyListeners();
+  }
+
+  /// Conserva los campos que el entrenador corrigió a mano, emparejando por
+  /// posición dentro de la parte.
+  List<Serie> _fusionarCorrecciones(
+    List<Serie> anteriores,
+    List<Serie> nuevas,
+  ) {
+    final resultado = <Serie>[];
+
+    for (var i = 0; i < nuevas.length; i++) {
+      var serie = nuevas[i];
+      if (i < anteriores.length) {
+        final previa = anteriores[i];
+        if (previa.camposCorregidos.isNotEmpty) {
+          serie = serie.copiarCon(
+            repeticiones: previa.estaProtegido('repeticiones')
+                ? previa.repeticiones
+                : null,
+            distancia:
+                previa.estaProtegido('distancia') ? previa.distancia : null,
+            zona: previa.estaProtegido('zona') ? previa.zona : null,
+            estilo: previa.estaProtegido('estilo') ? previa.estilo : null,
+            camposCorregidos: previa.camposCorregidos,
+            origen: previa.origen,
+          );
+        }
+      }
+      resultado.add(serie);
+    }
+
+    return resultado;
+  }
+
+  /// Corrige a mano un campo de una serie. La corrección prevalece.
+  void corregirSerie(
+    TipoParte tipo,
+    int indice,
+    String campo, {
+    int? valorEntero,
+    Zona? zona,
+    Estilo? estilo,
+  }) {
+    final parte = _sesion.parteDe(tipo);
+    if (indice < 0 || indice >= parte.series.length) return;
+
+    final series = List<Serie>.from(parte.series);
+    series[indice] = series[indice].corregir(
+      campo,
+      valorEntero: valorEntero,
+      zona: zona,
+      estilo: estilo,
+    );
+
+    _sesion = _sesion.conParte(parte.copiarCon(series: series));
+    notifyListeners();
+  }
+
+  /// Asigna la zona de intensidad de una serie. La asigna el entrenador: el
+  /// analizador no la adivina (FR-011).
+  void asignarZona(TipoParte tipo, int indice, Zona zona) {
+    corregirSerie(tipo, indice, 'zona', zona: zona);
+  }
+}
