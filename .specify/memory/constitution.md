@@ -1,39 +1,3 @@
-<!--
-SYNC IMPACT REPORT (material de revisión — borrar antes de commitear la constitución)
-
-Cambio de versión: 1.0.0 (borrador del 2026-09-25, nunca ratificado ni commiteado) -> 1.0.0 (reinicio)
-
-Justificación del número: el borrador anterior de hoy describía una app local de
-Flutter y no llegó a gobernar ninguna feature (no existe repositorio git, no hay
-spec.md ni plan.md creados bajo él). El entrenador pidió explícitamente empezar de
-cero con un producto distinto (comunidad de natación en línea, freemium). Se trata
-de una primera ratificación real, no de una enmienda, por lo que se conserva 1.0.0.
-Si se prefiere dejar rastro del borrador previo, renumerar a 2.0.0.
-
-Principios (reemplazo completo del conjunto anterior):
-- I.   Metodología del Entrenador como Norma          [NUEVO]
-- II.  Dominio en Dart Puro y Verificable             [conserva la idea del borrador previo]
-- III. Pruebas de las Reglas que Llegan al Nadador    [conserva la idea del borrador previo]
-- IV.  El Criterio del Entrenador no se Delega        [NUEVO — reemplaza "IA Detrás de un Contrato"]
-- V.   Datos de Deportistas: Mínimos y Protegidos     [NUEVO — era una restricción, ahora es principio]
-- VI.  Freemium Honesto                               [NUEVO]
-- VII. Rebanadas Verticales y Simplicidad             [amplía "Simplicidad Incremental"]
-
-Secciones añadidas:
-- Restricciones Técnicas y de Plataforma (stack Firebase/Flutter fijado)
-- Flujo de Desarrollo y Puertas de Calidad
-- Governance (con la regla de precedencia constitución vs. PROMPT MAESTRO)
-
-Secciones eliminadas: ninguna (el borrador previo se reemplaza íntegro).
-
-Pendientes diferidos (no bloquean la ratificación; se resuelven en el plan de su feature):
-1. Canal de cobro: facturación de tiendas (Google Play / App Store) frente a pasarela
-   web (Wompi, Mercado Pago, PayU, Stripe). Decide arquitectura y comisiones.
-2. Copia versionada de PROMPT_MAESTRO_V3.4.md y de la Biblioteca de ejercicios dentro
-   del repositorio, como fuente normativa estable (hoy solo existen en el escritorio).
-3. Orden de construcción de las cuatro áreas de la v1.
--->
-
 # Constitución de natacion_app
 
 Producto: comunidad de natación en línea dirigida por un entrenador, con planes de
@@ -44,9 +8,13 @@ bajo un modelo freemium por suscripción.
 
 ### I. Metodología del Entrenador como Norma
 
-La metodología del entrenador, formalizada en `PROMPT_MAESTRO_V3.4.md` y en la Biblioteca
-Oficial de ejercicios, es la **fuente normativa del dominio**. El software la implementa;
-no la interpreta, no la flexibiliza y no la sustituye.
+La metodología del entrenador, versionada en `docs/metodologia/` (`PROMPT_MAESTRO_V3.4.md`
+y la Biblioteca Oficial de ejercicios), es la **fuente normativa del dominio**. El software
+la implementa; no la interpreta, no la flexibiliza y no la sustituye.
+
+Esos documentos son la única fuente válida. Una regla de entrenamiento que no esté
+respaldada por ellos no se implementa, y modificarlos exige subir su versión y actualizar
+las pruebas afectadas.
 
 Reglas verificables que el sistema DEBE hacer cumplir:
 
