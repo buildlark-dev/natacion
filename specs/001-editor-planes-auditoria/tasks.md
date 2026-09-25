@@ -109,7 +109,7 @@ que los totales, el porcentaje técnico y los avisos coinciden con la revisión 
 - [X] T043 [US1] Construir la pantalla del editor en `lib/ui/editor/pantalla_editor.dart`: las tres partes como áreas de texto libre, cada serie desglosada en campos editables al lado, y los totales en vivo
 - [X] T044 [US1] Añadir los campos de cabecera de sesión en `lib/ui/editor/cabecera_sesion.dart`: fecha, objetivo técnico, objetivo fisiológico, RPE previsto de 0 a 10 y variables de monitoreo de carga interna (FR-012)
 - [X] T045 [US1] Mostrar los avisos en `lib/ui/editor/panel_avisos.dart`: fragmentos pendientes resaltados sobre el texto original, ejercicios fuera de biblioteca, volumen fuera de rango con la diferencia exacta, y datos obligatorios que faltan
-- [ ] T046 [US1] Implementar el registro de propuestas de ejercicio en `lib/dominio/biblioteca/propuestas.dart` y su pantalla en `lib/ui/editor/dialogo_propuesta.dart` (FR-004): se guarda fuera del plan, en estado `pendiente`, y **no tiene ningún efecto sobre el plan**
+- [X] T046 [US1] Implementar el registro de propuestas de ejercicio en `lib/dominio/biblioteca/propuestas.dart` y su pantalla en `lib/ui/editor/dialogo_propuesta.dart` (FR-004): se guarda fuera del plan, en estado `pendiente`, y **no tiene ningún efecto sobre el plan**
 - [ ] T047 [US1] Persistir y recuperar sesiones a través de `RepositorioSesiones`, guardando `textoOriginal`, `series`, `fragmentosPendientes` y el campo `origen` de cada serie
 
 **Checkpoint**: el entrenador puede escribir una sesión completa, verla interpretada, corregirla y recibir avisos. Validar con los escenarios V1, V2, V3 y V4 de `quickstart.md`.
@@ -198,7 +198,7 @@ conserva sus destinatarios y que los perfiles se pueden exportar.
 - [X] T080 [P] [US4] Escribir pruebas de completitud de perfil en `test/dominio/entidades/nadador_test.dart`: `categoria` y `estiloObjetivo` son **obligatorios** para dar el perfil por completo
 - [X] T081 [P] [US4] Escribir pruebas de asignación en `test/dominio/entidades/asignacion_test.dart`: el plan conserva su lista `nadadoresIds`, y desde un perfil se pueden ver sus planes con el estado de cada uno
 - [X] T082 [P] [US4] Escribir pruebas de exportación en `test/datos/exportacion_test.dart`: un plan exportado es un único JSON con el plan y sus sesiones embebidas, legible sin la app (principio V)
-- [ ] T083 [P] [US4] Escribir pruebas de minimización de datos en `test/datos/registros_test.dart`: ningún nombre, marca ni identificador de nadador aparece en los registros técnicos (FR-032)
+- [X] T083 [P] [US4] Escribir pruebas de minimización de datos en `test/datos/registros_test.dart`: ningún nombre, marca ni identificador de nadador aparece en los registros técnicos (FR-032)
 
 ### Implementation for User Story 4
 
@@ -207,7 +207,7 @@ conserva sus destinatarios y que los perfiles se pueden exportar.
 - [X] T086 [US4] Construir la pantalla de perfiles en `lib/ui/nadadores/pantalla_perfiles.dart`, señalando los datos obligatorios que falten
 - [X] T087 [US4] Añadir un aviso visible y permanente en `lib/ui/nadadores/aviso_consentimiento.dart`: mientras no exista el registro de consentimiento del acudiente, solo deben cargarse perfiles de prueba o del propio entrenador. **Lo exige la condición del principio V registrada en `plan.md`**
 - [X] T088 [US4] Implementar la asignación de planes a nadadores en `lib/ui/planes/asignacion.dart` y la vista de planes por perfil
-- [ ] T089 [US4] Implementar la exportación en `lib/datos/exportacion.dart`: plan completo con sus sesiones, y perfil con sus planes, en JSON legible
+- [X] T089 [US4] Implementar la exportación en `lib/datos/exportacion.dart`: plan completo con sus sesiones, y perfil con sus planes, en JSON legible
 
 **Checkpoint**: las cuatro historias funcionan. El editor produce planes auditados, aprobados y asignados a nadadores concretos.
 
@@ -215,13 +215,13 @@ conserva sus destinatarios y que los perfiles se pueden exportar.
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T090 Ejecutar el escenario **V10 de `quickstart.md`**: reconstruir el `Macrociclo - Precompetitivo Agosto` y comparar metros por sesión y microciclo contra el original, con diferencia de 0 m (criterio SC-001)
+- [X] T090 Ejecutar el escenario **V10 de `quickstart.md`**: reconstruir el `Macrociclo - Precompetitivo Agosto` y comparar metros por sesión y microciclo contra el original, con diferencia de 0 m (criterio SC-001)
 - [ ] T091 Si V10 no cuadra, determinar **cuál de las dos fuentes está equivocada antes de tocar código**, y registrar el hallazgo. Es posible que el documento original tenga un error aritmético: en ese caso no se ajusta la app para reproducirlo
 - [ ] T092 Recalibrar con el entrenador la tolerancia de ±3 puntos porcentuales a la luz de los resultados de V10: si sus propias planificaciones históricas fallan criterios, la tolerancia está mal puesta, no sus planes
-- [ ] T093 [P] Recorrer los escenarios V1 a V9 de `quickstart.md` y registrar el resultado de cada uno
-- [ ] T094 Verificar que `flutter analyze` termina sin errores ni advertencias nuevas, conforme al principio VII
+- [X] T093 [P] Recorrer los escenarios V1 a V9 de `quickstart.md` y registrar el resultado de cada uno
+- [X] T094 Verificar que `flutter analyze` termina sin errores ni advertencias nuevas, conforme al principio VII
 - [ ] T095 [P] Anonimizar el plan de referencia si contiene nombres de nadadores reales, antes de incorporarlo al repositorio como material de prueba
-- [ ] T096 [P] Actualizar `README.md` con cómo levantar los emuladores, arrancar la app y ejecutar las tres suites de pruebas
+- [X] T096 [P] Actualizar `README.md` con cómo levantar los emuladores, arrancar la app y ejecutar las tres suites de pruebas
 
 ---
 

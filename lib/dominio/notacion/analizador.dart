@@ -16,6 +16,7 @@ import 'package:natacion_app/dominio/entidades/serie.dart';
 import 'package:natacion_app/dominio/notacion/glosario.dart';
 import 'package:natacion_app/dominio/notacion/tokenizador.dart';
 import 'package:natacion_app/dominio/metodologia/estilos.dart';
+import 'package:natacion_app/dominio/metodologia/zonas.dart';
 
 /// Lo que devuelve el analizador: series interpretadas y lo que quedó
 /// pendiente.
@@ -157,13 +158,26 @@ class Analizador {
     final modificadores = <Modificador>[];
     Estilo? estilo;
     Estilo? bloqueTecnico;
+    Zona? zona;
     int? respiracionCada;
     final nombresCandidatos = <Token>[];
 
     var i = 0;
 
+    // Las series del entrenador suelen venir precedidas de una etiqueta:
+    // "Pre-set: 4x50 ...", "Principal: 6x100 ...". Se salta lo que haya antes
+    // del primer número, para no perder la serie entera.
+    //
+    // Sin esto, una línea con etiqueta se descartaba en silencio, que es peor
+    // que no entenderla: los metros desaparecían sin aviso.
+    final inicioCabecera =
+        tokens.indexWhere((t) => t.tipo == TipoToken.numero);
+    if (inicioCabecera > 0) {
+      i = inicioCabecera;
+    }
+
     // Cabecera: `N x D` o `D`.
-    if (tokens[i].tipo == TipoToken.numero) {
+    if (i < tokens.length && tokens[i].tipo == TipoToken.numero) {
       final primero = tokens[i].valorNumerico!;
       if (i + 2 < tokens.length &&
           tokens[i + 1].tipo == TipoToken.por &&
@@ -271,6 +285,18 @@ class Analizador {
             continue;
           }
 
+          // Zona escrita explícitamente (`A1`, `A2`, `AT`, `Máx`, `Vel`).
+          //
+          // El analizador NO adivina la zona (FR-011): la asigna el
+          // entrenador. Pero si él ya la escribió en el texto, recogerla no es
+          // adivinar, es leer lo que puso.
+          final zonaLeida = Zona.porAbreviatura(palabra);
+          if (zonaLeida != null) {
+            zona ??= zonaLeida;
+            i++;
+            continue;
+          }
+
           final estiloLeido = glosario.estilo(palabra);
           if (estiloLeido != null) {
             estilo ??= estiloLeido;
@@ -344,6 +370,7 @@ class Analizador {
       ejercicio: resolucion.ejercicio,
       estilo: estilo ?? resolucion.ejercicio?.estilo,
       bloqueTecnico: bloqueTecnico,
+      zona: zona,
       respiracionCada: respiracionCada,
       textoOriginal: texto.trim(),
     );

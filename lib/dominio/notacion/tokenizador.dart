@@ -224,7 +224,8 @@ class Tokenizador {
       }
 
       // Puntuación que separa tareas dentro de una celda.
-      if (caracter == ',' || caracter == ';' || caracter == '·') {
+      if (caracter == ',' || caracter == ';' || caracter == '·' ||
+          caracter == '→' || caracter == '▸') {
         tokens.add(Token(
           tipo: TipoToken.separador,
           texto: caracter,
