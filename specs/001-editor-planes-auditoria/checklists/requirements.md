@@ -31,33 +31,37 @@
 
 ## Notes
 
-Validación realizada el 2026-09-25 sobre la primera redacción. Resultado: los dieciséis
-puntos pasan. Observaciones que conviene resolver antes o durante `/speckit-plan`:
+Revalidado el 2026-09-25 tras la sesión de `/speckit-clarify` (5 preguntas). Resultado:
+16/16 → 16/16 puntos pasando, sin cambios de estado ni regresiones. Observaciones
+pendientes para `/speckit-plan`:
 
 1. **Cobertura parcial por escenarios.** FR-006 (ampliación del glosario) y FR-012 (RPE
-   previsto y variables de carga interna) están redactados como requisitos verificables,
-   pero ningún escenario de aceptación los ejercita de forma explícita. Conviene añadirles
-   escenario en `/speckit-clarify` o cubrirlos directamente en el plan de pruebas.
+   previsto y variables de carga interna) siguen sin escenario de aceptación propio.
+   Cubrirlos en el plan de pruebas.
 
-2. **Supuesto que necesita confirmación del entrenador.** La separación entre criterios
-   de auditoría *bloqueantes* y *justificables* (FR-022 y FR-023) es una interpretación de
-   la jerarquía de reglas R1-R7 de la metodología, no algo que el documento diga de forma
-   literal. Está declarada en Assumptions. Si el entrenador la corrige, cambian FR-022,
-   FR-023 y el escenario 2 de la User Story 3.
-
-3. **Tamaño de la feature.** Cuatro historias de usuario y treinta y dos requisitos
-   funcionales. Cumple el principio VII (rebanada vertical utilizable de punta a punta por
-   el entrenador), pero está en el límite alto de lo que conviene a un proyecto de una sola
-   persona. Si `/speckit-plan` arroja un plan inabarcable, la línea de corte natural es
-   dejar las User Stories 1 y 2 como primera entrega (construir y auditar) y separar la 3 y
-   la 4 (aprobar, cuentas y consentimiento) en una feature posterior.
-
-4. **Dependencia de datos.** El producto no puede cumplir FR-001 ni FR-002 sin que la
+2. **Dependencia de datos.** El producto no puede cumplir FR-001 ni FR-002 sin que la
    Biblioteca Oficial exista como datos consultables. Hoy solo existe como documento
    `.docx` en `docs/metodologia/`. Su digitalización es trabajo real de esta feature y debe
    aparecer como tarea con peso propio en `/speckit-tasks`.
 
-5. **Versionado de la metodología.** FR-026 exige registrar la versión de metodología de
+3. **Versionado de la metodología.** FR-026 exige registrar la versión de metodología de
    cada plan, pero el documento en `docs/metodologia/PROMPT_MAESTRO_V3.4.md` no declara hoy
    una versión legible por el sistema más allá de su nombre de archivo. Hay que resolverlo
    en el plan.
+
+4. **Plan de referencia para SC-001.** El criterio depende del
+   `Macrociclo - Precompetitivo Agosto`, que hoy vive fuera del repositorio. Debe quedar
+   disponible como material de prueba con sus metros ya conocidos, y anonimizado si
+   contiene nombres de nadadores reales.
+
+5. **Mención de tecnología en Clarifications y Assumptions.** Ambas secciones nombran los
+   emuladores de Firebase. Es una decisión registrada y una dependencia de entorno, no un
+   requisito: las secciones de Functional Requirements y Success Criteria siguen sin
+   mencionar tecnología. Se mantiene marcado como cumplido por eso, pero conviene no
+   extender la mención al cuerpo de los requisitos.
+
+6. **Tamaño de la feature.** Bajó de 4 historias completas a 3 más una reducida, pero subió
+   de 32 a 37 requisitos por la capa de interpretación de series. Sigue en el límite alto
+   para un proyecto de una sola persona. Si `/speckit-plan` arroja algo inabarcable, la
+   línea de corte natural es entregar primero las User Stories 1 y 2 (construir y auditar)
+   y dejar la 3 y la 4 (aprobar y perfiles) para después.

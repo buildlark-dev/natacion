@@ -9,8 +9,37 @@
 **Input**: Primera rebanada vertical del producto. El entrenador construye planes de
 entrenamiento dentro de la app, y la app los valida contra su metodología
 (`docs/metodologia/PROMPT_MAESTRO_V3.4.md` y la Biblioteca Oficial de ejercicios) antes de
-permitirle aprobarlos. Incluye cuentas y roles al mínimo, con consentimiento verificable
-del acudiente cuando el nadador es menor de edad.
+permitirle aprobarlos. Incluye perfiles de nadador y la asignación de planes a ellos. Se
+desarrolla y se prueba en local, con el entrenador como único operador, y no se publica
+hasta que el producto esté completo.
+
+## Clarifications
+
+### Session 2026-09-25
+
+- Q: ¿Cómo quieres escribir las series dentro de una sesión: tecleando el texto con tu
+  notación tal como lo haces hoy en Excel, o armándolas con campos separados? → A: Híbrido.
+  El entrenador escribe en texto libre y la app muestra al instante lo que entendió en
+  campos editables; él corrige lo que esté mal y lo no reconocido queda marcado como
+  pendiente sin bloquear la escritura.
+- Q: Ahora que la app solo correrá en local y que el único usuario será el entrenador,
+  ¿las cuentas, los roles y el consentimiento del acudiente siguen dentro de esta feature?
+  → A: No. Se conserva solo la estructura: existen perfiles de nadador y cada plan se
+  asigna a uno o varios. El inicio de sesión, los roles y el consentimiento pasan a la
+  feature que abra la app a nadadores reales.
+- Q: ¿Un ejercicio fuera de la Biblioteca debe impedir aprobar el plan, mientras que un
+  volumen fuera de rango por afinación solo pide justificación escrita? → A: Sí, confirmado.
+  Bloquean la no invención, la nomenclatura, la notación, las zonas mal asignadas y los
+  datos obligatorios faltantes. Piden justificación escrita el volumen fuera de rango por
+  afinación y las desviaciones de distribución de zonas, técnica y estilos.
+- Q: Mientras se desarrolla en local, ¿dónde deben guardarse los planes: solo en el equipo,
+  o ya contra Firebase? → A: Contra emuladores de Firebase corriendo en el equipo del
+  entrenador, con la misma estructura de datos y las mismas reglas de acceso que en
+  producción, sin conexión ni proyecto en la nube. Al publicar solo cambia a dónde apunta
+  la app, sin migrar datos.
+- Q: ¿Cuál planificación existente sirve de prueba de fuego para SC-001? → A: el
+  `Macrociclo - Precompetitivo Agosto`, por ser de una categoría que usa fases ATR y
+  ejercitar a la vez rango de volumen, distribución de zonas y porcentaje técnico.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -49,6 +78,14 @@ coinciden con lo que arroja la revisión manual del entrenador.
 5. **Given** una sesión sin objetivo técnico o sin objetivo fisiológico declarado,
    **When** el entrenador intenta darla por terminada, **Then** la app señala el dato
    faltante y no la considera completa.
+6. **Given** el entrenador escribiendo `4x100 AL / 2'` como texto libre, **When** termina
+   de escribir la serie, **Then** la app muestra en campos editables que entendió 4
+   repeticiones de 100 m con aletas saliendo cada 2 minutos, y el total de 400 m.
+7. **Given** una serie que la app interpretó mal, **When** el entrenador corrige el campo
+   equivocado, **Then** prevalece su corrección y los totales se recalculan con ella.
+8. **Given** un fragmento de texto que la app no consigue interpretar, **When** el
+   entrenador sigue escribiendo, **Then** el fragmento queda marcado como pendiente sin
+   interrumpirlo, y la sesión no puede darse por completa mientras siga pendiente.
 
 ---
 
@@ -122,33 +159,30 @@ pasan limpios.
 
 ---
 
-### User Story 4 - Cuentas, roles y consentimiento (Priority: P4)
+### User Story 4 - Perfiles de nadador y asignación (Priority: P4)
 
-Existen dos tipos de usuario: entrenador y nadador. El entrenador registra a sus nadadores
-con los datos mínimos necesarios para planificar (categoría, edad, estilo objetivo, marcas
-conocidas). Cuando el nadador es menor de edad, la app exige el consentimiento verificable
-de su padre, madre o acudiente antes de almacenar sus datos.
+El entrenador registra perfiles de nadador con los datos mínimos necesarios para
+planificar (categoría, edad, estilo y prueba objetivo, marcas conocidas, diagnóstico
+técnico observado) y asigna cada plan a uno o varios de ellos. No hay inicio de sesión ni
+roles todavía: la app se usa en local y el entrenador es su único operador.
 
-**Why this priority**: Sin nadadores registrados no hay a quién asignar un plan, y sin
-consentimiento no se pueden guardar datos de menores. Va después del núcleo porque el
-editor puede construirse y probarse contra perfiles de prueba.
+**Why this priority**: Sin perfiles no hay a quién asignar un plan, y la pertenencia de
+cada plan es estructural: añadirla después obligaría a rehacer lo ya construido. Va
+después del núcleo porque el editor puede construirse y probarse contra perfiles de prueba.
 
-**Independent Test**: Se puede probar registrando un nadador mayor y uno menor, y
-comprobando que el menor no queda almacenado mientras no exista consentimiento registrado.
+**Independent Test**: Se puede probar creando varios perfiles, asignándoles planes y
+comprobando que cada plan conserva sus destinatarios y que los perfiles se pueden exportar.
 
 **Acceptance Scenarios**:
 
-1. **Given** un nadador menor de 18 años, **When** el entrenador intenta guardar su perfil
-   sin consentimiento del acudiente, **Then** la app no almacena los datos y explica qué
-   falta.
-2. **Given** un consentimiento otorgado, **When** queda registrado, **Then** guarda quién
-   lo otorga, su relación con el menor y la fecha.
-3. **Given** un usuario con rol de nadador, **When** intenta acceder a los datos o a los
-   planes de otro nadador, **Then** la app lo deniega.
-4. **Given** un usuario con rol de nadador, **When** intenta aprobar o editar un plan,
-   **Then** la app lo deniega: solo el entrenador aprueba.
-5. **Given** un nadador registrado, **When** solicita sus datos, **Then** el entrenador
-   puede exportarlos en un formato legible y puede eliminarlos a petición.
+1. **Given** un perfil de nadador nuevo, **When** el entrenador lo guarda sin categoría o
+   sin estilo objetivo, **Then** la app señala el dato faltante y no lo da por completo.
+2. **Given** un plan y varios perfiles de la misma categoría, **When** el entrenador asigna
+   el plan al grupo, **Then** el plan conserva la lista de nadadores destinatarios.
+3. **Given** un perfil con planes asignados, **When** el entrenador lo consulta, **Then**
+   ve los planes que le corresponden y en qué estado está cada uno.
+4. **Given** un perfil de nadador, **When** el entrenador lo exporta, **Then** obtiene sus
+   datos y sus planes en un formato legible.
 
 ---
 
@@ -157,6 +191,10 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
 - **Notación desconocida**: el entrenador escribe una abreviatura que no está en el
   glosario ni en la biblioteca. La app pregunta en lugar de suponer, y una vez aclarada la
   incorpora al glosario con su fecha.
+- **Interpretación silenciosamente equivocada**: la app entiende una serie de forma
+  plausible pero incorrecta (por ejemplo, lee como distancia lo que era un tiempo de
+  salida). Lo interpretado siempre queda visible en campos editables junto al texto
+  original, para que el entrenador lo detecte antes de aprobar.
 - **Datos insuficientes para planificar**: falta la categoría, la prueba objetivo, la
   longitud de piscina o la frecuencia semanal. La app no completa el vacío con supuestos:
   señala qué falta y no permite dar el plan por terminado.
@@ -174,8 +212,8 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
   distribuciones.
 - **Regla de Tecnificación**: en programas de dos meses, la sesión 1 es de Pecho y la
   sesión 2 de Mariposa todas las semanas; un microciclo que lo incumpla se reporta.
-- **Menor que cumple 18 años**: el perfil deja de requerir consentimiento del acudiente,
-  pero el consentimiento histórico se conserva como registro.
+- **Perfil incompleto**: un nadador sin categoría o sin estilo objetivo no permite validar
+  volúmenes ni distribución de estilos; la app lo señala y no da el perfil por completo.
 
 ## Requirements *(mandatory)*
 
@@ -194,7 +232,8 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
 - **FR-004**: El sistema DEBE permitir registrar un ejercicio no cubierto por la biblioteca
   como propuesta pendiente de aprobación, almacenada fuera del plan y sin efecto sobre él.
 - **FR-005**: El sistema DEBE interpretar la notación del entrenador (implementos, patada,
-  brazada, hipóxicos, recuperación, progresivos, salidas, `NxD / t`) y DEBE tratar como
+  brazada, hipóxicos, recuperación, progresivos, salidas, `NxD / t`) escrita como texto
+  libre, según el flujo de entrada descrito en FR-033 a FR-037, y DEBE tratar como
   desconocido cualquier término ausente del glosario, preguntando en lugar de suponer.
 - **FR-006**: El sistema DEBE permitir ampliar el glosario con términos aclarados por el
   entrenador, registrando su definición y la fecha.
@@ -244,8 +283,10 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
   negociable: ejercicios ajenos a la biblioteca, nomenclatura o notación inválidas, zonas
   mal asignadas, prescripción que no suma 100%, o datos obligatorios faltantes.
 - **FR-023**: El sistema DEBE exigir justificación escrita del entrenador para los
-  incumplimientos que la metodología admite justificar, en particular el descenso de
-  volumen por afinación, y DEBE conservarla junto al plan.
+  incumplimientos que la metodología admite justificar —el descenso de volumen por
+  afinación y las desviaciones de la distribución de zonas, del porcentaje técnico y de la
+  distribución de estilos—, DEBE conservarla junto al plan y NO DEBE permitir aprobar
+  mientras la justificación esté vacía.
 - **FR-024**: El sistema DEBE manejar los estados `borrador`, `aprobado` y `publicado`, y
   solo el entrenador puede mover un plan a `aprobado`.
 - **FR-025**: El sistema DEBE bloquear la edición de un plan aprobado y DEBE crear una
@@ -254,15 +295,14 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
   se construyó, y NO DEBE reescribir retroactivamente planes ya aprobados cuando la
   metodología cambie.
 
-**Cuentas, datos y privacidad**
+**Perfiles, datos y privacidad**
 
-- **FR-027**: El sistema DEBE distinguir los roles entrenador y nadador, y DEBE reservar la
-  creación, edición y aprobación de planes al entrenador.
-- **FR-028**: El sistema DEBE impedir que un nadador acceda a los datos o a los planes de
-  otro nadador.
-- **FR-029**: El sistema DEBE exigir consentimiento verificable del padre, madre o
-  acudiente antes de almacenar datos de un nadador menor de edad, registrando quién lo
-  otorga, su relación con el menor y la fecha.
+- **FR-027**: El sistema DEBE permitir crear perfiles de nadador y DEBE exigir en ellos, al
+  menos, categoría y estilo objetivo para darlos por completos.
+- **FR-028**: El sistema DEBE permitir asignar cada plan a uno o varios perfiles de nadador
+  y DEBE conservar esa pertenencia como parte del plan.
+- **FR-029**: El sistema DEBE permitir consultar, desde un perfil, los planes que le
+  corresponden y el estado de cada uno.
 - **FR-030**: El sistema DEBE limitarse a recolectar los datos con un uso declarado en esta
   feature: identificación, categoría, edad, estilo y prueba objetivo, marcas conocidas y
   diagnóstico técnico.
@@ -271,17 +311,28 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
 - **FR-032**: El sistema NO DEBE registrar nombres, marcas ni identificadores de nadadores
   en los registros técnicos ni en la analítica.
 
+**Entrada e interpretación de series**
+
+- **FR-033**: El sistema DEBE permitir escribir las series de una parte como texto libre,
+  sin obligar al entrenador a rellenar campos uno por uno.
+- **FR-034**: El sistema DEBE mostrar, a medida que el entrenador escribe, el resultado de
+  su interpretación en campos editables: repeticiones, distancia, tiempo de salida,
+  implementos, ejercicio de la biblioteca, estilo y zona de intensidad.
+- **FR-035**: El sistema DEBE permitir corregir a mano cualquier campo mal interpretado, y
+  la corrección DEBE prevalecer sobre la interpretación automática.
+- **FR-036**: El sistema DEBE marcar como pendiente todo fragmento que no consiga
+  interpretar, sin bloquear la escritura, y DEBE impedir que una sesión con fragmentos
+  pendientes se dé por completa.
+- **FR-037**: El sistema DEBE basar todo cálculo y toda auditoría en los datos
+  estructurados resultantes, nunca en el texto libre sin interpretar.
+
 ### Key Entities
 
-- **Usuario**: persona autenticada con un rol, entrenador o nadador. El entrenador es uno
-  solo en esta etapa.
 - **Nadador**: deportista con categoría, edad, estilo y prueba objetivo, marcas conocidas y
-  diagnóstico técnico observado. Si es menor, referencia a su consentimiento.
-- **Consentimiento**: autorización de un acudiente sobre un nadador menor, con relación y
-  fecha.
+  diagnóstico técnico observado.
 - **Plan**: unidad de planificación con categoría, estilo objetivo, prueba objetivo,
-  longitud de piscina, fechas, fase ATR cuando aplica, estado, versión de metodología y
-  justificaciones asociadas.
+  longitud de piscina, fechas, fase ATR cuando aplica, estado, versión de metodología,
+  nadadores destinatarios y justificaciones asociadas.
 - **Microciclo**: agrupación de sesiones nombrada por su objetivo real, perteneciente a un
   plan.
 - **Sesión**: unidad de entrenamiento con fecha, objetivo técnico, objetivo fisiológico,
@@ -304,9 +355,11 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
 
 ### Measurable Outcomes
 
-- **SC-001**: Al reconstruir en la app un microciclo histórico ya existente del entrenador,
-  los metros totales por sesión y por microciclo coinciden exactamente con los del
-  documento original, con diferencia de 0 m.
+- **SC-001**: Al reconstruir en la app el `Macrociclo - Precompetitivo Agosto`, una
+  planificación real ya existente del entrenador, los metros totales por sesión y por
+  microciclo coinciden exactamente con los del documento original, con diferencia de 0 m, y
+  la distribución de zonas y el porcentaje técnico calculados coinciden con los del
+  documento.
 - **SC-002**: Ningún plan aprobado contiene ejercicios ajenos a la Biblioteca Oficial: cero
   excepciones sobre el total de planes aprobados.
 - **SC-003**: Todo plan aprobado cumple los once criterios de auditoría o lleva
@@ -317,12 +370,10 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
   mano.
 - **SC-005**: Sobre un conjunto de planes con defectos sembrados a propósito, la auditoría
   detecta el 100% de los defectos que corresponden a sus once criterios.
-- **SC-006**: Ningún dato de un nadador menor de edad queda almacenado sin consentimiento
-  registrado: cero casos.
+- **SC-006**: Todo plan aprobado conserva sus nadadores destinatarios y su versión de
+  metodología: cero planes aprobados sin esos dos datos.
 - **SC-007**: El entrenador exporta un plan aprobado en formato legible en menos de un
   minuto.
-- **SC-008**: Un nadador no consigue acceder a los datos ni a los planes de otro nadador en
-  ningún intento de las pruebas de acceso.
 
 ## Assumptions
 
@@ -336,18 +387,27 @@ comprobando que el menor no queda almacenado mientras no exista consentimiento r
   feature.
 - **Versión de metodología**: se asume vigente la V3.4 del documento del entrenador, y que
   el documento del repositorio declara su versión de forma verificable.
-- **Auditoría bloqueante frente a justificable**: se asume que los criterios que tocan la
-  regla de no invención, la nomenclatura, la notación, las zonas y los datos obligatorios
-  bloquean la aprobación, mientras que el volumen fuera de rango por afinación y las
-  desviaciones de distribución admiten justificación escrita. Es la interpretación de la
-  jerarquía de reglas de la metodología y conviene que el entrenador la confirme.
-- **Planes por nadador o por grupo**: se asume que un plan se dirige a una categoría y
-  puede asignarse a uno o varios nadadores, siguiendo la forma en que el entrenador ya
-  organiza sus planificaciones por grupo.
+- **Sin datos reales de menores hasta que exista consentimiento**: mientras esta feature no
+  implemente el registro de consentimiento del acudiente, la app se usa únicamente con
+  perfiles de prueba o con los datos del propio entrenador. NO DEBEN cargarse datos reales
+  de nadadores menores de edad antes de que exista ese registro, porque el principio V de
+  la constitución lo exige para almacenarlos.
+- **Uso local durante el desarrollo**: la app se construye y se prueba en local, con el
+  entrenador como único operador y como su propio nadador de prueba. No se publica ni se
+  abre a terceros hasta que el producto esté completo. Las reglas de acceso, aunque hoy no
+  protejan a nadie, se escriben y se prueban desde ahora, como exige el principio III de la
+  constitución.
 - **Importación desde Excel**: los planes históricos en hoja de cálculo no se importan
   automáticamente. Se usan como referencia de verificación, reconstruyéndolos a mano.
-- **Sin conexión**: la edición de planes por parte del entrenador asume conexión. El uso a
-  pie de piscina sin conexión corresponde a la consulta del nadador, que es otra feature.
+- **Disponibilidad del plan de referencia**: SC-001 depende de que el
+  `Macrociclo - Precompetitivo Agosto` esté disponible como material de prueba, con sus
+  metros por sesión y por microciclo ya conocidos. Si contiene nombres de nadadores reales,
+  debe anonimizarse antes de incorporarlo al repositorio.
+- **Sin conexión durante el desarrollo**: toda la feature corre en el equipo del entrenador
+  sin necesidad de internet, contra emuladores locales que reproducen la estructura de
+  datos y las reglas de acceso de producción. El almacenamiento definitivo se activa al
+  publicar, cambiando a dónde apunta la app y sin migrar datos. El uso a pie de piscina sin
+  conexión por parte del nadador corresponde a otra feature.
 - **Monetización**: esta feature no incluye cobros, suscripciones ni distinción entre nivel
   gratuito y pago. El editor es una herramienta del entrenador.
 - **Volumen de uso**: se asume un entrenador y decenas de nadadores, no miles. El
@@ -360,6 +420,9 @@ construible:
 
 - La consulta del plan por parte del nadador, incluida la sesión del día y el
   funcionamiento sin conexión a pie de piscina. Es la feature siguiente.
+- El inicio de sesión, la distinción de roles entrenador y nadador, y el consentimiento
+  verificable del acudiente para menores. Corresponden a la feature que abra la app a
+  nadadores reales, y son requisito para hacerlo.
 - El registro de progreso, marcas, pruebas de control y Critical Speed.
 - La retroalimentación en video.
 - La comunidad, el contenido educativo y las notificaciones.
