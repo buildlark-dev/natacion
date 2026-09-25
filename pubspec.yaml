@@ -35,6 +35,15 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+  # Gestor de estado. Justificado en research.md D8: el editor recalcula
+  # metros, porcentaje tecnico y auditoria en cada pulsacion, y muchos
+  # widgets separados leen esos valores derivados.
+  provider: ^6.1.2
+
+  # Capa de datos. Los emuladores locales usan estas mismas librerias.
+  firebase_core: ^3.8.0
+  cloud_firestore: ^5.5.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -56,6 +65,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/biblioteca/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

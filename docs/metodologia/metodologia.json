@@ -1,0 +1,18 @@
+{
+  "version": "3.4",
+  "fecha": "2026-09-25",
+  "descripcion": "Version vigente de la metodologia del entrenador. La app estampa esta version en cada plan aprobado (FR-026).",
+  "documentos": [
+    {
+      "ruta": "docs/metodologia/PROMPT_MAESTRO_V3.4.md",
+      "papel": "Fuente normativa. La seccion 19 es la Biblioteca Oficial de ejercicios.",
+      "sha256": "cd8b36cd8f31dc0295fb33790a1a7c50b8d6b203fdf9e2eb3708b95c54816a00"
+    },
+    {
+      "ruta": "docs/metodologia/Biblioteca de ejercicios.docx",
+      "papel": "Material de apoyo. En caso de discrepancia manda la seccion 19 del documento normativo.",
+      "sha256": "25cab1c211147321a325df486cb107c87a6505fca274372e3ca5d62366d86f6b"
+    }
+  ],
+  "nota": "Si una huella deja de coincidir, un documento normativo cambio sin subir la version. El flujo de desarrollo de la constitucion exige subir la version y actualizar las pruebas afectadas."
+}

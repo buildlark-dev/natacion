@@ -1,0 +1,567 @@
+{
+  "fuente": "Sección 19 de docs/metodologia/PROMPT_MAESTRO_V3.4.md",
+  "generado": "2026-09-25",
+  "advertencia": "Generado automáticamente. Requiere revisión manual del entrenador (tarea T009) antes de darse por válido.",
+  "ejercicios": [
+    {
+      "nombre": "PUNTO MUERTO",
+      "estilo": "Libre",
+      "descripcion": "Nadar libre haciendo una pausa de dos segundos con los brazos estirados adelante, luego de cada brazada.",
+      "errorQueCorrige": "Técnica discontinua/sobrepuesta; mejora deslizamiento y sincronización brazo-brazo",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PUNTO MUERTO"
+    },
+    {
+      "nombre": "TOCAR AXILA",
+      "estilo": "Libre",
+      "descripcion": "Tocar la axila con el dedo pulgar en la fase aérea de la brazada de libre, manteniendo el codo arriba apuntando al cielo.",
+      "errorQueCorrige": "Recobro con brazo extendido / codo caído; corrige recobro alto con codo elevado",
+      "requiereDesambiguacion": false,
+      "nombreBase": "TOCAR AXILA"
+    },
+    {
+      "nombre": "ROZAR SUPERFICIE",
+      "estilo": "Libre",
+      "descripcion": "Rozar la superficie del agua durante el recobro (fase aérea) de la brazada de libre, manteniendo el codo arriba apuntando al cielo.",
+      "errorQueCorrige": "Recobro bajo o desalineado; codo alto en recobro",
+      "requiereDesambiguacion": false,
+      "nombreBase": "ROZAR SUPERFICIE"
+    },
+    {
+      "nombre": "PUÑOS",
+      "estilo": "Libre",
+      "descripcion": "Nadar con las manos empuñadas, ejecutando todo el gesto de la brazada.",
+      "errorQueCorrige": "Falta de agarre/sensibilidad del agua; mejora empuje con antebrazo",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PUÑOS"
+    },
+    {
+      "nombre": "TRACC",
+      "estilo": "Libre",
+      "descripcion": "Realizar solo empujes con una mano a la vez (fase subacuática), devolviendo el brazo por dentro del agua muy pegado al cuerpo.",
+      "errorQueCorrige": "Tracción subacuática deficiente; trayectoria de empuje",
+      "requiereDesambiguacion": false,
+      "nombreBase": "TRACC"
+    },
+    {
+      "nombre": "REMO",
+      "estilo": "Libre",
+      "descripcion": "Realizar solo empujes, con ambas manos al mismo tiempo, en la fase subacuática de la brazada de libre.",
+      "errorQueCorrige": "Fase propulsiva débil; fortalece el empuje subacuático",
+      "requiereDesambiguacion": false,
+      "nombreBase": "REMO"
+    },
+    {
+      "nombre": "VADEO",
+      "estilo": "Libre",
+      "descripcion": "Remada continua y propulsiva con las manos y antebrazos (sculling).",
+      "errorQueCorrige": "Falta de sensibilidad y agarre del agua",
+      "requiereDesambiguacion": false,
+      "nombreBase": "VADEO"
+    },
+    {
+      "nombre": "CL (CÁMARA LENTA)",
+      "estilo": "Libre",
+      "descripcion": "Nadar libre realizando la fase aérea de la brazada lo más lento posible.",
+      "errorQueCorrige": "Control del recobro; ritmo y coordinación del gesto",
+      "requiereDesambiguacion": false,
+      "nombreBase": "CL (CÁMARA LENTA)"
+    },
+    {
+      "nombre": "O. KICK",
+      "estilo": "Libre",
+      "descripcion": "Nadar libre generando una patada muy rápida con una brazada muy despacio.",
+      "errorQueCorrige": "Descoordinación patada-brazada; sostén de la patada",
+      "requiereDesambiguacion": false,
+      "nombreBase": "O. KICK"
+    },
+    {
+      "nombre": "DXS",
+      "estilo": "Libre",
+      "descripcion": "Nadar libre eficientemente, abarcando la mayor distancia posible por cada brazada.",
+      "errorQueCorrige": "Baja distancia por ciclo (DPS); economía de nado",
+      "requiereDesambiguacion": false,
+      "nombreBase": "DXS"
+    },
+    {
+      "nombre": "BAND",
+      "estilo": "Libre",
+      "descripcion": "Patada de libre en posición de bandera: posición lateral con una mano en flecha y la otra arriba.",
+      "errorQueCorrige": "Posición corporal lateral; rolido y patada estable",
+      "requiereDesambiguacion": false,
+      "nombreBase": "BAND"
+    },
+    {
+      "nombre": "CAMB POSIC",
+      "estilo": "Libre",
+      "descripcion": "Cambios de posiciones en libre solo en patada: ventral, dorsal, lateral izq. y der.",
+      "errorQueCorrige": "Control corporal y equilibrio en el eje longitudinal",
+      "requiereDesambiguacion": false,
+      "nombreBase": "CAMB POSIC"
+    },
+    {
+      "nombre": "RUT L",
+      "estilo": "Libre",
+      "descripcion": "Patada; patada + brazada con una mano; con la otra; estilo completo (una distancia en cada uno).",
+      "errorQueCorrige": "Integración progresiva patada→brazada→nado completo",
+      "requiereDesambiguacion": false,
+      "nombreBase": "RUT L"
+    },
+    {
+      "nombre": "ROLIDO (Libre)",
+      "estilo": "Libre",
+      "descripcion": "Patada de libre con brazos abajo, giros de 90° a derecha e izquierda en el eje longitudinal.",
+      "errorQueCorrige": "Rolido insuficiente/excesivo; desalineación horizontal",
+      "requiereDesambiguacion": true,
+      "nombreBase": "ROLIDO"
+    },
+    {
+      "nombre": "ROLIDO CON 1 BRAZO (Libre)",
+      "estilo": "Libre",
+      "descripcion": "Libre con un brazo abajo y uno en flecha, giro de 90° a un solo lado con la brazada.",
+      "errorQueCorrige": "Rolido acoplado a la brazada; alineación en la tracción",
+      "requiereDesambiguacion": true,
+      "nombreBase": "ROLIDO CON 1 BRAZO"
+    },
+    {
+      "nombre": "FLECHA (Libre)",
+      "estilo": "Libre",
+      "descripcion": "Patada de libre en buena posición de flecha.",
+      "errorQueCorrige": "Posición corporal / hidrodinámica deficiente",
+      "requiereDesambiguacion": true,
+      "nombreBase": "FLECHA"
+    },
+    {
+      "nombre": "PATADA MIRANDO EL FONDO",
+      "estilo": "Libre",
+      "descripcion": "Patada de libre con la mirada hacia el fondo y ligeramente al frente, cadera alta.",
+      "errorQueCorrige": "Cabeza muy baja/alta; desalineación horizontal por posición de cabeza",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PATADA MIRANDO EL FONDO"
+    },
+    {
+      "nombre": "PATADA CORTA – PIES CON ESPUMA",
+      "estilo": "Libre",
+      "descripcion": "Patada de libre de amplitud corta y superficial, \"oyendo\" los pies hacer espuma.",
+      "errorQueCorrige": "Batida profunda o muy amplia",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PATADA CORTA – PIES CON ESPUMA"
+    },
+    {
+      "nombre": "PATADA CABEZA EMERGIDA",
+      "estilo": "Libre",
+      "descripcion": "Patada de libre con la cabeza fuera del agua (ejercicio de contraste).",
+      "errorQueCorrige": "Cabeza muy baja / mala percepción de la posición corporal",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PATADA CABEZA EMERGIDA"
+    },
+    {
+      "nombre": "3+3 PATADA LATERAL",
+      "estilo": "Libre",
+      "descripcion": "Patada de libre apuntando alternativamente los hombros al techo: 3 batidas de un lado y 3 del otro.",
+      "errorQueCorrige": "Desalineación lateral; falta de rotación longitudinal",
+      "requiereDesambiguacion": true,
+      "nombreBase": "3+3 PATADA LATERAL"
+    },
+    {
+      "nombre": "DESLIZAMIENTO HIDRODINÁMICO",
+      "estilo": "Libre",
+      "descripcion": "Deslizar en posición hidrodinámica probando distintas posiciones de brazos y manos hasta la más eficiente.",
+      "errorQueCorrige": "Mala posición hidrodinámica; exceso de arrastre",
+      "requiereDesambiguacion": false,
+      "nombreBase": "DESLIZAMIENTO HIDRODINÁMICO"
+    },
+    {
+      "nombre": "PULGAR ROZA EL MUSLO",
+      "estilo": "Libre",
+      "descripcion": "Nadar libre terminando la brazada con el pulgar rozando el muslo, brazo extendido.",
+      "errorQueCorrige": "Finalización incompleta de la brazada (empuje corto)",
+      "requiereDesambiguacion": true,
+      "nombreBase": "PULGAR ROZA EL MUSLO"
+    },
+    {
+      "nombre": "ROTAR PALMAS EN RECUPERACIÓN",
+      "estilo": "Libre",
+      "descripcion": "Al pasar los hombros en el recobro, rotar las palmas de dentro hacia fuera.",
+      "errorQueCorrige": "Entrada de la mano en pronación; mala orientación de la mano",
+      "requiereDesambiguacion": false,
+      "nombreBase": "ROTAR PALMAS EN RECUPERACIÓN"
+    },
+    {
+      "nombre": "ROLIDO (Espalda)",
+      "estilo": "Espalda",
+      "descripcion": "Patada de espalda con brazos abajo, giros de 90° a derecha e izquierda en el eje longitudinal.",
+      "errorQueCorrige": "Rolido de cadera/hombro insuficiente; desalineación",
+      "requiereDesambiguacion": true,
+      "nombreBase": "ROLIDO"
+    },
+    {
+      "nombre": "ROLIDO CON 1 BRAZO (Espalda)",
+      "estilo": "Espalda",
+      "descripcion": "Espalda con un brazo abajo y uno en flecha, giro de 90° a un solo lado con la brazada.",
+      "errorQueCorrige": "Rolido acoplado a la brazada; entrada y tracción",
+      "requiereDesambiguacion": true,
+      "nombreBase": "ROLIDO CON 1 BRAZO"
+    },
+    {
+      "nombre": "MANO AL CIELO",
+      "estilo": "Espalda",
+      "descripcion": "Patada de espalda con brazos quietos: uno en flecha y el otro apuntando al cielo.",
+      "errorQueCorrige": "Posición corporal y estabilidad de hombros",
+      "requiereDesambiguacion": false,
+      "nombreBase": "MANO AL CIELO"
+    },
+    {
+      "nombre": "MANO AL CIELO DINÁMICA",
+      "estilo": "Espalda",
+      "descripcion": "Igual, cambiando la posición de los brazos con brazada simultánea cada 5 s.",
+      "errorQueCorrige": "Coordinación del recobro y timing de brazada",
+      "requiereDesambiguacion": false,
+      "nombreBase": "MANO AL CIELO DINÁMICA"
+    },
+    {
+      "nombre": "TOCANDO FRENTE",
+      "estilo": "Espalda",
+      "descripcion": "En la fase aérea, flexionar el codo para tocar la frente y volver a estirar para terminar la brazada.",
+      "errorQueCorrige": "Recobro con brazo rígido; trayectoria del recobro",
+      "requiereDesambiguacion": false,
+      "nombreBase": "TOCANDO FRENTE"
+    },
+    {
+      "nombre": "FLECHA (Espalda)",
+      "estilo": "Espalda",
+      "descripcion": "Patada de espalda en buena posición de flecha.",
+      "errorQueCorrige": "Posición corporal / hidrodinámica deficiente",
+      "requiereDesambiguacion": true,
+      "nombreBase": "FLECHA"
+    },
+    {
+      "nombre": "PATADA MIRANDO EL TECHO",
+      "estilo": "Espalda",
+      "descripcion": "Patada de espalda con la mirada al techo y cadera alta.",
+      "errorQueCorrige": "Desalineación horizontal (cabeza levantada / cadera hundida)",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PATADA MIRANDO EL TECHO"
+    },
+    {
+      "nombre": "CHUTAR EL AGUA – DOBLAR RODILLA",
+      "estilo": "Espalda",
+      "descripcion": "Patada de espalda \"pateando\" el agua flexionando la rodilla, como chutar una pelota en la superficie.",
+      "errorQueCorrige": "Patada con rodillas en extensión (acción exclusiva del muslo)",
+      "requiereDesambiguacion": false,
+      "nombreBase": "CHUTAR EL AGUA – DOBLAR RODILLA"
+    },
+    {
+      "nombre": "PATADA MI EXTENDIDOS – ANTI-BICICLETA",
+      "estilo": "Espalda",
+      "descripcion": "Patada de espalda manteniendo los miembros inferiores más extendidos.",
+      "errorQueCorrige": "Patada tipo \"bicicleta\" (exceso de cadera y rodilla)",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PATADA MI EXTENDIDOS – ANTI-BICICLETA"
+    },
+    {
+      "nombre": "3+3 PATADA LATERAL (Espalda)",
+      "estilo": "Espalda",
+      "descripcion": "Patada de espalda apuntando alternativamente los hombros al techo: 3 batidas por lado.",
+      "errorQueCorrige": "Desalineación lateral; falta de rotación longitudinal",
+      "requiereDesambiguacion": true,
+      "nombreBase": "3+3 PATADA LATERAL"
+    },
+    {
+      "nombre": "FLECHA (Pecho)",
+      "estilo": "Pecho",
+      "descripcion": "Patada de pecho con buena flecha.",
+      "errorQueCorrige": "Posición corporal / deslizamiento deficiente",
+      "requiereDesambiguacion": true,
+      "nombreBase": "FLECHA"
+    },
+    {
+      "nombre": "TOCANDO TALÓN/TOBILLO",
+      "estilo": "Pecho",
+      "descripcion": "Patada de pecho con brazos abajo, tocando talones/tobillos al flexionar cadera y rodillas.",
+      "errorQueCorrige": "Patada incompleta o mal cierre; recorrido de la patada",
+      "requiereDesambiguacion": false,
+      "nombreBase": "TOCANDO TALÓN/TOBILLO"
+    },
+    {
+      "nombre": "2 PN X 1 BR",
+      "estilo": "Pecho",
+      "descripcion": "Pecho con brazos en flecha: dos patadas eficientes y luego una sola brazada.",
+      "errorQueCorrige": "Sincronización brazada-patada; eficiencia de la patada",
+      "requiereDesambiguacion": false,
+      "nombreBase": "2 PN X 1 BR"
+    },
+    {
+      "nombre": "COORD DE EXTREMIDADES",
+      "estilo": "Pecho",
+      "descripcion": "Coordinar nado solo con extremidades derechas o solo con izquierdas.",
+      "errorQueCorrige": "Asimetrías; coordinación contralateral",
+      "requiereDesambiguacion": false,
+      "nombreBase": "COORD DE EXTREMIDADES"
+    },
+    {
+      "nombre": "PULL EN PIERNAS",
+      "estilo": "Pecho",
+      "descripcion": "Pecho completo con pull buoy entre las piernas para no separar mucho las rodillas.",
+      "errorQueCorrige": "Rodillas muy abiertas; amplitud excesiva de patada",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PULL EN PIERNAS"
+    },
+    {
+      "nombre": "BRAZA 1-2-3",
+      "estilo": "Pecho",
+      "descripcion": "Coordinación en secuencia: 1) brazada, 2) pedaleo, 3) deslizamiento (~3 s).",
+      "errorQueCorrige": "Sincronización MS×MI (superposición o discontinuidad del ciclo)",
+      "requiereDesambiguacion": false,
+      "nombreBase": "BRAZA 1-2-3"
+    },
+    {
+      "nombre": "PEDALEO Y JUNTAR PIES, RECUPERAR LENTO",
+      "estilo": "Pecho",
+      "descripcion": "Acelerar el pedaleo hasta juntar los pies (ALI) y recuperar lentamente.",
+      "errorQueCorrige": "Recuperación de piernas demasiado rápida",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PEDALEO Y JUNTAR PIES, RECUPERAR LENTO"
+    },
+    {
+      "nombre": "TALÓN A LAS MANOS – DORSAL/VENTRAL",
+      "estilo": "Pecho",
+      "descripcion": "Patada de pecho tocando con el talón las manos, que van en la prolongación del cuerpo (posición ventral o dorsal).",
+      "errorQueCorrige": "Recuperación incompleta de la patada; falta de deslizamiento",
+      "requiereDesambiguacion": false,
+      "nombreBase": "TALÓN A LAS MANOS – DORSAL/VENTRAL"
+    },
+    {
+      "nombre": "BRAZADA CORTA – CODOS JUNTOS",
+      "estilo": "Pecho",
+      "descripcion": "Brazada de pecho corta, juntando rápidamente los codos bajo el cuerpo.",
+      "errorQueCorrige": "Recuperación de brazos con manos apartadas / brazada muy amplia",
+      "requiereDesambiguacion": false,
+      "nombreBase": "BRAZADA CORTA – CODOS JUNTOS"
+    },
+    {
+      "nombre": "MI × RESPIRACIÓN (Pecho)",
+      "estilo": "Pecho",
+      "descripcion": "Patada de pecho con o sin tabla, cabeza emergida, coordinando la respiración.",
+      "errorQueCorrige": "Cuerpo poco inclinado; pies que emergen; sincronización MI×respiración",
+      "requiereDesambiguacion": false,
+      "nombreBase": "MI × RESPIRACIÓN"
+    },
+    {
+      "nombre": "FLECHA (Mariposa)",
+      "estilo": "Mariposa",
+      "descripcion": "Patada de mariposa en buena posición de flecha.",
+      "errorQueCorrige": "Posición corporal / ondulación desde una base estable",
+      "requiereDesambiguacion": true,
+      "nombreBase": "FLECHA"
+    },
+    {
+      "nombre": "DELFINEO",
+      "estilo": "Mariposa",
+      "descripcion": "Mariposa solo con la fase subacuática de la brazada; brazos regresan por dentro del agua.",
+      "errorQueCorrige": "Ondulación y timing de patada sin la carga del recobro",
+      "requiereDesambiguacion": false,
+      "nombreBase": "DELFINEO"
+    },
+    {
+      "nombre": "2-2-2",
+      "estilo": "Mariposa",
+      "descripcion": "2 brazadas mano izq., 2 mano der. y 2 completas.",
+      "errorQueCorrige": "Asimetría de brazada; coordinación de ambos brazos",
+      "requiereDesambiguacion": false,
+      "nombreBase": "2-2-2"
+    },
+    {
+      "nombre": "PN EN SOLDADO",
+      "estilo": "Mariposa",
+      "descripcion": "Patada de mariposa con manos en posición de soldado, respirando sin mover las manos.",
+      "errorQueCorrige": "Estabilidad de la posición; respiración sin romper la línea",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PN EN SOLDADO"
+    },
+    {
+      "nombre": "DELFINEO COMPLETO",
+      "estilo": "Mariposa",
+      "descripcion": "Fase subacuática, pausa en soldado (2-3 s) y regreso de brazos por fuera del agua.",
+      "errorQueCorrige": "Timing recobro-patada; ritmo del ciclo completo",
+      "requiereDesambiguacion": false,
+      "nombreBase": "DELFINEO COMPLETO"
+    },
+    {
+      "nombre": "SACAR LA CADERA – ONDULACIÓN",
+      "estilo": "Mariposa",
+      "descripcion": "Ondular mariposa sacando la cadera fuera del agua, \"como los delfines\".",
+      "errorQueCorrige": "Movimiento ondulatorio insuficiente; poca transferencia de energía",
+      "requiereDesambiguacion": false,
+      "nombreBase": "SACAR LA CADERA – ONDULACIÓN"
+    },
+    {
+      "nombre": "DELFÍN 2 BATIDAS – ENTRADA/SALIDA",
+      "estilo": "Mariposa",
+      "descripcion": "Mariposa con dos pedaleos por ciclo: uno en la entrada de las manos y otro en la salida.",
+      "errorQueCorrige": "Un solo batido por ciclo; sincronización MS×MI",
+      "requiereDesambiguacion": false,
+      "nombreBase": "DELFÍN 2 BATIDAS – ENTRADA/SALIDA"
+    },
+    {
+      "nombre": "PULGAR ROZA EL MUSLO (Mariposa)",
+      "estilo": "Mariposa",
+      "descripcion": "Terminar la fase acuática de la brazada con el pulgar rozando el muslo, brazos extendidos.",
+      "errorQueCorrige": "Finalización incompleta o alejada de la brazada",
+      "requiereDesambiguacion": true,
+      "nombreBase": "PULGAR ROZA EL MUSLO"
+    },
+    {
+      "nombre": "MANOS ARRIBA-AFUERA-ATRÁS",
+      "estilo": "Mariposa",
+      "descripcion": "Dirigir la trayectoria subacuática hacia arriba, afuera y atrás (trayecto curvilíneo).",
+      "errorQueCorrige": "Empuje directo hacia arriba/atrás; desalineación",
+      "requiereDesambiguacion": false,
+      "nombreBase": "MANOS ARRIBA-AFUERA-ATRÁS"
+    },
+    {
+      "nombre": "COORD PM-BL",
+      "estilo": "General",
+      "descripcion": "Patada de mariposa y brazada de libre.",
+      "errorQueCorrige": "Transferencia de ondulación al eje del libre; coordinación",
+      "requiereDesambiguacion": false,
+      "nombreBase": "COORD PM-BL"
+    },
+    {
+      "nombre": "COORD PL-BP",
+      "estilo": "General",
+      "descripcion": "Patada de libre y brazada de pecho.",
+      "errorQueCorrige": "Coordinación cruzada; timing brazo-patada",
+      "requiereDesambiguacion": false,
+      "nombreBase": "COORD PL-BP"
+    },
+    {
+      "nombre": "COORD PP-BL",
+      "estilo": "General",
+      "descripcion": "Patada de pecho y brazada de libre.",
+      "errorQueCorrige": "Disociación tren superior/inferior; coordinación",
+      "requiereDesambiguacion": false,
+      "nombreBase": "COORD PP-BL"
+    },
+    {
+      "nombre": "COORD PM-BP",
+      "estilo": "General",
+      "descripcion": "Patada de mariposa y brazada de pecho.",
+      "errorQueCorrige": "Timing ondulación-brazada; coordinación",
+      "requiereDesambiguacion": false,
+      "nombreBase": "COORD PM-BP"
+    },
+    {
+      "nombre": "COORD PL-BM",
+      "estilo": "General",
+      "descripcion": "Patada de libre y brazada de mariposa.",
+      "errorQueCorrige": "Sostén de brazada simultánea con patada alterna",
+      "requiereDesambiguacion": false,
+      "nombreBase": "COORD PL-BM"
+    },
+    {
+      "nombre": "CLAVADO + FLECHA ESTÁTICA",
+      "estilo": "General",
+      "descripcion": "Clavado y posición de flecha estática.",
+      "errorQueCorrige": "Entrada y línea hidrodinámica en la salida",
+      "requiereDesambiguacion": false,
+      "nombreBase": "CLAVADO + FLECHA ESTÁTICA"
+    },
+    {
+      "nombre": "CLAVADO + SUBACUÁTICO",
+      "estilo": "General",
+      "descripcion": "Clavado y trabajo subacuático.",
+      "errorQueCorrige": "Transición salida-subacuático; profundidad y dirección",
+      "requiereDesambiguacion": false,
+      "nombreBase": "CLAVADO + SUBACUÁTICO"
+    },
+    {
+      "nombre": "CLAVADO + SUB + 6 BRAZADAS",
+      "estilo": "General",
+      "descripcion": "Clavado, subacuático y 6 brazadas (3 ciclos).",
+      "errorQueCorrige": "Enlace salida→subacuático→primeras brazadas",
+      "requiereDesambiguacion": false,
+      "nombreBase": "CLAVADO + SUB + 6 BRAZADAS"
+    },
+    {
+      "nombre": "SALIDAS SUBACUÁTICAS POR ESTILO",
+      "estilo": "General",
+      "descripcion": "Salidas subacuáticas de cada estilo.",
+      "errorQueCorrige": "Especificidad técnica del subacuático por estilo",
+      "requiereDesambiguacion": false,
+      "nombreBase": "SALIDAS SUBACUÁTICAS POR ESTILO"
+    },
+    {
+      "nombre": "SALIDAS DE 15M",
+      "estilo": "General",
+      "descripcion": "Salidas de 15 metros.",
+      "errorQueCorrige": "Distancia y potencia del subacuático hasta el límite reglamentario",
+      "requiereDesambiguacion": false,
+      "nombreBase": "SALIDAS DE 15M"
+    },
+    {
+      "nombre": "SALIDAS DE ABAJO EXPLOSIVAS",
+      "estilo": "General",
+      "descripcion": "Salidas explosivas desde abajo.",
+      "errorQueCorrige": "Potencia de impulso; reacción",
+      "requiereDesambiguacion": false,
+      "nombreBase": "SALIDAS DE ABAJO EXPLOSIVAS"
+    },
+    {
+      "nombre": "VIRAJES + SALIDA SUBACUÁTICA",
+      "estilo": "General",
+      "descripcion": "Virajes de estilos más salida subacuática.",
+      "errorQueCorrige": "Eficiencia del viraje y su enlace con el subacuático",
+      "requiereDesambiguacion": false,
+      "nombreBase": "VIRAJES + SALIDA SUBACUÁTICA"
+    },
+    {
+      "nombre": "VIRAJES RÁPIDOS",
+      "estilo": "General",
+      "descripcion": "Virajes a máxima velocidad.",
+      "errorQueCorrige": "Velocidad de rotación y empuje en pared",
+      "requiereDesambiguacion": false,
+      "nombreBase": "VIRAJES RÁPIDOS"
+    },
+    {
+      "nombre": "PRIMERO TIRA, DESPUÉS EMPUJA",
+      "estilo": "General",
+      "descripcion": "Salida agrupada (grab): primero traccionar y luego empujar el bloque con las manos.",
+      "errorQueCorrige": "Salida que solo usa MI; mala colocación de manos; poco alcance de vuelo",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PRIMERO TIRA, DESPUÉS EMPUJA"
+    },
+    {
+      "nombre": "PROGRESIÓN DE SALTOS",
+      "estilo": "General",
+      "descripcion": "Progresión de saltos de la adaptación al medio para vencer el temor a la entrada.",
+      "errorQueCorrige": "MI en extensión / no flexionar el tronco por temor a la entrada",
+      "requiereDesambiguacion": false,
+      "nombreBase": "PROGRESIÓN DE SALTOS"
+    },
+    {
+      "nombre": "APROXIMACIÓN A LA PARED",
+      "estilo": "General",
+      "descripcion": "Ejercitar la aproximación automatizando la distancia de inicio del viraje.",
+      "errorQueCorrige": "Reducir la velocidad antes del viraje; mala previsión de la distancia",
+      "requiereDesambiguacion": false,
+      "nombreBase": "APROXIMACIÓN A LA PARED"
+    },
+    {
+      "nombre": "SIN RESPIRAR ANTES DEL VIRAJE",
+      "estilo": "General",
+      "descripcion": "No respirar en la última brazada antes del viraje de rotación.",
+      "errorQueCorrige": "Mirar al frente / levantar la cabeza en la aproximación",
+      "requiereDesambiguacion": false,
+      "nombreBase": "SIN RESPIRAR ANTES DEL VIRAJE"
+    },
+    {
+      "nombre": "POSICIÓN AGRUPADA – TUCK",
+      "estilo": "General",
+      "descripcion": "Ejercitar la posición agrupada para la rotación rápida.",
+      "errorQueCorrige": "Rotación lenta; no dominar la posición agrupada",
+      "requiereDesambiguacion": false,
+      "nombreBase": "POSICIÓN AGRUPADA – TUCK"
+    }
+  ]
+}

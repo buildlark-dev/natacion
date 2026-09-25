@@ -33,12 +33,12 @@ de emuladores y pruebas de reglas en Node.
 
 **Purpose**: dejar el proyecto listo para trabajar, con el prototipo actual retirado.
 
-- [ ] T001 Añadir dependencias `provider`, `firebase_core` y `cloud_firestore` a `pubspec.yaml`, y declarar `assets/biblioteca/` en la sección `flutter: assets:`
-- [ ] T002 Crear el árbol de carpetas de `lib/dominio/{entidades,notacion,biblioteca,calculo,auditoria,metodologia,repositorios}`, `lib/datos/{firestore,recursos}`, `lib/ui/{editor,planes,nadadores}` y `test/{dominio,datos,ui}` según la estructura de `plan.md`
-- [ ] T003 Reemplazar el prototipo de `lib/main.dart` (clase `MiApp`, `Nadador` con `tiempo100m` y `generarPlanIA` simulado) por un arranque mínimo que monte la app y lea la bandera `USAR_EMULADORES`
-- [ ] T004 [P] Crear `firebase/firebase.json` con el emulador de Firestore configurado para el proyecto ficticio `demo-natacion`, y `firebase/firestore.indexes.json` vacío
-- [ ] T005 [P] Crear `firebase/package.json` con `@firebase/rules-unit-testing` y un script `test`, y `firebase/.gitignore` para `node_modules`
-- [ ] T006 [P] Endurecer `analysis_options.yaml` para que las advertencias del analizador no pasen desapercibidas, conforme al principio VII
+- [X] T001 Añadir dependencias `provider`, `firebase_core` y `cloud_firestore` a `pubspec.yaml`, y declarar `assets/biblioteca/` en la sección `flutter: assets:`
+- [X] T002 Crear el árbol de carpetas de `lib/dominio/{entidades,notacion,biblioteca,calculo,auditoria,metodologia,repositorios}`, `lib/datos/{firestore,recursos}`, `lib/ui/{editor,planes,nadadores}` y `test/{dominio,datos,ui}` según la estructura de `plan.md`
+- [X] T003 Reemplazar el prototipo de `lib/main.dart` (clase `MiApp`, `Nadador` con `tiempo100m` y `generarPlanIA` simulado) por un arranque mínimo que monte la app y lea la bandera `USAR_EMULADORES`
+- [X] T004 [P] Crear `firebase/firebase.json` con el emulador de Firestore configurado para el proyecto ficticio `demo-natacion`, y `firebase/firestore.indexes.json` vacío
+- [X] T005 [P] Crear `firebase/package.json` con `@firebase/rules-unit-testing` y un script `test`, y `firebase/.gitignore` para `node_modules`
+- [X] T006 [P] Endurecer `analysis_options.yaml` para que las advertencias del analizador no pasen desapercibidas, conforme al principio VII
 
 ---
 
@@ -49,15 +49,15 @@ historias necesitan.
 
 **⚠️ CRÍTICO**: ninguna historia de usuario puede empezar antes de terminar esta fase.
 
-- [ ] T007 Crear `docs/metodologia/metodologia.json` declarando `version: "3.4"`, fecha y huella SHA-256 de `PROMPT_MAESTRO_V3.4.md` y de `Biblioteca de ejercicios.docx`, según la decisión D4 de `research.md`
-- [ ] T008 Escribir un script de extracción de la sección 19 de `docs/metodologia/PROMPT_MAESTRO_V3.4.md` que genere `assets/biblioteca/ejercicios.json` con los campos `nombre`, `estilo`, `descripcion`, `errorQueCorrige` y `requiereDesambiguacion`
+- [X] T007 Crear `docs/metodologia/metodologia.json` declarando `version: "3.4"`, fecha y huella SHA-256 de `PROMPT_MAESTRO_V3.4.md` y de `Biblioteca de ejercicios.docx`, según la decisión D4 de `research.md`
+- [X] T008 Escribir un script de extracción de la sección 19 de `docs/metodologia/PROMPT_MAESTRO_V3.4.md` que genere `assets/biblioteca/ejercicios.json` con los campos `nombre`, `estilo`, `descripcion`, `errorQueCorrige` y `requiereDesambiguacion`
 - [ ] T009 Revisar a mano el resultado de T008 con el entrenador: confirmar el conteo de ejercicios por estilo y marcar los nombres que se repiten entre estilos (`FLECHA`, `ROLIDO`, `ROLIDO CON 1 BRAZO`) con `requiereDesambiguacion: true`. **Un ejercicio mal transcrito es una regla mal aplicada**
-- [ ] T010 [P] Implementar las constantes de categoría en `lib/dominio/metodologia/categorias.dart`: Iniciación 500–800 m / 2 sesiones / sin ATR; Tecnificación 800–1000 m / 2 / sin ATR; Precompetitivo 1800–2200 m / 3 / con ATR; Competitivo 4000–5000 m / 5 / con ATR; Alto Rendimiento 5000–6000 m / 10 / con ATR
-- [ ] T011 [P] Implementar las seis zonas en `lib/dominio/metodologia/zonas.dart` con bandas contiguas y sin solapamiento: A1 60–70%, A2 70–80%, A3 80–85%, AT 85–92%, Máx 92%+, Velocidad (controlada por ritmo, no por frecuencia cardíaca)
-- [ ] T012 [P] Implementar las distribuciones de fase ATR en `lib/dominio/metodologia/fases_atr.dart`: Acumulación A1 60 / A2 25 / A3 10 / AT 5, técnico 50%; Transformación A1 30 / A2 35 / A3 15 / AT 15 / Máx 5, técnico 30%; Realización A1 25 / A2 25 / A3 15 / AT 10 / Máx 15 / Velocidad 10, técnico 20%
-- [ ] T013 [P] Implementar en `lib/dominio/metodologia/estilos.dart` el reparto por estilo objetivo: Libre 80–85% Libre y 15–20% Espalda; Pecho 50% Pecho y 50% Libre/Espalda; Mariposa 50% Mariposa y 50% Libre/Espalda; y el reparto de sesión inicial 40% / central 50% (pre-set 10% + principal 40%) / final 10%
-- [ ] T014 Escribir la prueba de frontera del dominio en `test/dominio/arquitectura_test.dart`: recorre `lib/dominio/` y falla si algún archivo importa `package:flutter/`, `package:cloud_firestore/` o `package:firebase_core/` (principio II, decisión D9)
-- [ ] T015 [P] Escribir pruebas de las constantes en `test/dominio/metodologia/` que verifiquen los invariantes: cada fila de fase ATR suma exactamente 100%, las bandas de zona son contiguas y no se solapan, y las categorías sin ATR están marcadas como tales
+- [X] T010 [P] Implementar las constantes de categoría en `lib/dominio/metodologia/categorias.dart`: Iniciación 500–800 m / 2 sesiones / sin ATR; Tecnificación 800–1000 m / 2 / sin ATR; Precompetitivo 1800–2200 m / 3 / con ATR; Competitivo 4000–5000 m / 5 / con ATR; Alto Rendimiento 5000–6000 m / 10 / con ATR
+- [X] T011 [P] Implementar las seis zonas en `lib/dominio/metodologia/zonas.dart` con bandas contiguas y sin solapamiento: A1 60–70%, A2 70–80%, A3 80–85%, AT 85–92%, Máx 92%+, Velocidad (controlada por ritmo, no por frecuencia cardíaca)
+- [X] T012 [P] Implementar las distribuciones de fase ATR en `lib/dominio/metodologia/fases_atr.dart`: Acumulación A1 60 / A2 25 / A3 10 / AT 5, técnico 50%; Transformación A1 30 / A2 35 / A3 15 / AT 15 / Máx 5, técnico 30%; Realización A1 25 / A2 25 / A3 15 / AT 10 / Máx 15 / Velocidad 10, técnico 20%
+- [X] T013 [P] Implementar en `lib/dominio/metodologia/estilos.dart` el reparto por estilo objetivo: Libre 80–85% Libre y 15–20% Espalda; Pecho 50% Pecho y 50% Libre/Espalda; Mariposa 50% Mariposa y 50% Libre/Espalda; y el reparto de sesión inicial 40% / central 50% (pre-set 10% + principal 40%) / final 10%
+- [X] T014 Escribir la prueba de frontera del dominio en `test/dominio/arquitectura_test.dart`: recorre `lib/dominio/` y falla si algún archivo importa `package:flutter/`, `package:cloud_firestore/` o `package:firebase_core/` (principio II, decisión D9)
+- [X] T015 [P] Escribir pruebas de las constantes en `test/dominio/metodologia/` que verifiquen los invariantes: cada fila de fase ATR suma exactamente 100%, las bandas de zona son contiguas y no se solapan, y las categorías sin ATR están marcadas como tales
 - [ ] T016 Crear las entidades del dominio en `lib/dominio/entidades/`: `Plan`, `Microciclo`, `Sesion`, `Parte`, `Serie`, `Nadador`, `Ejercicio`, `FragmentoPendiente`, `Justificacion`, según los campos y reglas de `data-model.md`. Los derivados (metros, porcentajes, distribuciones) se calculan, **nunca se almacenan como campo**
 - [ ] T017 Declarar las interfaces de repositorio en `lib/dominio/repositorios/`: `RepositorioPlanes`, `RepositorioSesiones`, `RepositorioNadadores` y `RepositorioBiblioteca`, con las firmas de `contracts/almacenamiento.md`. Ninguna firma puede mencionar tipos de Firestore
 - [ ] T018 [P] Implementar `lib/datos/recursos/biblioteca_empaquetada.dart`, que carga `assets/biblioteca/ejercicios.json` y satisface `RepositorioBiblioteca` con búsqueda por coincidencia exacta de (`nombre`, `estilo`)
@@ -85,7 +85,7 @@ que los totales, el porcentaje técnico y los avisos coinciden con la revisión 
 > Escribir primero y comprobar que FALLAN antes de implementar.
 
 - [ ] T024 [P] [US1] Construir el corpus de notación en `test/dominio/notacion/corpus.dart` con las series reales de la sección 14 del documento normativo, cada una con su resultado estructurado esperado: `200 N`, `4x100 AL SNK PN / 2'`, `8x50 (1L 1Estilo 1>4)`, `200 PULL PL (75N=25 Prog)`, `400 AL (75 Estilo − 25 UW)`, `200 AL (25m Pn E FLECHA + 75 N)`, `200 PU/Pp E (50 c/brazo)`, `300 REC Pp TEC L`
-- [ ] T025 [P] [US1] Escribir la prueba de anclaje en `test/dominio/notacion/anclaje_seccion14_test.dart`: el ejemplo completo del miércoles 14 debe dar inicial 1.800 m, central 1.500 m, final 300 m y total **3.600 m**
+- [X] T025 [P] [US1] Escribir la prueba de anclaje en `test/dominio/notacion/anclaje_seccion14_test.dart`: el ejemplo completo del miércoles 14 debe dar inicial 1.800 m, central 1.500 m, final 300 m y total **3.600 m**
 - [ ] T026 [P] [US1] Escribir pruebas del tokenizador en `test/dominio/notacion/tokenizador_test.dart` para implementos y modificadores (`AL`, `PL`, `Pp`, `PULL`, `PN`, `SNK`, `PARAC`, `CAUCHO`, `Hyp n`, `UW`, `REC`, `^`, `1<4`, `1>4`, `+5''`, `-5''`)
 - [ ] T027 [P] [US1] Escribir pruebas de recuperación de errores en `test/dominio/notacion/pendientes_test.dart`: el analizador nunca lanza excepción, y devuelve fragmentos pendientes con posición exacta y motivo correcto (`termino_desconocido`, `estructura_no_reconocida`, `ejercicio_fuera_de_biblioteca`, `ambiguo`, `nomenclatura_prohibida`)
 - [ ] T028 [P] [US1] Escribir pruebas de la regla de no invención en `test/dominio/biblioteca/no_invencion_test.dart`: un nombre ausente de la Biblioteca produce fragmento pendiente y **no se sugiere ningún nombre parecido**
@@ -98,11 +98,11 @@ que los totales, el porcentaje técnico y los avisos coinciden con la revisión 
 
 ### Implementation for User Story 1
 
-- [ ] T035 [US1] Implementar el tokenizador en `lib/dominio/notacion/tokenizador.dart`, que convierte el texto libre en tokens conservando la posición de cada uno dentro del original
-- [ ] T036 [US1] Implementar el analizador descendente en `lib/dominio/notacion/analizador.dart` con la firma `analizar(texto) -> { series, pendientes }`. **Nunca lanza excepción**: ante lo que no entiende devuelve resultados parciales y un fragmento pendiente con posición y motivo (contrato en `contracts/notacion.md`)
-- [ ] T037 [US1] Implementar el reconocimiento de estructuras en `lib/dominio/notacion/estructuras.dart`: `N x D`, `N x D / t`, distancia suelta, series con implemento, agrupaciones entre paréntesis y composiciones con `+`
-- [ ] T038 [US1] Implementar la resolución de ejercicios contra la Biblioteca en `lib/dominio/biblioteca/resolucion.dart`: coincidencia exacta, sin sinónimos ni correcciones automáticas, y exigencia de estilo cuando `requiereDesambiguacion` es verdadero
-- [ ] T039 [US1] Implementar el glosario ampliable en `lib/dominio/notacion/glosario.dart` (FR-006): un término aclarado se incorpora con su definición y su fecha, y deja de producir fragmento pendiente. Tratar `FC1` y `FC2` como notación en desuso: se ignoran informando, sin bloquear
+- [X] T035 [US1] Implementar el tokenizador en `lib/dominio/notacion/tokenizador.dart`, que convierte el texto libre en tokens conservando la posición de cada uno dentro del original
+- [X] T036 [US1] Implementar el analizador descendente en `lib/dominio/notacion/analizador.dart` con la firma `analizar(texto) -> { series, pendientes }`. **Nunca lanza excepción**: ante lo que no entiende devuelve resultados parciales y un fragmento pendiente con posición y motivo (contrato en `contracts/notacion.md`)
+- [X] T037 [US1] Implementar el reconocimiento de estructuras en `lib/dominio/notacion/estructuras.dart`: `N x D`, `N x D / t`, distancia suelta, series con implemento, agrupaciones entre paréntesis y composiciones con `+`
+- [X] T038 [US1] Implementar la resolución de ejercicios contra la Biblioteca en `lib/dominio/biblioteca/resolucion.dart`: coincidencia exacta, sin sinónimos ni correcciones automáticas, y exigencia de estilo cuando `requiereDesambiguacion` es verdadero
+- [X] T039 [US1] Implementar el glosario ampliable en `lib/dominio/notacion/glosario.dart` (FR-006): un término aclarado se incorpora con su definición y su fecha, y deja de producir fragmento pendiente. Tratar `FC1` y `FC2` como notación en desuso: se ignoran informando, sin bloquear
 - [ ] T040 [US1] Implementar los cálculos en `lib/dominio/calculo/`: metros por serie, parte y sesión; porcentaje técnico; reparto real entre partes; y comparación contra el rango de volumen de la categoría
 - [ ] T041 [US1] Implementar las reglas de completitud de sesión en `lib/dominio/entidades/sesion.dart`: objetivo técnico y objetivo fisiológico obligatorios, exactamente tres partes, y ningún fragmento pendiente
 - [ ] T042 [US1] Implementar el estado del editor en `lib/ui/editor/estado_editor.dart` con `ChangeNotifier`, que reinterpreta y recalcula al escribir manteniendo las correcciones manuales (decisión D8)
