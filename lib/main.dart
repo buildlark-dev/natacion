@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:natacion_app/datos/memoria/repositorios_memoria.dart';
 import 'package:natacion_app/datos/recursos/biblioteca_empaquetada.dart';
+import 'package:natacion_app/datos/recursos/version_metodologia.dart';
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/repositorios/repositorios.dart';
 import 'package:natacion_app/ui/editor/estado_editor.dart';
 import 'package:natacion_app/ui/editor/pantalla_editor.dart';
+import 'package:natacion_app/ui/nadadores/pantalla_perfiles.dart';
 import 'package:provider/provider.dart';
 
 /// Punto de entrada de la aplicación.
@@ -15,6 +19,17 @@ const bool usarEmuladores =
 
 void main() {
   runApp(const AppNatacion());
+}
+
+/// Todo lo que la app necesita cargar antes de empezar.
+class RecursosIniciales {
+  const RecursosIniciales({
+    required this.biblioteca,
+    required this.versionMetodologia,
+  });
+
+  final Biblioteca biblioteca;
+  final String versionMetodologia;
 }
 
 class AppNatacion extends StatelessWidget {
@@ -33,10 +48,9 @@ class AppNatacion extends StatelessWidget {
   }
 }
 
-/// Carga la Biblioteca Oficial antes de abrir el editor.
-///
-/// Sin biblioteca no se puede comprobar la regla de no invención, así que el
-/// editor no se muestra hasta tenerla.
+/// Carga la Biblioteca Oficial y la versión de metodología antes de abrir la
+/// app. Sin biblioteca no se puede comprobar la regla de no invención, así que
+/// no se muestra nada hasta tenerla.
 class PantallaInicio extends StatefulWidget {
   const PantallaInicio({super.key});
 
@@ -45,12 +59,21 @@ class PantallaInicio extends StatefulWidget {
 }
 
 class _PantallaInicioState extends State<PantallaInicio> {
-  late final Future<Biblioteca> _biblioteca = CargadorBiblioteca().cargar();
+  late final Future<RecursosIniciales> _recursos = _cargar();
+
+  Future<RecursosIniciales> _cargar() async {
+    final biblioteca = await CargadorBiblioteca().cargar();
+    final version = await CargadorVersionMetodologia().cargar();
+    return RecursosIniciales(
+      biblioteca: biblioteca,
+      versionMetodologia: version,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Biblioteca>(
-      future: _biblioteca,
+    return FutureBuilder<RecursosIniciales>(
+      future: _recursos,
       builder: (context, instantanea) {
         if (instantanea.hasError) {
           return Scaffold(
@@ -75,11 +98,55 @@ class _PantallaInicioState extends State<PantallaInicio> {
           );
         }
 
-        return ChangeNotifierProvider(
-          create: (_) => EstadoEditor(biblioteca: instantanea.data!),
-          child: const PantallaEditor(),
-        );
+        return PantallaPrincipal(recursos: instantanea.data!);
       },
+    );
+  }
+}
+
+/// Navegación entre el editor de sesión y los perfiles de nadador.
+class PantallaPrincipal extends StatefulWidget {
+  const PantallaPrincipal({super.key, required this.recursos});
+
+  final RecursosIniciales recursos;
+
+  @override
+  State<PantallaPrincipal> createState() => _PantallaPrincipalState();
+}
+
+class _PantallaPrincipalState extends State<PantallaPrincipal> {
+  int _indice = 0;
+
+  final RepositorioNadadores _nadadores = RepositorioNadadoresMemoria();
+
+  @override
+  Widget build(BuildContext context) {
+    final pantallas = <Widget>[
+      ChangeNotifierProvider(
+        create: (_) => EstadoEditor(biblioteca: widget.recursos.biblioteca),
+        child: const PantallaEditor(),
+      ),
+      PantallaPerfiles(repositorio: _nadadores),
+    ];
+
+    return Scaffold(
+      body: pantallas[_indice],
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _indice,
+        onDestinationSelected: (indice) => setState(() => _indice = indice),
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.edit_note_outlined),
+            selectedIcon: Icon(Icons.edit_note),
+            label: 'Editor',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.groups_outlined),
+            selectedIcon: Icon(Icons.groups),
+            label: 'Nadadores',
+          ),
+        ],
+      ),
     );
   }
 }

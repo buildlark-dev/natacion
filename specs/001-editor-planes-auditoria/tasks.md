@@ -133,7 +133,7 @@ porcentajes calculados coinciden con los del documento original.
 - [X] T051 [P] [US2] Escribir pruebas de `C06_transferencia` en `test/dominio/auditoria/c06_test.dart`, con estilo objetivo Libre repartido 60/40 donde se prescribe 80–85% / 15–20%
 - [X] T052 [P] [US2] Escribir pruebas de `C05_volumen_categoria` en `test/dominio/auditoria/c05_test.dart`, incluida la discrepancia entre sesiones programadas y la frecuencia semanal esperada de la categoría
 - [X] T053 [P] [US2] Escribir pruebas de la prohibición de fase ATR en `test/dominio/auditoria/atr_prohibido_test.dart`: un plan de Iniciación o Tecnificación no admite fase ATR
-- [ ] T054 [P] [US2] Escribir pruebas de la regla de Tecnificación en `test/dominio/auditoria/tecnificacion_test.dart`: en programas de dos meses, sesión 1 de Pecho y sesión 2 de Mariposa todas las semanas; un microciclo que lo incumple se reporta
+- [X] T054 [P] [US2] Escribir pruebas de la regla de Tecnificación en `test/dominio/auditoria/tecnificacion_test.dart`: en programas de dos meses, sesión 1 de Pecho y sesión 2 de Mariposa todas las semanas; un microciclo que lo incumple se reporta
 - [X] T055 [P] [US2] Escribir pruebas de `C09_modelamiento` en `test/dominio/auditoria/c09_test.dart`: un microciclo sin objetivo real, o cuyo nombre no lo refleja, falla el criterio
 - [X] T056 [P] [US2] Escribir pruebas de `C10_drills_diagnostico` en `test/dominio/auditoria/c10_test.dart`: con diagnóstico registrado y ejercicios que no atacan ninguno de sus errores, falla; **sin diagnóstico, reporta la ausencia sin culpar al plan**
 - [X] T057 [P] [US2] Escribir pruebas de la tolerancia en `test/dominio/auditoria/tolerancia_test.dart`: una desviación dentro de ±3 puntos porcentuales cumple, y justo fuera no cumple
@@ -144,9 +144,9 @@ porcentajes calculados coinciden con los del documento original.
 - [X] T059 [US2] Implementar la tolerancia configurable en `lib/dominio/auditoria/tolerancia.dart`, con valor inicial de ±3 puntos porcentuales definido **en un solo lugar** para poder recalibrarlo
 - [X] T060 [US2] Implementar los criterios justificables `C02`, `C03`, `C04`, `C05`, `C06`, `C09` y `C10` en `lib/dominio/auditoria/criterios/`, uno por archivo, cada uno devolviendo veredicto, observación con números concretos y ubicación
 - [X] T061 [US2] Implementar la validación de fase ATR frente a categoría en `lib/dominio/metodologia/validacion_fase.dart`: las categorías sin ATR no la admiten
-- [ ] T062 [US2] Implementar la gestión de microciclos en `lib/dominio/entidades/microciclo.dart` y `lib/ui/planes/editor_microciclos.dart`, exigiendo que el nombre describa el objetivo real y no solo la posición en la fase
-- [ ] T063 [US2] Construir la pantalla de plan en `lib/ui/planes/pantalla_plan.dart`: cabecera con categoría, estilo y prueba objetivo, longitud de piscina, fechas y fase ATR, con sus microciclos y sesiones
-- [ ] T064 [US2] Construir el panel de distribución en `lib/ui/planes/panel_distribucion.dart`, mostrando por cada zona el valor real, el prescrito y la diferencia, más el porcentaje técnico y el reparto de estilos
+- [X] T062 [US2] Implementar la gestión de microciclos en `lib/dominio/entidades/microciclo.dart` y `lib/ui/planes/editor_microciclos.dart`, exigiendo que el nombre describa el objetivo real y no solo la posición en la fase
+- [X] T063 [US2] Construir la pantalla de plan en `lib/ui/planes/pantalla_plan.dart`: cabecera con categoría, estilo y prueba objetivo, longitud de piscina, fechas y fase ATR, con sus microciclos y sesiones
+- [X] T064 [US2] Construir el panel de distribución en `lib/ui/planes/panel_distribucion.dart`, mostrando por cada zona el valor real, el prescrito y la diferencia, más el porcentaje técnico y el reparto de estilos
 
 **Checkpoint**: la auditoría agregada detecta los errores que no se ven en una sesión aislada. Validar con el escenario V8 de `quickstart.md`.
 
@@ -177,9 +177,9 @@ cuáles bloquean, cuáles piden justificación y cuáles pasan limpios.
 - [X] T074 [US3] Implementar la regla de aprobación en `lib/dominio/auditoria/regla_aprobacion.dart`: cero bloqueantes en rojo, justificación no vacía por cada justificable en rojo, y ninguna sesión incompleta
 - [X] T075 [US3] Implementar las transiciones de estado del plan en `lib/dominio/entidades/plan.dart`: `aprobar()` estampa la versión de metodología leída de `metodologia.json` y la fecha; `publicar()`; e inmutabilidad tras aprobar
 - [X] T076 [US3] Implementar `crearVersionDesde(idAprobado)` en la capa de datos, que produce un plan nuevo en `borrador` con `versionAnteriorId` y conserva el aprobado sin tocar
-- [ ] T077 [US3] Guardar la instantánea de auditoría y las justificaciones junto al plan al aprobar, en el campo `auditoriaAlAprobar` de `contracts/almacenamiento.md`
-- [ ] T078 [US3] Construir la tabla de auditoría en `lib/ui/planes/tabla_auditoria.dart`: los once criterios con su veredicto, su severidad y su observación con números concretos, consultable en cualquier momento y no solo al aprobar
-- [ ] T079 [US3] Construir el flujo de aprobación en `lib/ui/planes/dialogo_aprobacion.dart`: los bloqueantes se muestran como impedimento nombrando el ejercicio y la sesión; los justificables piden el texto y no dejan aprobar mientras esté vacío
+- [X] T077 [US3] Guardar la instantánea de auditoría y las justificaciones junto al plan al aprobar, en el campo `auditoriaAlAprobar` de `contracts/almacenamiento.md`
+- [X] T078 [US3] Construir la tabla de auditoría en `lib/ui/planes/tabla_auditoria.dart`: los once criterios con su veredicto, su severidad y su observación con números concretos, consultable en cualquier momento y no solo al aprobar
+- [X] T079 [US3] Construir el flujo de aprobación en `lib/ui/planes/dialogo_aprobacion.dart`: los bloqueantes se muestran como impedimento nombrando el ejercicio y la sesión; los justificables piden el texto y no dejan aprobar mientras esté vacío
 
 **Checkpoint**: ningún plan defectuoso puede aprobarse. Validar con los escenarios V5, V6 y V7 de `quickstart.md`.
 
@@ -196,17 +196,17 @@ conserva sus destinatarios y que los perfiles se pueden exportar.
 ### Tests for User Story 4 ⚠️
 
 - [X] T080 [P] [US4] Escribir pruebas de completitud de perfil en `test/dominio/entidades/nadador_test.dart`: `categoria` y `estiloObjetivo` son **obligatorios** para dar el perfil por completo
-- [ ] T081 [P] [US4] Escribir pruebas de asignación en `test/dominio/entidades/asignacion_test.dart`: el plan conserva su lista `nadadoresIds`, y desde un perfil se pueden ver sus planes con el estado de cada uno
+- [X] T081 [P] [US4] Escribir pruebas de asignación en `test/dominio/entidades/asignacion_test.dart`: el plan conserva su lista `nadadoresIds`, y desde un perfil se pueden ver sus planes con el estado de cada uno
 - [X] T082 [P] [US4] Escribir pruebas de exportación en `test/datos/exportacion_test.dart`: un plan exportado es un único JSON con el plan y sus sesiones embebidas, legible sin la app (principio V)
 - [ ] T083 [P] [US4] Escribir pruebas de minimización de datos en `test/datos/registros_test.dart`: ningún nombre, marca ni identificador de nadador aparece en los registros técnicos (FR-032)
 
 ### Implementation for User Story 4
 
-- [ ] T084 [US4] Implementar la entidad `Nadador` completa en `lib/dominio/entidades/nadador.dart` con `nombre` obligatorio, `fechaNacimiento` opcional, `categoria` y `estiloObjetivo` obligatorios, `pruebaObjetivo`, lista de `marcas` y `diagnosticoTecnico`
-- [ ] T085 [US4] Implementar `RepositorioNadadores` sobre Firestore en `lib/datos/firestore/repositorio_nadadores.dart`
-- [ ] T086 [US4] Construir la pantalla de perfiles en `lib/ui/nadadores/pantalla_perfiles.dart`, señalando los datos obligatorios que falten
-- [ ] T087 [US4] Añadir un aviso visible y permanente en `lib/ui/nadadores/aviso_consentimiento.dart`: mientras no exista el registro de consentimiento del acudiente, solo deben cargarse perfiles de prueba o del propio entrenador. **Lo exige la condición del principio V registrada en `plan.md`**
-- [ ] T088 [US4] Implementar la asignación de planes a nadadores en `lib/ui/planes/asignacion.dart` y la vista de planes por perfil
+- [X] T084 [US4] Implementar la entidad `Nadador` completa en `lib/dominio/entidades/nadador.dart` con `nombre` obligatorio, `fechaNacimiento` opcional, `categoria` y `estiloObjetivo` obligatorios, `pruebaObjetivo`, lista de `marcas` y `diagnosticoTecnico`
+- [X] T085 [US4] Implementar `RepositorioNadadores` sobre Firestore en `lib/datos/firestore/repositorio_nadadores.dart`
+- [X] T086 [US4] Construir la pantalla de perfiles en `lib/ui/nadadores/pantalla_perfiles.dart`, señalando los datos obligatorios que falten
+- [X] T087 [US4] Añadir un aviso visible y permanente en `lib/ui/nadadores/aviso_consentimiento.dart`: mientras no exista el registro de consentimiento del acudiente, solo deben cargarse perfiles de prueba o del propio entrenador. **Lo exige la condición del principio V registrada en `plan.md`**
+- [X] T088 [US4] Implementar la asignación de planes a nadadores en `lib/ui/planes/asignacion.dart` y la vista de planes por perfil
 - [ ] T089 [US4] Implementar la exportación en `lib/datos/exportacion.dart`: plan completo con sus sesiones, y perfil con sus planes, en JSON legible
 
 **Checkpoint**: las cuatro historias funcionan. El editor produce planes auditados, aprobados y asignados a nadadores concretos.
