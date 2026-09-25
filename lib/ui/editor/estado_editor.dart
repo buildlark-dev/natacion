@@ -15,17 +15,24 @@ import 'package:natacion_app/dominio/metodologia/categorias.dart';
 import 'package:natacion_app/dominio/metodologia/estilos.dart';
 import 'package:natacion_app/dominio/metodologia/zonas.dart';
 import 'package:natacion_app/dominio/notacion/analizador.dart';
+import 'package:natacion_app/dominio/repositorios/repositorios.dart';
 
 class EstadoEditor extends ChangeNotifier {
   EstadoEditor({
     required Biblioteca biblioteca,
     Categoria categoria = Categoria.precompetitivo,
+    this.repositorio,
+    this.planId,
   })  : _analizador = Analizador(biblioteca: biblioteca),
         _sesion = Sesion() {
     _categoria = categoria;
   }
 
   final Analizador _analizador;
+
+  /// Opcional: sin repositorio el editor funciona igual, solo que no guarda.
+  final RepositorioSesiones? repositorio;
+  final String? planId;
 
   Sesion _sesion;
   Categoria _categoria = Categoria.precompetitivo;
@@ -142,5 +149,38 @@ class EstadoEditor extends ChangeNotifier {
   /// analizador no la adivina (FR-011).
   void asignarZona(TipoParte tipo, int indice, Zona zona) {
     corregirSerie(tipo, indice, 'zona', zona: zona);
+  }
+
+  bool get puedeGuardar => repositorio != null && planId != null;
+
+  String? ultimoError;
+
+  /// Guarda la sesión con su texto original, sus series interpretadas, sus
+  /// fragmentos pendientes y el origen de cada serie (FR-035 a FR-037).
+  ///
+  /// Se guarda aunque esté incompleta: es un borrador de trabajo. Lo que no se
+  /// puede es aprobar un plan con sesiones incompletas.
+  Future<bool> guardar() async {
+    final destino = repositorio;
+    final plan = planId;
+    if (destino == null || plan == null) return false;
+
+    try {
+      final id = await destino.guardar(plan, _sesion);
+      _sesion = _sesion.copiarCon(id: id);
+      ultimoError = null;
+      notifyListeners();
+      return true;
+    } on FalloDeDatos catch (e) {
+      ultimoError = e.mensaje;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  /// Recupera una sesión guardada para seguir editándola.
+  Future<void> cargar(Sesion sesion) async {
+    _sesion = sesion;
+    notifyListeners();
   }
 }

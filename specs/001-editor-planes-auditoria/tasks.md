@@ -110,7 +110,7 @@ que los totales, el porcentaje técnico y los avisos coinciden con la revisión 
 - [X] T044 [US1] Añadir los campos de cabecera de sesión en `lib/ui/editor/cabecera_sesion.dart`: fecha, objetivo técnico, objetivo fisiológico, RPE previsto de 0 a 10 y variables de monitoreo de carga interna (FR-012)
 - [X] T045 [US1] Mostrar los avisos en `lib/ui/editor/panel_avisos.dart`: fragmentos pendientes resaltados sobre el texto original, ejercicios fuera de biblioteca, volumen fuera de rango con la diferencia exacta, y datos obligatorios que faltan
 - [X] T046 [US1] Implementar el registro de propuestas de ejercicio en `lib/dominio/biblioteca/propuestas.dart` y su pantalla en `lib/ui/editor/dialogo_propuesta.dart` (FR-004): se guarda fuera del plan, en estado `pendiente`, y **no tiene ningún efecto sobre el plan**
-- [ ] T047 [US1] Persistir y recuperar sesiones a través de `RepositorioSesiones`, guardando `textoOriginal`, `series`, `fragmentosPendientes` y el campo `origen` de cada serie
+- [X] T047 [US1] Persistir y recuperar sesiones a través de `RepositorioSesiones`, guardando `textoOriginal`, `series`, `fragmentosPendientes` y el campo `origen` de cada serie
 
 **Checkpoint**: el entrenador puede escribir una sesión completa, verla interpretada, corregirla y recibir avisos. Validar con los escenarios V1, V2, V3 y V4 de `quickstart.md`.
 
@@ -317,3 +317,40 @@ manual que hoy hace el entrenador.
 - Verificar que cada prueba falla antes de implementar lo que la hace pasar
 - Commitear por tarea o por grupo lógico
 - T009, T087, T091 y T092 requieren **criterio del entrenador**, no son mecánicas
+
+---
+
+## Estado de cierre (2026-09-25)
+
+**92 de 96 tareas completadas.** Las cuatro restantes dependen del entrenador o
+quedaron sin aplicar:
+
+- **T009 — Revisión de la Biblioteca extraída.** Pendiente del entrenador. La
+  extracción dio **70 ejercicios** (Libre 23, General 18, Espalda 10, Pecho 10,
+  Mariposa 9). Detectó **cinco** nombres base ambiguos, no los tres que nombra
+  la sección 7: además de `FLECHA`, `ROLIDO` y `ROLIDO CON 1 BRAZO`, también se
+  repiten entre estilos `3+3 PATADA LATERAL` (Libre y Espalda) y
+  `PULGAR ROZA EL MUSLO` (Libre y Mariposa).
+
+- **T091 — No aplica.** Solo entraba en juego si V10 no cuadraba, y cuadró: la
+  sesión S2 del 04/08 da 1.900 m exactos y la semana 5.700 m. Los dos defectos
+  que V10 destapó estaban en el analizador, no en el documento del entrenador,
+  y se corrigieron.
+
+- **T092 — Recalibración de la tolerancia.** Pendiente del entrenador. La
+  tolerancia de ±3 puntos porcentuales sigue sin calibrar contra sus planes
+  históricos completos: V10 validó metros, no distribuciones.
+
+- **T095 — No aplica todavía.** El plan de referencia no se incorporó al
+  repositorio; las pruebas reproducen su texto sin nombres de nadadores. Si más
+  adelante se añade el archivo, habrá que anonimizarlo antes.
+
+### Hallazgos en el documento normativo
+
+1. **`CAMBIO POSI` frente a `CAMB POSIC`.** La sesión de ejemplo de la
+   sección 14 escribe `CAMBIO POSI`, pero la sección 19 define el ejercicio
+   como `CAMB POSIC`. La regla R2 exige coincidencia exacta, así que el
+   analizador lo marca como fuera de biblioteca. Hay que decidir cuál de los
+   dos nombres es el bueno y corregir el documento.
+
+2. **Cinco ejercicios ambiguos, no tres** (ver T009).
