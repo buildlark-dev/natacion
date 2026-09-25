@@ -59,13 +59,13 @@ historias necesitan.
 - [X] T014 Escribir la prueba de frontera del dominio en `test/dominio/arquitectura_test.dart`: recorre `lib/dominio/` y falla si algún archivo importa `package:flutter/`, `package:cloud_firestore/` o `package:firebase_core/` (principio II, decisión D9)
 - [X] T015 [P] Escribir pruebas de las constantes en `test/dominio/metodologia/` que verifiquen los invariantes: cada fila de fase ATR suma exactamente 100%, las bandas de zona son contiguas y no se solapan, y las categorías sin ATR están marcadas como tales
 - [X] T016 Crear las entidades del dominio en `lib/dominio/entidades/`: `Plan`, `Microciclo`, `Sesion`, `Parte`, `Serie`, `Nadador`, `Ejercicio`, `FragmentoPendiente`, `Justificacion`, según los campos y reglas de `data-model.md`. Los derivados (metros, porcentajes, distribuciones) se calculan, **nunca se almacenan como campo**
-- [ ] T017 Declarar las interfaces de repositorio en `lib/dominio/repositorios/`: `RepositorioPlanes`, `RepositorioSesiones`, `RepositorioNadadores` y `RepositorioBiblioteca`, con las firmas de `contracts/almacenamiento.md`. Ninguna firma puede mencionar tipos de Firestore
+- [X] T017 Declarar las interfaces de repositorio en `lib/dominio/repositorios/`: `RepositorioPlanes`, `RepositorioSesiones`, `RepositorioNadadores` y `RepositorioBiblioteca`, con las firmas de `contracts/almacenamiento.md`. Ninguna firma puede mencionar tipos de Firestore
 - [X] T018 [P] Implementar `lib/datos/recursos/biblioteca_empaquetada.dart`, que carga `assets/biblioteca/ejercicios.json` y satisface `RepositorioBiblioteca` con búsqueda por coincidencia exacta de (`nombre`, `estilo`)
-- [ ] T019 [P] Implementar repositorios en memoria en `test/dominio/dobles/` para poder probar el dominio sin Firestore
-- [ ] T020 Implementar los conversores documento a entidad en `lib/datos/firestore/` para plan (con microciclos embebidos) y sesión (en subcolección `sesiones`), según la estructura de `contracts/almacenamiento.md`
+- [X] T019 [P] Implementar repositorios en memoria en `test/dominio/dobles/` para poder probar el dominio sin Firestore
+- [X] T020 Implementar los conversores documento a entidad en `lib/datos/firestore/` para plan (con microciclos embebidos) y sesión (en subcolección `sesiones`), según la estructura de `contracts/almacenamiento.md`
 - [X] T021 Escribir `firebase/firestore.rules` con postura de **denegar por defecto**: ninguna colección legible ni escribible sin concesión explícita, y prohibida toda escritura sobre un plan en estado `aprobado` o `publicado`. Sin reglas permisivas provisionales
 - [X] T022 Escribir las pruebas de reglas en `firebase/test/reglas.test.js` con los seis casos de `contracts/almacenamiento.md`, incluidos los negativos: cliente sin autenticar no lee ni escribe `planes` ni `nadadores`, y no se puede escribir sobre un plan aprobado o publicado
-- [ ] T023 Conectar la app a los emuladores en `lib/datos/firestore/configuracion.dart` cuando `USAR_EMULADORES` esté activa, de modo que nunca apunte por accidente a un proyecto real
+- [X] T023 Conectar la app a los emuladores en `lib/datos/firestore/configuracion.dart` cuando `USAR_EMULADORES` esté activa, de modo que nunca apunte por accidente a un proyecto real
 
 **Checkpoint**: las reglas de la metodología están codificadas y probadas, las entidades existen, el acceso a datos funciona contra emuladores y la frontera del dominio está vigilada.
 
@@ -195,9 +195,9 @@ conserva sus destinatarios y que los perfiles se pueden exportar.
 
 ### Tests for User Story 4 ⚠️
 
-- [ ] T080 [P] [US4] Escribir pruebas de completitud de perfil en `test/dominio/entidades/nadador_test.dart`: `categoria` y `estiloObjetivo` son **obligatorios** para dar el perfil por completo
+- [X] T080 [P] [US4] Escribir pruebas de completitud de perfil en `test/dominio/entidades/nadador_test.dart`: `categoria` y `estiloObjetivo` son **obligatorios** para dar el perfil por completo
 - [ ] T081 [P] [US4] Escribir pruebas de asignación en `test/dominio/entidades/asignacion_test.dart`: el plan conserva su lista `nadadoresIds`, y desde un perfil se pueden ver sus planes con el estado de cada uno
-- [ ] T082 [P] [US4] Escribir pruebas de exportación en `test/datos/exportacion_test.dart`: un plan exportado es un único JSON con el plan y sus sesiones embebidas, legible sin la app (principio V)
+- [X] T082 [P] [US4] Escribir pruebas de exportación en `test/datos/exportacion_test.dart`: un plan exportado es un único JSON con el plan y sus sesiones embebidas, legible sin la app (principio V)
 - [ ] T083 [P] [US4] Escribir pruebas de minimización de datos en `test/datos/registros_test.dart`: ningún nombre, marca ni identificador de nadador aparece en los registros técnicos (FR-032)
 
 ### Implementation for User Story 4
