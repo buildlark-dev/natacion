@@ -58,7 +58,7 @@ historias necesitan.
 - [X] T013 [P] Implementar en `lib/dominio/metodologia/estilos.dart` el reparto por estilo objetivo: Libre 80–85% Libre y 15–20% Espalda; Pecho 50% Pecho y 50% Libre/Espalda; Mariposa 50% Mariposa y 50% Libre/Espalda; y el reparto de sesión inicial 40% / central 50% (pre-set 10% + principal 40%) / final 10%
 - [X] T014 Escribir la prueba de frontera del dominio en `test/dominio/arquitectura_test.dart`: recorre `lib/dominio/` y falla si algún archivo importa `package:flutter/`, `package:cloud_firestore/` o `package:firebase_core/` (principio II, decisión D9)
 - [X] T015 [P] Escribir pruebas de las constantes en `test/dominio/metodologia/` que verifiquen los invariantes: cada fila de fase ATR suma exactamente 100%, las bandas de zona son contiguas y no se solapan, y las categorías sin ATR están marcadas como tales
-- [ ] T016 Crear las entidades del dominio en `lib/dominio/entidades/`: `Plan`, `Microciclo`, `Sesion`, `Parte`, `Serie`, `Nadador`, `Ejercicio`, `FragmentoPendiente`, `Justificacion`, según los campos y reglas de `data-model.md`. Los derivados (metros, porcentajes, distribuciones) se calculan, **nunca se almacenan como campo**
+- [X] T016 Crear las entidades del dominio en `lib/dominio/entidades/`: `Plan`, `Microciclo`, `Sesion`, `Parte`, `Serie`, `Nadador`, `Ejercicio`, `FragmentoPendiente`, `Justificacion`, según los campos y reglas de `data-model.md`. Los derivados (metros, porcentajes, distribuciones) se calculan, **nunca se almacenan como campo**
 - [ ] T017 Declarar las interfaces de repositorio en `lib/dominio/repositorios/`: `RepositorioPlanes`, `RepositorioSesiones`, `RepositorioNadadores` y `RepositorioBiblioteca`, con las firmas de `contracts/almacenamiento.md`. Ninguna firma puede mencionar tipos de Firestore
 - [X] T018 [P] Implementar `lib/datos/recursos/biblioteca_empaquetada.dart`, que carga `assets/biblioteca/ejercicios.json` y satisface `RepositorioBiblioteca` con búsqueda por coincidencia exacta de (`nombre`, `estilo`)
 - [ ] T019 [P] Implementar repositorios en memoria en `test/dominio/dobles/` para poder probar el dominio sin Firestore
@@ -127,23 +127,23 @@ porcentajes calculados coinciden con los del documento original.
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T048 [P] [US2] Escribir pruebas de agregación en `test/dominio/calculo/agregacion_test.dart`: distribución de zonas, porcentaje técnico y reparto de estilos de un plan completo a partir de sus sesiones
-- [ ] T049 [P] [US2] Escribir pruebas del criterio `C03_intensidades_fase` en `test/dominio/auditoria/c03_test.dart`, con un plan que lo viola (A1 al 45% en Acumulación, donde se prescribe 60%) y otro que lo cumple. La observación debe contener valor real, prescrito y diferencia
-- [ ] T050 [P] [US2] Escribir pruebas de `C02_tecnica_prioritaria` y `C04_tecnica_fase` en `test/dominio/auditoria/c02_c04_test.dart`, con un plan de Acumulación al 32% técnico donde se prescribe 50%
-- [ ] T051 [P] [US2] Escribir pruebas de `C06_transferencia` en `test/dominio/auditoria/c06_test.dart`, con estilo objetivo Libre repartido 60/40 donde se prescribe 80–85% / 15–20%
-- [ ] T052 [P] [US2] Escribir pruebas de `C05_volumen_categoria` en `test/dominio/auditoria/c05_test.dart`, incluida la discrepancia entre sesiones programadas y la frecuencia semanal esperada de la categoría
-- [ ] T053 [P] [US2] Escribir pruebas de la prohibición de fase ATR en `test/dominio/auditoria/atr_prohibido_test.dart`: un plan de Iniciación o Tecnificación no admite fase ATR
+- [X] T048 [P] [US2] Escribir pruebas de agregación en `test/dominio/calculo/agregacion_test.dart`: distribución de zonas, porcentaje técnico y reparto de estilos de un plan completo a partir de sus sesiones
+- [X] T049 [P] [US2] Escribir pruebas del criterio `C03_intensidades_fase` en `test/dominio/auditoria/c03_test.dart`, con un plan que lo viola (A1 al 45% en Acumulación, donde se prescribe 60%) y otro que lo cumple. La observación debe contener valor real, prescrito y diferencia
+- [X] T050 [P] [US2] Escribir pruebas de `C02_tecnica_prioritaria` y `C04_tecnica_fase` en `test/dominio/auditoria/c02_c04_test.dart`, con un plan de Acumulación al 32% técnico donde se prescribe 50%
+- [X] T051 [P] [US2] Escribir pruebas de `C06_transferencia` en `test/dominio/auditoria/c06_test.dart`, con estilo objetivo Libre repartido 60/40 donde se prescribe 80–85% / 15–20%
+- [X] T052 [P] [US2] Escribir pruebas de `C05_volumen_categoria` en `test/dominio/auditoria/c05_test.dart`, incluida la discrepancia entre sesiones programadas y la frecuencia semanal esperada de la categoría
+- [X] T053 [P] [US2] Escribir pruebas de la prohibición de fase ATR en `test/dominio/auditoria/atr_prohibido_test.dart`: un plan de Iniciación o Tecnificación no admite fase ATR
 - [ ] T054 [P] [US2] Escribir pruebas de la regla de Tecnificación en `test/dominio/auditoria/tecnificacion_test.dart`: en programas de dos meses, sesión 1 de Pecho y sesión 2 de Mariposa todas las semanas; un microciclo que lo incumple se reporta
-- [ ] T055 [P] [US2] Escribir pruebas de `C09_modelamiento` en `test/dominio/auditoria/c09_test.dart`: un microciclo sin objetivo real, o cuyo nombre no lo refleja, falla el criterio
-- [ ] T056 [P] [US2] Escribir pruebas de `C10_drills_diagnostico` en `test/dominio/auditoria/c10_test.dart`: con diagnóstico registrado y ejercicios que no atacan ninguno de sus errores, falla; **sin diagnóstico, reporta la ausencia sin culpar al plan**
-- [ ] T057 [P] [US2] Escribir pruebas de la tolerancia en `test/dominio/auditoria/tolerancia_test.dart`: una desviación dentro de ±3 puntos porcentuales cumple, y justo fuera no cumple
+- [X] T055 [P] [US2] Escribir pruebas de `C09_modelamiento` en `test/dominio/auditoria/c09_test.dart`: un microciclo sin objetivo real, o cuyo nombre no lo refleja, falla el criterio
+- [X] T056 [P] [US2] Escribir pruebas de `C10_drills_diagnostico` en `test/dominio/auditoria/c10_test.dart`: con diagnóstico registrado y ejercicios que no atacan ninguno de sus errores, falla; **sin diagnóstico, reporta la ausencia sin culpar al plan**
+- [X] T057 [P] [US2] Escribir pruebas de la tolerancia en `test/dominio/auditoria/tolerancia_test.dart`: una desviación dentro de ±3 puntos porcentuales cumple, y justo fuera no cumple
 
 ### Implementation for User Story 2
 
-- [ ] T058 [US2] Implementar la agregación de un plan en `lib/dominio/calculo/agregacion_plan.dart`: distribución de zonas sobre el volumen total, porcentaje técnico y reparto de estilos, a partir de las sesiones de todos sus microciclos
-- [ ] T059 [US2] Implementar la tolerancia configurable en `lib/dominio/auditoria/tolerancia.dart`, con valor inicial de ±3 puntos porcentuales definido **en un solo lugar** para poder recalibrarlo
-- [ ] T060 [US2] Implementar los criterios justificables `C02`, `C03`, `C04`, `C05`, `C06`, `C09` y `C10` en `lib/dominio/auditoria/criterios/`, uno por archivo, cada uno devolviendo veredicto, observación con números concretos y ubicación
-- [ ] T061 [US2] Implementar la validación de fase ATR frente a categoría en `lib/dominio/metodologia/validacion_fase.dart`: las categorías sin ATR no la admiten
+- [X] T058 [US2] Implementar la agregación de un plan en `lib/dominio/calculo/agregacion_plan.dart`: distribución de zonas sobre el volumen total, porcentaje técnico y reparto de estilos, a partir de las sesiones de todos sus microciclos
+- [X] T059 [US2] Implementar la tolerancia configurable en `lib/dominio/auditoria/tolerancia.dart`, con valor inicial de ±3 puntos porcentuales definido **en un solo lugar** para poder recalibrarlo
+- [X] T060 [US2] Implementar los criterios justificables `C02`, `C03`, `C04`, `C05`, `C06`, `C09` y `C10` en `lib/dominio/auditoria/criterios/`, uno por archivo, cada uno devolviendo veredicto, observación con números concretos y ubicación
+- [X] T061 [US2] Implementar la validación de fase ATR frente a categoría en `lib/dominio/metodologia/validacion_fase.dart`: las categorías sin ATR no la admiten
 - [ ] T062 [US2] Implementar la gestión de microciclos en `lib/dominio/entidades/microciclo.dart` y `lib/ui/planes/editor_microciclos.dart`, exigiendo que el nombre describa el objetivo real y no solo la posición en la fase
 - [ ] T063 [US2] Construir la pantalla de plan en `lib/ui/planes/pantalla_plan.dart`: cabecera con categoría, estilo y prueba objetivo, longitud de piscina, fechas y fase ATR, con sus microciclos y sesiones
 - [ ] T064 [US2] Construir el panel de distribución en `lib/ui/planes/panel_distribucion.dart`, mostrando por cada zona el valor real, el prescrito y la diferencia, más el porcentaje técnico y el reparto de estilos
@@ -162,21 +162,21 @@ cuáles bloquean, cuáles piden justificación y cuáles pasan limpios.
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T065 [P] [US3] Escribir pruebas de los criterios bloqueantes en `test/dominio/auditoria/bloqueantes_test.dart`: `C01_biblioteca`, `C07_nomenclatura`, `C08_zonas` y `C11_sin_ambiguos`, cada uno con un plan que lo viola y otro que lo cumple
-- [ ] T066 [P] [US3] Escribir pruebas de `C08_zonas` en `test/dominio/auditoria/c08_test.dart`: falla si una serie no tiene zona, si la zona no es una de las seis válidas, o si una serie contara en dos zonas
-- [ ] T067 [P] [US3] Escribir pruebas de la regla de aprobación en `test/dominio/auditoria/regla_aprobacion_test.dart`: no se aprueba con un bloqueante en rojo ni aportando justificación; no se aprueba con un justificable en rojo y justificación vacía; sí se aprueba con justificación escrita
-- [ ] T068 [P] [US3] Escribir pruebas de transición de estado en `test/dominio/entidades/plan_estados_test.dart`: `borrador` → `aprobado` → `publicado`; al aprobar se estampan `versionMetodologia` y `fechaAprobacion`; un plan aprobado o publicado es inmutable
-- [ ] T069 [P] [US3] Escribir pruebas de versionado en `test/dominio/entidades/plan_version_test.dart`: editar un plan aprobado crea un plan nuevo en `borrador` con `versionAnteriorId`, y el aprobado queda intacto
-- [ ] T070 [P] [US3] Escribir pruebas de que un criterio sin datos suficientes **no cumple**, en `test/dominio/auditoria/datos_faltantes_test.dart`: nunca se considera cumplido por omisión
-- [ ] T071 [P] [US3] Escribir pruebas de la tabla completa en `test/dominio/auditoria/tabla_once_criterios_test.dart`: la auditoría devuelve siempre los once criterios, cada uno con veredicto y observación
+- [X] T065 [P] [US3] Escribir pruebas de los criterios bloqueantes en `test/dominio/auditoria/bloqueantes_test.dart`: `C01_biblioteca`, `C07_nomenclatura`, `C08_zonas` y `C11_sin_ambiguos`, cada uno con un plan que lo viola y otro que lo cumple
+- [X] T066 [P] [US3] Escribir pruebas de `C08_zonas` en `test/dominio/auditoria/c08_test.dart`: falla si una serie no tiene zona, si la zona no es una de las seis válidas, o si una serie contara en dos zonas
+- [X] T067 [P] [US3] Escribir pruebas de la regla de aprobación en `test/dominio/auditoria/regla_aprobacion_test.dart`: no se aprueba con un bloqueante en rojo ni aportando justificación; no se aprueba con un justificable en rojo y justificación vacía; sí se aprueba con justificación escrita
+- [X] T068 [P] [US3] Escribir pruebas de transición de estado en `test/dominio/entidades/plan_estados_test.dart`: `borrador` → `aprobado` → `publicado`; al aprobar se estampan `versionMetodologia` y `fechaAprobacion`; un plan aprobado o publicado es inmutable
+- [X] T069 [P] [US3] Escribir pruebas de versionado en `test/dominio/entidades/plan_version_test.dart`: editar un plan aprobado crea un plan nuevo en `borrador` con `versionAnteriorId`, y el aprobado queda intacto
+- [X] T070 [P] [US3] Escribir pruebas de que un criterio sin datos suficientes **no cumple**, en `test/dominio/auditoria/datos_faltantes_test.dart`: nunca se considera cumplido por omisión
+- [X] T071 [P] [US3] Escribir pruebas de la tabla completa en `test/dominio/auditoria/tabla_once_criterios_test.dart`: la auditoría devuelve siempre los once criterios, cada uno con veredicto y observación
 
 ### Implementation for User Story 3
 
-- [ ] T072 [US3] Implementar los criterios bloqueantes `C01`, `C07`, `C08` y `C11` en `lib/dominio/auditoria/criterios/`, uno por archivo, con la severidad declarada en `contracts/auditoria.md`
-- [ ] T073 [US3] Implementar el ensamblado de la auditoría en `lib/dominio/auditoria/auditoria.dart`, que ejecuta los once criterios y devuelve el resultado agregado con `apruebaSinBloqueos`
-- [ ] T074 [US3] Implementar la regla de aprobación en `lib/dominio/auditoria/regla_aprobacion.dart`: cero bloqueantes en rojo, justificación no vacía por cada justificable en rojo, y ninguna sesión incompleta
-- [ ] T075 [US3] Implementar las transiciones de estado del plan en `lib/dominio/entidades/plan.dart`: `aprobar()` estampa la versión de metodología leída de `metodologia.json` y la fecha; `publicar()`; e inmutabilidad tras aprobar
-- [ ] T076 [US3] Implementar `crearVersionDesde(idAprobado)` en la capa de datos, que produce un plan nuevo en `borrador` con `versionAnteriorId` y conserva el aprobado sin tocar
+- [X] T072 [US3] Implementar los criterios bloqueantes `C01`, `C07`, `C08` y `C11` en `lib/dominio/auditoria/criterios/`, uno por archivo, con la severidad declarada en `contracts/auditoria.md`
+- [X] T073 [US3] Implementar el ensamblado de la auditoría en `lib/dominio/auditoria/auditoria.dart`, que ejecuta los once criterios y devuelve el resultado agregado con `apruebaSinBloqueos`
+- [X] T074 [US3] Implementar la regla de aprobación en `lib/dominio/auditoria/regla_aprobacion.dart`: cero bloqueantes en rojo, justificación no vacía por cada justificable en rojo, y ninguna sesión incompleta
+- [X] T075 [US3] Implementar las transiciones de estado del plan en `lib/dominio/entidades/plan.dart`: `aprobar()` estampa la versión de metodología leída de `metodologia.json` y la fecha; `publicar()`; e inmutabilidad tras aprobar
+- [X] T076 [US3] Implementar `crearVersionDesde(idAprobado)` en la capa de datos, que produce un plan nuevo en `borrador` con `versionAnteriorId` y conserva el aprobado sin tocar
 - [ ] T077 [US3] Guardar la instantánea de auditoría y las justificaciones junto al plan al aprobar, en el campo `auditoriaAlAprobar` de `contracts/almacenamiento.md`
 - [ ] T078 [US3] Construir la tabla de auditoría en `lib/ui/planes/tabla_auditoria.dart`: los once criterios con su veredicto, su severidad y su observación con números concretos, consultable en cualquier momento y no solo al aprobar
 - [ ] T079 [US3] Construir el flujo de aprobación en `lib/ui/planes/dialogo_aprobacion.dart`: los bloqueantes se muestran como impedimento nombrando el ejercicio y la sesión; los justificables piden el texto y no dejan aprobar mientras esté vacío
