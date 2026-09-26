@@ -101,8 +101,13 @@ extracción debe terminar con una revisión manual y un conteo confirmado por es
 ## D4 — Versión legible de la metodología
 
 **Decisión**: añadir `docs/metodologia/metodologia.json`, un manifiesto que declara la
-versión (`"3.4"`), la fecha, y la huella SHA-256 de cada documento normativo. La app
-incrusta esa versión y la estampa en cada plan (FR-026).
+versión, la fecha, y la huella SHA-256 de cada documento normativo. La app lee esa versión
+y la estampa en cada plan al aprobarlo (FR-026).
+
+**Estado**: implementado. La versión vigente es **3.4.1** desde el 2026-09-25, tras las dos
+correcciones que el entrenador confirmó (nombre unificado `CAMBIO POSIC` y lista completa de
+los cinco ejercicios que exigen desambiguación). El nombre del archivo conserva `V3.4` a
+propósito, por la razón que se explica abajo.
 
 **Razón**: FR-026 exige saber bajo qué versión se construyó un plan. Deducirla del nombre
 del archivo es frágil: renombrar el archivo cambiaría la historia de planes ya aprobados.

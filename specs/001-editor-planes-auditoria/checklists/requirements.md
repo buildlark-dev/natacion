@@ -31,28 +31,29 @@
 
 ## Notes
 
-Revalidado el 2026-09-25 tras la sesión de `/speckit-clarify` (5 preguntas). Resultado:
-16/16 → 16/16 puntos pasando, sin cambios de estado ni regresiones. Observaciones
-pendientes para `/speckit-plan`:
+Revalidado el 2026-09-25 tras la sesión de `/speckit-clarify` (5 preguntas) y actualizado al
+cierre de la implementación. Resultado: 16/16 puntos pasando, sin regresiones.
 
-1. **Cobertura parcial por escenarios.** FR-006 (ampliación del glosario) y FR-012 (RPE
-   previsto y variables de carga interna) siguen sin escenario de aceptación propio.
-   Cubrirlos en el plan de pruebas.
+Estado de las observaciones que quedaron abiertas en su momento:
 
-2. **Dependencia de datos.** El producto no puede cumplir FR-001 ni FR-002 sin que la
-   Biblioteca Oficial exista como datos consultables. Hoy solo existe como documento
-   `.docx` en `docs/metodologia/`. Su digitalización es trabajo real de esta feature y debe
-   aparecer como tarea con peso propio en `/speckit-tasks`.
+1. **Cobertura parcial por escenarios.** RESUELTO durante la implementación. FR-006
+   (ampliación del glosario) y FR-012 (RPE previsto y variables de carga interna) no tenían
+   escenario de aceptación propio; quedaron cubiertos por pruebas de dominio y de interfaz.
 
-3. **Versionado de la metodología.** FR-026 exige registrar la versión de metodología de
-   cada plan, pero el documento en `docs/metodologia/PROMPT_MAESTRO_V3.4.md` no declara hoy
-   una versión legible por el sistema más allá de su nombre de archivo. Hay que resolverlo
-   en el plan.
+2. **Dependencia de datos.** RESUELTO. La Biblioteca Oficial se extrae de la sección 19 del
+   documento normativo y viaja como recurso de la app: 70 ejercicios, revisados y
+   confirmados por el entrenador el 2026-09-25.
 
-4. **Plan de referencia para SC-001.** El criterio depende del
-   `Macrociclo - Precompetitivo Agosto`, que hoy vive fuera del repositorio. Debe quedar
-   disponible como material de prueba con sus metros ya conocidos, y anonimizado si
-   contiene nombres de nadadores reales.
+3. **Versionado de la metodología.** RESUELTO. `docs/metodologia/metodologia.json` declara
+   la versión vigente (**3.4.1**) y la huella SHA-256 de cada documento normativo. La app
+   lee esa versión y la estampa al aprobar. Si una huella deja de coincidir, un documento
+   cambió sin subir la versión, que es lo que el flujo de la constitución prohíbe.
+
+4. **Plan de referencia para SC-001.** RESUELTO. El escenario V10 se ejecutó contra la
+   hoja "Sem 04-08 Ago" del `Macrociclo - Precompetitivo Agosto`: la sesión del 04/08 da
+   1.900 m exactos y la semana 5.700 m. Las pruebas reproducen su texto literal sin
+   nombres de nadadores, así que el archivo no se incorporó al repositorio y no hay nada
+   que anonimizar.
 
 5. **Mención de tecnología en Clarifications y Assumptions.** Ambas secciones nombran los
    emuladores de Firebase. Es una decisión registrada y una dependencia de entorno, no un
@@ -60,8 +61,10 @@ pendientes para `/speckit-plan`:
    mencionar tecnología. Se mantiene marcado como cumplido por eso, pero conviene no
    extender la mención al cuerpo de los requisitos.
 
-6. **Tamaño de la feature.** Bajó de 4 historias completas a 3 más una reducida, pero subió
-   de 32 a 37 requisitos por la capa de interpretación de series. Sigue en el límite alto
-   para un proyecto de una sola persona. Si `/speckit-plan` arroja algo inabarcable, la
-   línea de corte natural es entregar primero las User Stories 1 y 2 (construir y auditar)
-   y dejar la 3 y la 4 (aprobar y perfiles) para después.
+6. **Tamaño de la feature.** No hizo falta cortar: las cuatro historias quedaron
+   implementadas. 93 de 96 tareas; las tres restantes o dependen del entrenador
+   (recalibración de la tolerancia) o no aplicaron.
+
+7. **Pendiente vivo: calibración de la tolerancia.** Los ±3 puntos porcentuales de las
+   desviaciones de distribución siguen sin contrastar contra planes históricos completos.
+   V10 validó metros, no distribuciones.

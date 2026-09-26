@@ -385,8 +385,10 @@ comprobando que cada plan conserva sus destinatarios y que los perfiles se puede
 - **Digitalización de la biblioteca**: la Biblioteca Oficial debe existir como datos
   consultables dentro del producto. Su carga inicial forma parte del trabajo de esta
   feature.
-- **Versión de metodología**: se asume vigente la V3.4 del documento del entrenador, y que
-  el documento del repositorio declara su versión de forma verificable.
+- **Versión de metodología**: la vigente es la **3.4.1**, declarada en
+  `docs/metodologia/metodologia.json` junto a la huella de cada documento normativo. La
+  versión de referencia es la del manifiesto, no la del nombre del archivo: renombrarlo
+  alteraría la trazabilidad de los planes aprobados bajo una versión anterior.
 - **Sin datos reales de menores hasta que exista consentimiento**: mientras esta feature no
   implemente el registro de consentimiento del acudiente, la app se usa únicamente con
   perfiles de prueba o con los datos del propio entrenador. NO DEBEN cargarse datos reales
