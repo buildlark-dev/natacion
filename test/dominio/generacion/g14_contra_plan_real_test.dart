@@ -73,7 +73,7 @@ void main() {
         expect(
           categoriaReal.volumenPorSesion.contiene(sesion.metros),
           isTrue,
-          reason: 'El entrenador nada ${metrosPorSesionReal} m por sesión; '
+          reason: 'El entrenador nada $metrosPorSesionReal m por sesión; '
               'la app propone ${sesion.metros} m',
         );
       }
