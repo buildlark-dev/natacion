@@ -136,15 +136,31 @@ partes con series que llevan su zona asignada y su texto en notación del entren
 
 ## Ubicación de zonas dentro de la sesión
 
-| Parte | Porcentaje | Zonas admitidas |
-|---|---|---|
-| Inicial | 40% | A1 |
-| Central · pre-set | 10% | A1, A2 |
-| Central · principal | 40% | A2, A3, AT, Máx, Velocidad |
-| Final | 10% | A1 con recuperación |
+**Corregido durante la implementación (2026-09-29).** La primera redacción de este contrato
+imponía las zonas por parte: la inicial solo admitía A1. Eso resultó imposible de cumplir:
+en Transformación la fase prescribe A1 al 30%, mientras que inicial más final suman el 50%
+del volumen de la sesión. Obligar a que ambas fueran A1 haría inalcanzable la distribución de
+la fase.
 
-Reproduce la interconexión de cargas de la sección 4: primero la calidad, después la carga
-metabólica. La técnica vive donde el nadador está fresco.
+La regla correcta es de **preferencia, no de imposición**. Cada bloque declara un orden de
+zonas y se llena con lo que haya, empezando por las preferidas:
+
+| Bloque | Porcentaje | Zonas preferidas, en orden |
+|---|---|---|
+| Inicial | 40% | A1, A2, A3 |
+| Central · pre-set | 10% | A1, A2, A3 |
+| Central · principal | 40% | Máx, Velocidad, AT, A3, A2, A1 |
+| Final | 10% | A1, A2 |
+
+Cuando un bloque no se puede llenar con sus zonas preferidas, toma de las que queden, en el
+orden de la sección 9. Es una concesión declarada y acotada: **lo que nunca cede es la
+estructura 40/50/10** (nivel 2) **ni la distribución total de zonas del microciclo**
+(nivel 5). Solo flexiona en qué bloque cae cada zona, que es precisamente lo que la
+sección 14 no prescribe.
+
+El orden de preferencia codifica la interconexión de cargas de la sección 4: primero la
+calidad, después la carga metabólica. La técnica vive donde el nadador está fresco; la
+intensidad, en la serie principal.
 
 El presupuesto técnico se coloca en la inicial y el pre-set. Si no cupiera, se extiende a la
 principal y el hecho queda marcado como supuesto, porque la técnica no cede (nivel 4).

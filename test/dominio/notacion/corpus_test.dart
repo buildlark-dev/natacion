@@ -270,6 +270,51 @@ void main() {
     }
   });
 
+  group('la zona escrita no parte la serie (regresión)', () {
+    // DEFECTO ENCONTRADO el 2026-09-29 por el viaje redondo de la feature 002.
+    //
+    // El patrón que detecta series numeradas (`1)`, `2)`) casaba también con el
+    // `1)` de `(A1)` cuando le seguía un salto de línea, y partía la serie por
+    // la mitad. Los metros seguían cuadrando —por eso no lo detectó ninguna
+    // prueba de la feature 001—, pero la zona se perdía en silencio, que es
+    // peor: el entrenador vería una serie sin zona sin saber por qué.
+
+    test('una serie con zona seguida de salto de línea conserva la zona', () {
+      final resultado = analizador.analizar('200 Nado Libre (A1)\n100 N');
+
+      expect(resultado.series, hasLength(2));
+      expect(
+        resultado.series.first.zona?.abreviatura,
+        'A1',
+        reason: 'El "1)" de "(A1)" no puede partir la serie',
+      );
+    });
+
+    test('los metros también cuadran', () {
+      final resultado = analizador.analizar('200 Nado Libre (A1)\n100 N');
+      expect(resultado.metros, 300);
+    });
+
+    test('varias zonas seguidas conservan todas la suya', () {
+      final resultado = analizador.analizar(
+        '200 N (A1)\n300 N (A2)\n100 N (AT)',
+      );
+
+      expect(
+        resultado.series.map((s) => s.zona?.abreviatura).toList(),
+        ['A1', 'A2', 'AT'],
+      );
+    });
+
+    test('la numeración de serie al principio de línea sí se quita', () {
+      final resultado = analizador.analizar('1) 200 N\n2) 300 N');
+
+      expect(resultado.series, hasLength(2));
+      expect(resultado.metros, 500);
+      expect(resultado.series.first.distancia, 200);
+    });
+  });
+
   group('notación en desuso', () {
     test('FC1 y FC2 se ignoran con aviso, sin bloquear', () {
       final resultado = analizador.analizar('200 N FC2');
