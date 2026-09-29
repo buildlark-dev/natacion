@@ -119,6 +119,28 @@ dart run tool/extraer_biblioteca.dart
 El resultado **debe revisarlo el entrenador** antes de darlo por válido: un
 ejercicio mal transcrito es una regla mal aplicada.
 
+## Comprobar la correspondencia del diagnóstico (tarea T070)
+
+El generador elige ejercicios buscando el error diagnosticado dentro del campo
+«error que corrige» de la Biblioteca. Ese campo está en **prosa libre**, así que
+la correspondencia puede fallar en los dos sentidos: no encontrar un ejercicio
+que servía, o traer uno que no ataca el error. Para revisarlo con los errores
+que el entrenador diagnostica de verdad:
+
+```bash
+dart run tool/probar_diagnostico.dart "codo caido" "agarre del agua"
+```
+
+Para ver con qué palabras está escrita la Biblioteca:
+
+```bash
+dart run tool/probar_diagnostico.dart --vocabulario
+```
+
+Las frases cortas funcionan; las oraciones completas no, porque la búsqueda es
+por término contenido. Un error sin coincidencia **se reporta como vacío y no se
+sustituye** por un ejercicio aproximado: sustituirlo sería inventar por otra vía.
+
 ## Gobernanza
 
 El proyecto se rige por [`.specify/memory/constitution.md`](.specify/memory/constitution.md).
