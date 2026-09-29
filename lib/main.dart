@@ -1,71 +1,151 @@
 import 'package:flutter/material.dart';
+import 'package:natacion_app/datos/memoria/repositorios_memoria.dart';
+import 'package:natacion_app/datos/recursos/biblioteca_empaquetada.dart';
+import 'package:natacion_app/datos/recursos/version_metodologia.dart';
+import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/repositorios/repositorios.dart';
+import 'package:natacion_app/ui/editor/estado_editor.dart';
+import 'package:natacion_app/ui/editor/pantalla_editor.dart';
+import 'package:natacion_app/ui/nadadores/pantalla_perfiles.dart';
+import 'package:provider/provider.dart';
+
+/// Punto de entrada de la aplicación.
+///
+/// `USAR_EMULADORES` se pasa con `--dart-define=USAR_EMULADORES=true` y decide
+/// si la capa de datos apunta a los emuladores locales. Por omisión es falsa,
+/// de modo que un arranque descuidado nunca escriba en un proyecto real.
+const bool usarEmuladores =
+    bool.fromEnvironment('USAR_EMULADORES', defaultValue: false);
+
 void main() {
-  runApp(const MiApp());
+  runApp(const AppNatacion());
 }
-// IA "de mentiritas": simula la espera de internet y devuelve un plan.
-// El día de mañana, solo cambiaremos lo de adentro por la llamada real.
-Future<String> generarPlanIA(String datosNadador) async {
-  await Future.delayed(const Duration(seconds: 4)); // finge 4 s de internet
-  return 'Plan para $datosNadador:\n20x50L AL / 1 min';
+
+/// Todo lo que la app necesita cargar antes de empezar.
+class RecursosIniciales {
+  const RecursosIniciales({
+    required this.biblioteca,
+    required this.versionMetodologia,
+  });
+
+  final Biblioteca biblioteca;
+  final String versionMetodologia;
 }
-class MiApp extends StatefulWidget {
-  const MiApp({super.key});
-  @override
-  State<MiApp> createState() => _MiAppState();
-}
-class Nadador {
-  String nombre;
-  double tiempo100m;
-  
-  Nadador(this.nombre, this.tiempo100m);
-  
-  String nivel() {
-    if (tiempo100m < 60) {
-      return 'Competitivo';
-    } else if (tiempo100m < 70) {
-      return 'Intermedio';
-    } else {
-      return 'En desarrollo';
-    }
-  }
-}
- List<Nadador> equipo = [
-    Nadador('Ana', 68),
-    Nadador('Peter', 55),
-    Nadador('Carlos', 75),
-  ];
-class _MiAppState extends State<MiApp> {
-  String plan = 'Aún no hay plan generado';
-  bool cargando = false;
-  void pedirPlan() async {
-    setState(() {
-      cargando = true;            // 1) avisamos que empezó la espera
-    });
-    
-    Nadador n = equipo[1];
-    String resultado = await generarPlanIA('${n.nombre}, con tiempo de 100 en ${n.tiempo100m}s y nivel ${n.nivel()}:'); // 2) esperamos
-    setState(() {
-      plan = resultado;           // 3) llegó el plan, lo mostramos
-      cargando = false;
-    });
-  }
+
+class AppNatacion extends StatelessWidget {
+  const AppNatacion({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Generador profesional de planes')),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(cargando ? 'Generando plan...' : plan),
+      title: 'Planificación de natación',
+      theme: ThemeData(
+        colorSchemeSeed: const Color(0xFF0B6E99),
+        useMaterial3: true,
+      ),
+      home: const PantallaInicio(),
+    );
+  }
+}
+
+/// Carga la Biblioteca Oficial y la versión de metodología antes de abrir la
+/// app. Sin biblioteca no se puede comprobar la regla de no invención, así que
+/// no se muestra nada hasta tenerla.
+class PantallaInicio extends StatefulWidget {
+  const PantallaInicio({super.key});
+
+  @override
+  State<PantallaInicio> createState() => _PantallaInicioState();
+}
+
+class _PantallaInicioState extends State<PantallaInicio> {
+  late final Future<RecursosIniciales> _recursos = _cargar();
+
+  Future<RecursosIniciales> _cargar() async {
+    final biblioteca = await CargadorBiblioteca().cargar();
+    final version = await CargadorVersionMetodologia().cargar();
+    return RecursosIniciales(
+      biblioteca: biblioteca,
+      versionMetodologia: version,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<RecursosIniciales>(
+      future: _recursos,
+      builder: (context, instantanea) {
+        if (instantanea.hasError) {
+          return Scaffold(
+            appBar: AppBar(title: const Text('Planificación de natación')),
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  'No se pudo cargar la Biblioteca Oficial de ejercicios.\n'
+                  'Sin ella no se puede comprobar la regla de no invención.\n\n'
+                  '${instantanea.error}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-            ElevatedButton(
-              onPressed: cargando ? null : pedirPlan,
-              child: const Text('Generar plan'),
-            ),
-          ],
-        ),
+          );
+        }
+
+        if (!instantanea.hasData) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        return PantallaPrincipal(recursos: instantanea.data!);
+      },
+    );
+  }
+}
+
+/// Navegación entre el editor de sesión y los perfiles de nadador.
+class PantallaPrincipal extends StatefulWidget {
+  const PantallaPrincipal({super.key, required this.recursos});
+
+  final RecursosIniciales recursos;
+
+  @override
+  State<PantallaPrincipal> createState() => _PantallaPrincipalState();
+}
+
+class _PantallaPrincipalState extends State<PantallaPrincipal> {
+  int _indice = 0;
+
+  final RepositorioNadadores _nadadores = RepositorioNadadoresMemoria();
+
+  @override
+  Widget build(BuildContext context) {
+    final pantallas = <Widget>[
+      ChangeNotifierProvider(
+        create: (_) => EstadoEditor(biblioteca: widget.recursos.biblioteca),
+        child: const PantallaEditor(),
+      ),
+      PantallaPerfiles(repositorio: _nadadores),
+    ];
+
+    return Scaffold(
+      body: pantallas[_indice],
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _indice,
+        onDestinationSelected: (indice) => setState(() => _indice = indice),
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.edit_note_outlined),
+            selectedIcon: Icon(Icons.edit_note),
+            label: 'Editor',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.groups_outlined),
+            selectedIcon: Icon(Icons.groups),
+            label: 'Nadadores',
+          ),
+        ],
       ),
     );
   }

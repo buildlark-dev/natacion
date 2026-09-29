@@ -4,6 +4,9 @@ Producto: comunidad de natación en línea dirigida por un entrenador, con plane
 entrenamiento, seguimiento de progreso, retroalimentación en video y contenido educativo,
 bajo un modelo freemium por suscripción.
 
+El plan entregado es **interactivo**: vive dentro de la aplicación, el nadador actúa sobre
+él y su respuesta vuelve al entrenador. No es un documento que se lee y se cierra.
+
 ## Core Principles
 
 ### I. Metodología del Entrenador como Norma
@@ -73,6 +76,11 @@ Las reglas de seguridad de Firestore y Storage DEBEN probarse automáticamente c
 emulador, incluyendo casos negativos: un nadador no puede leer los datos ni los videos de
 otro.
 
+Todo plan generado automáticamente DEBE tener pruebas que demuestren que **cumple la
+auditoría por construcción**, no por casualidad: dados unos datos de entrada, la
+distribución de zonas, el porcentaje técnico y el volumen por sesión salen dentro de lo
+prescrito.
+
 `flutter test` DEBE pasar en verde antes de dar por terminada cualquier tarea de
 `tasks.md`. Una tarea con pruebas rojas no se reporta como completada.
 
@@ -90,12 +98,36 @@ La app NO DEBE presentarse como consejo médico ni fisioterapéutico. Un reporte
 lesión o malestar se marca, se hace visible al entrenador y NO DEBE resolverse de forma
 automática ni ocultarse tras una respuesta genérica.
 
-**Automatización futura (hoy fuera de alcance):** cuando el volumen de la comunidad lo
-justifique, la generación asistida se incorporará únicamente a través de una interfaz del
-dominio, con estas condiciones no negociables: su salida nace en estado `borrador`, pasa
-la auditoría de la sección 16 antes de poder aprobarse, queda marcada como generada
-automáticamente, y nunca alcanza a un nadador sin la firma del entrenador. Ninguna decisión
-de diseño tomada hoy puede cerrar esa puerta ni abrirla sin estas condiciones.
+**Automatización (dentro de alcance desde la versión 1.1.0).** La generación de planes se
+incorpora únicamente a través de una interfaz del dominio, con estas condiciones no
+negociables:
+
+- su salida nace en estado `borrador`;
+- pasa la auditoría de la sección 16 antes de poder aprobarse;
+- queda marcada con **cómo** se generó;
+- nunca alcanza a un nadador sin la firma del entrenador.
+
+Existen dos formas de automatización, con exigencias distintas:
+
+- **Generación determinista.** La app compone el plan a partir de las reglas ya codificadas:
+  rangos de volumen por categoría, distribución de zonas de la fase, reparto de estilos,
+  estructura de sesión y selección de ejercicios según el error diagnosticado. Cumple **por
+  construcción**, es reproducible y funciona sin conexión. Es la vía por defecto.
+- **Generación asistida por modelo de lenguaje.** Su salida es una **propuesta no
+  confiable** y se valida antes de mostrarse como plan, igual que cualquier entrada externa.
+  NO DEBE sustituir a la generación determinista en lo que es aritmética ni distribución: se
+  reserva para lo que es criterio, como redactar objetivos, nombrar el microciclo por su
+  componente acentuado o interconectar cargas. Un fallo del proveedor NO DEBE dejar al
+  entrenador sin poder generar un plan.
+
+El orden de construcción es **determinista primero y modelo encima**, nunca al revés:
+montar el modelo sobre reglas no codificadas convertiría la tendencia a cumplir en la única
+garantía disponible.
+
+La automatización NO DEBE eliminar los puntos de decisión que la metodología reserva al
+entrenador. Un plan extenso se construye por fases, con su confirmación entre cada una
+(sección 18): generar sesenta sesiones de un golpe incumpliría la metodología aunque cada
+sesión pasara la auditoría.
 
 Razón: la comunidad se suscribe a un entrenador con nombre propio. La automatización puede
 ahorrarle tiempo; no puede ocupar su lugar ni firmar por él.
@@ -111,6 +143,9 @@ Colombia).
 - **Menores de edad:** el registro de un menor exige consentimiento verificable de su
   padre, madre o acudiente, registrado con fecha. Sin ese consentimiento no se habilita la
   carga de video.
+- **El consentimiento es requisito de publicación, no una feature opcional posterior.**
+  Mientras no exista su registro, la app se usa únicamente con datos de prueba o del propio
+  entrenador. Abrirla a nadadores reales sin él incumple este principio.
 - **Video:** privado por defecto. Solo el nadador, su acudiente y el entrenador pueden
   verlo. NO DEBE usarse para promoción, para entrenar modelos ni compartirse fuera de la
   app sin consentimiento adicional, específico y revocable. Todo video tiene plazo de
@@ -160,6 +195,28 @@ un comentario que explique por qué.
 Razón: el proyecto lo sostiene una sola persona que además entrena. Cuatro frentes abiertos
 a la vez es la forma más segura de no terminar ninguno.
 
+### VIII. Control de Carga Interna
+
+La metodología exige cerrar el ciclo diagnóstico → modelar → programar → **controlar** →
+reajustar (sección 4). El producto DEBE implementar el control, no solo la programación.
+
+- El nadador DEBE poder registrar, por sesión: si la cumplió, su RPE percibido (Borg 0-10) y
+  observaciones en texto libre.
+- Esos registros DEBEN llegar al entrenador y mostrarse junto al plan que los originó. Un
+  registro que nadie lee no es control.
+- La **carga externa** (lo programado: metros, series, pausas, ritmos) y la **carga interna**
+  (la respuesta del nadador) se almacenan y se muestran por separado. NO DEBEN combinarse en
+  un mismo indicador.
+- Un reporte de dolor, lesión o malestar se marca **aparte** del resto de observaciones,
+  llega al entrenador y NO DEBE resolverse de forma automática (Principio IV).
+- El registro de la carga interna NO DEBE ser obligatorio para usar la app: un nadador que
+  no anota nada sigue viendo su plan. Lo que no se permite es que la app no ofrezca dónde
+  anotarlo.
+
+Razón: sin la respuesta del nadador, un plan es una hipótesis que nadie comprueba. El
+reajuste que la metodología exige necesita datos que hoy no se recogen en ninguna parte del
+flujo del entrenador.
+
 ## Restricciones Técnicas y de Plataforma
 
 - **Lenguaje y framework:** Flutter con Dart. Cambiar de stack es una enmienda a esta
@@ -167,9 +224,13 @@ a la vez es la forma más segura de no terminar ninguno.
 - **Plataforma:** Firebase — Authentication, Firestore, Cloud Storage (video) y Hosting
   para el despliegue de la web Flutter.
 - **Lógica de servidor** (validación de suscripciones, webhooks de pago, auditoría del
-  lado servidor): Cloud Functions en TypeScript, o Cloud Run con un servidor Dart `shelf`
-  detrás de un *rewrite* de Hosting si se prefiere mantener todo en Dart. La ruta elegida
-  se documenta en el `plan.md` de la primera feature que la necesite.
+  lado servidor, intermediación con el proveedor del modelo de lenguaje): Cloud Functions en
+  TypeScript, o Cloud Run con un servidor Dart `shelf` detrás de un *rewrite* de Hosting si
+  se prefiere mantener todo en Dart. La ruta elegida se documenta en el `plan.md` de la
+  primera feature que la necesite.
+- **Claves de proveedores externos:** una clave de API NUNCA viaja al cliente. La llamada al
+  proveedor del modelo de lenguaje se hace desde el servidor; la app habla con ese servidor,
+  no con el proveedor.
 - **Exportabilidad:** Firestore es NoSQL y las consultas de progreso histórico son su punto
   débil. Por eso el esquema DEBE estar documentado y ser exportable a JSON o formato
   tabular desde el inicio, de modo que migrar a una base relacional siga siendo posible.
@@ -177,20 +238,30 @@ a la vez es la forma más segura de no terminar ninguno.
   interfaz, los mensajes al usuario y **todos los documentos entregables** van en español.
 - **Sin credenciales en el repositorio:** claves de API, secretos de pasarela y archivos de
   configuración sensibles se inyectan en tiempo de ejecución o de build.
-- **Uso a pie de piscina:** la señal en piscinas suele ser mala. Consultar el plan de la
-  semana, la sesión del día y las marcas propias DEBE funcionar sin conexión. Requieren red
-  únicamente la carga de video, la comunidad y los pagos.
+- **Uso a pie de piscina.** La señal en las piscinas suele ser mala, así que funcionar sin
+  conexión no es una mejora opcional:
+  - **Lectura:** consultar los planes propios, la sesión del día y el progreso propio NUNCA
+    DEBE requerir red.
+  - **Escritura:** el nadador DEBE poder anotar su retroalimentación y marcar una sesión
+    como realizada sin conexión. La app guarda el registro en el dispositivo, muestra un
+    estado explícito del tipo «Guardado el progreso, se enviará cuando tengas acceso a
+    internet» y sincroniza cuando la red vuelve. Ningún dato escrito sin conexión se pierde
+    en silencio.
+  - Requieren red únicamente la carga de video, la comunidad, los pagos y la generación
+    asistida por modelo de lenguaje.
+- **El entregable vive en la app:** un plan aprobado se consulta y se usa dentro de la
+  aplicación. La exportación o descarga es una copia para archivo o impresión, no el
+  producto.
 - **Unidades y formatos:** sistema métrico, piscina de 25 m o 50 m declarada en cada plan,
   tiempos en `mm:ss.cc`, RPE en escala de Borg 0-10.
-- **Canal de cobro:** pendiente de decisión (ver pendientes diferidos). La feature de pagos
-  DEBE resolverlo en su `plan.md` antes de escribir código, porque condiciona la
-  arquitectura y el margen.
+- **Canal de cobro:** pendiente de decisión. La feature de pagos DEBE resolverlo en su
+  `plan.md` antes de escribir código, porque condiciona la arquitectura y el margen.
 
 ## Flujo de Desarrollo y Puertas de Calidad
 
 - Toda feature sigue el flujo de Spec Kit: `/speckit-specify` → `/speckit-plan` →
   `/speckit-tasks` → `/speckit-implement`. La implementación no empieza sin `tasks.md`.
-- `plan.md` DEBE incluir una revisión contra estos siete principios. Toda desviación se
+- `plan.md` DEBE incluir una revisión contra estos ocho principios. Toda desviación se
   documenta con su justificación **antes** de escribir código.
 - Puertas de calidad antes de cerrar una feature, en este orden: `flutter analyze` limpio,
   `flutter test` en verde, pruebas de reglas de seguridad en el emulador, y verificación
@@ -224,7 +295,7 @@ Versionado semántico de este documento:
 - PATCH: aclaraciones, redacción y correcciones sin cambio de obligación.
 
 Revisión de cumplimiento: en cada `/speckit-plan` y antes de cerrar cada feature se
-verifica el cumplimiento de los siete principios. La complejidad no justificada se elimina
+verifica el cumplimiento de los ocho principios. La complejidad no justificada se elimina
 o se documenta.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-25 | **Last Amended**: 2026-09-25
+**Version**: 1.1.0 | **Ratified**: 2026-09-25 | **Last Amended**: 2026-09-29
