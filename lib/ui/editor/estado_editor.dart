@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
 import 'package:natacion_app/dominio/calculo/calculo_sesion.dart';
 import 'package:natacion_app/dominio/entidades/parte.dart';
+import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/entidades/serie.dart';
 import 'package:natacion_app/dominio/entidades/sesion.dart';
 import 'package:natacion_app/dominio/metodologia/categorias.dart';
@@ -181,6 +182,40 @@ class EstadoEditor extends ChangeNotifier {
   /// Recupera una sesión guardada para seguir editándola.
   Future<void> cargar(Sesion sesion) async {
     _sesion = sesion;
+    notifyListeners();
+  }
+
+  /// Sesiones de un microciclo generado que se están revisando, y cuál está
+  /// abierta. Vacío cuando el entrenador escribe a mano.
+  List<Sesion> _sesionesDelPlan = const [];
+  int _indiceAbierta = 0;
+
+  List<Sesion> get sesionesDelPlan => _sesionesDelPlan;
+  int get indiceAbierta => _indiceAbierta;
+
+  /// Verdadero cuando lo que se está editando vino de una generación.
+  bool get revisandoGenerado => _sesionesDelPlan.isNotEmpty;
+
+  /// Abre un microciclo generado para revisarlo.
+  ///
+  /// El editor pasa de ser la forma de crear a ser la forma de revisar, que es
+  /// lo que la feature 002 persigue.
+  void abrirGenerado(Plan plan) {
+    _sesionesDelPlan = List<Sesion>.from(plan.sesiones);
+    _indiceAbierta = 0;
+    _categoria = plan.categoria;
+    _sesion = _sesionesDelPlan.isEmpty ? Sesion() : _sesionesDelPlan.first;
+    notifyListeners();
+  }
+
+  /// Cambia de sesión dentro del microciclo, conservando lo editado en la que
+  /// se abandona.
+  void abrirSesion(int indice) {
+    if (indice < 0 || indice >= _sesionesDelPlan.length) return;
+
+    _sesionesDelPlan[_indiceAbierta] = _sesion;
+    _indiceAbierta = indice;
+    _sesion = _sesionesDelPlan[indice];
     notifyListeners();
   }
 }

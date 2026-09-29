@@ -90,14 +90,14 @@ totales y las distribuciones salen dentro de lo que la metodología prescribe, s
 - [X] T018 [P] [US1] Escribir pruebas del presupuesto técnico en `test/dominio/generacion/tecnica_test.dart`: el porcentaje técnico del microciclo coincide con el prescrito para la fase dentro de la tolerancia, y **nunca queda por debajo** (nivel 4 de la escala de precedencia)
 - [X] T019 [P] [US1] Escribir pruebas del reparto de estilos en `test/dominio/generacion/estilos_test.dart`: con estilo objetivo Libre, el reparto cae en 80-85% Libre y 15-20% Espalda; con Pecho y Mariposa, mitad y mitad
 - [X] T020 [P] [US1] Escribir pruebas de la estructura de sesión en `test/dominio/generacion/compositor_test.dart`: cada sesión generada tiene tres partes repartidas 40/50/10, la central con su pre-set del 10%, y **las zonas se ubican donde el contrato las admite** (inicial solo A1; principal A2, A3, AT, Máx, Velocidad)
-- [ ] T021 [P] [US1] Escribir pruebas de precedencia en `test/dominio/generacion/precedencia_test.dart`: cuando las restricciones chocan, ceden de abajo hacia arriba según la tabla de `contracts/generacion.md`, y **nunca ceden** la no invención, la estructura de sesión, el volumen de la categoría ni el porcentaje técnico
+- [X] T021 [P] [US1] Escribir pruebas de precedencia en `test/dominio/generacion/precedencia_test.dart`: cuando las restricciones chocan, ceden de abajo hacia arriba según la tabla de `contracts/generacion.md`, y **nunca ceden** la no invención, la estructura de sesión, el volumen de la categoría ni el porcentaje técnico
 - [X] T022 [P] [US1] Escribir pruebas de determinismo en `test/dominio/generacion/determinismo_test.dart`: la misma petición produce planes idénticos serie por serie (FR-024), y **cambiar solo el componente acentuado produce un plan distinto**
 - [X] T023 [P] [US1] Escribir pruebas de selección de ejercicios en `test/dominio/generacion/seleccion_test.dart`: con diagnóstico se eligen ejercicios cuyo error corregido corresponde; sin diagnóstico se sigue la progresión de la sección 15 **sin inventar errores**; un error sin ejercicio en la Biblioteca se reporta como `VacioDeBiblioteca` y **no se sustituye** por otro
-- [ ] T024 [P] [US1] Escribir pruebas de la regla de Tecnificación en `test/dominio/generacion/tecnificacion_test.dart`: en esa categoría la primera sesión es de Pecho y la segunda de Mariposa, y no se le asigna fase ATR
+- [X] T024 [P] [US1] Escribir pruebas de la regla de Tecnificación en `test/dominio/generacion/tecnificacion_test.dart`: en esa categoría la primera sesión es de Pecho y la segunda de Mariposa, y no se le asigna fase ATR
 - [X] T025 [P] [US1] Escribir pruebas del renderizador en `test/dominio/notacion/renderizador_test.dart` con los ejemplos de `contracts/renderizado.md`, incluidos los casos que ya dieron problemas: ejercicio ambiguo con su estilo, nombre con `+`, etiqueta de bloque técnico y nado completo
 - [X] T026 [P] [US1] Escribir la prueba del **viaje redondo** en `test/dominio/notacion/viaje_redondo_test.dart`: generar, renderizar, releer con el analizador, y comprobar que metros, zonas, ejercicios, implementos y modificadores coinciden, con diferencia de **0 m** y sin fragmentos pendientes
 - [X] T027 [P] [US1] Escribir la prueba de cumplimiento por construcción en `test/dominio/generacion/cumple_auditoria_test.dart`: todo microciclo generado pasa los once criterios **sin ningún bloqueante en rojo**, para las treinta combinaciones. Es la exigencia que la constitución 1.1.0 añadió al principio III
-- [ ] T028 [P] [US1] Escribir pruebas de sesiones dobles en `test/dominio/generacion/sesiones_dobles_test.dart`: Alto Rendimiento reparte diez sesiones entre los días disponibles y **marca como tal la segunda sesión del día**
+- [X] T028 [P] [US1] Escribir pruebas de sesiones dobles en `test/dominio/generacion/sesiones_dobles_test.dart`: Alto Rendimiento reparte diez sesiones entre los días disponibles y **marca como tal la segunda sesión del día**
 - [X] T029 [P] [US1] Escribir pruebas de cuantización en `test/dominio/generacion/cuantizacion_test.dart`: toda distancia generada es múltiplo de la longitud de piscina declarada (FR-019)
 
 ### Implementation for User Story 1
@@ -105,15 +105,15 @@ totales y las distribuciones salen dentro de lo que la metodología prescribe, s
 - [X] T030 [US1] Implementar el presupuesto en `lib/dominio/generacion/presupuesto.dart`: volumen por sesión como punto medio del rango cuantizado, volumen del microciclo, reparto por zonas, presupuesto técnico y reparto de estilos, usando el reparto de T009
 - [X] T031 [US1] Implementar el reparto entre sesiones en `lib/dominio/generacion/presupuesto.dart`, de modo que la suma por sesión sea exactamente el volumen del microciclo (invariante 6)
 - [X] T032 [US1] Implementar el compositor de sesión en `lib/dominio/generacion/compositor_sesion.dart`: tres partes 40/50/10 con el pre-set del 10%, y ubicación de zonas según la tabla de `contracts/generacion.md`
-- [ ] T033 [US1] Implementar la escala de precedencia en `lib/dominio/generacion/precedencia.dart`: qué cede y en qué orden, devolviendo `repartoImposible` cuando tras ceder los niveles 5 y 6 dentro de la tolerancia el reparto sigue sin cerrar
+- [X] T033 [US1] Implementar la escala de precedencia en `lib/dominio/generacion/precedencia.dart`: qué cede y en qué orden, devolviendo `repartoImposible` cuando tras ceder los niveles 5 y 6 dentro de la tolerancia el reparto sigue sin cerrar
 - [X] T034 [US1] Implementar el selector de ejercicios en `lib/dominio/generacion/selector_ejercicios.dart`: correspondencia por términos normalizados contra el campo de error que corrige, progresión de la sección 15 cuando no hay diagnóstico, recorrido **estable** y rotación por posición sin azar
 - [X] T035 [US1] Implementar la generación de objetivos y del nombre del microciclo en `lib/dominio/generacion/generador.dart`, derivando el nombre del componente acentuado declarado para que pase el criterio C09 (FR-009, invariante 12)
 - [X] T036 [US1] Implementar el RPE previsto por sesión en `lib/dominio/generacion/generador.dart`, coherente con la zona dominante de la sesión según la tabla de la sección 9
 - [X] T037 [US1] Implementar el renderizador en `lib/dominio/notacion/renderizador.dart` con el orden fijo de elementos de `contracts/renderizado.md`, usando el signo `×` y **sin abreviar, embellecer ni corregir** nada
 - [X] T038 [US1] Orquestar todo en `lib/dominio/generacion/generador.dart`: recibe la petición, devuelve `MicrocicloGenerado` con el plan en estado `borrador` y `origen: automatico`, más sus supuestos, vacíos de biblioteca y avisos
-- [ ] T039 [US1] Construir el formulario de petición en `lib/ui/generacion/pantalla_peticion.dart` con los campos del protocolo de inicio, incluidos diagnóstico técnico, fechas sin servicio y lesiones
-- [ ] T040 [US1] Mostrar el aviso de lesiones en `lib/ui/generacion/pantalla_peticion.dart` dejando explícito que **se registran pero no modifican el plan**, y por qué
-- [ ] T041 [US1] Conectar el botón de generar con el editor: el microciclo generado se abre en `lib/ui/editor/` con sus sesiones ya escritas en notación
+- [X] T039 [US1] Construir el formulario de petición en `lib/ui/generacion/pantalla_peticion.dart` con los campos del protocolo de inicio, incluidos diagnóstico técnico, fechas sin servicio y lesiones
+- [X] T040 [US1] Mostrar el aviso de lesiones en `lib/ui/generacion/pantalla_peticion.dart` dejando explícito que **se registran pero no modifican el plan**, y por qué
+- [X] T041 [US1] Conectar el botón de generar con el editor: el microciclo generado se abre en `lib/ui/editor/` con sus sesiones ya escritas en notación
 
 **Checkpoint**: el entrenador obtiene una semana cuadrada. Validar con los escenarios G1, G2, G3, G4, G5, G8, G9, G10 y G13 de `quickstart.md`.
 
@@ -136,9 +136,9 @@ criterios reflejan el cambio.
 
 ### Implementation for User Story 2
 
-- [ ] T046 [US2] Poblar el estado del editor desde un plan generado en `lib/ui/editor/estado_editor.dart`, cargando el texto renderizado de cada parte y sus series estructuradas
-- [ ] T047 [US2] Mostrar en el editor que la sesión proviene de una generación automática, en `lib/ui/editor/cabecera_sesion.dart`, de forma que el entrenador sepa qué está revisando
-- [ ] T048 [US2] Permitir navegar entre las sesiones del microciclo generado en `lib/ui/editor/pantalla_editor.dart`, sin perder los cambios sin guardar de la sesión que se abandona
+- [X] T046 [US2] Poblar el estado del editor desde un plan generado en `lib/ui/editor/estado_editor.dart`, cargando el texto renderizado de cada parte y sus series estructuradas
+- [X] T047 [US2] Mostrar en el editor que la sesión proviene de una generación automática, en `lib/ui/editor/cabecera_sesion.dart`, de forma que el entrenador sepa qué está revisando
+- [X] T048 [US2] Permitir navegar entre las sesiones del microciclo generado en `lib/ui/editor/pantalla_editor.dart`, sin perder los cambios sin guardar de la sesión que se abandona
 - [ ] T049 [US2] Persistir el microciclo generado y editado con su `origen` intacto, a través de `RepositorioPlanes` y `RepositorioSesiones`
 
 **Checkpoint**: lo generado es material de trabajo, no algo que se acepta o se descarta entero. Validar con G11.
@@ -155,20 +155,20 @@ un plan ni deja nada guardado.
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T050 [P] [US3] Escribir pruebas de datos faltantes en `test/dominio/generacion/impedimentos_test.dart`: sin categoría, sin estilo objetivo o sin componente acentuado, el resultado es `GeneracionImposible` con `datoFaltante` nombrando el campo
-- [ ] T051 [P] [US3] Escribir pruebas de acumulación en `test/dominio/generacion/impedimentos_acumulados_test.dart`: cuando faltan varios datos se devuelven **todos los impedimentos a la vez**, no de uno en uno
-- [ ] T052 [P] [US3] Escribir pruebas de contradicción de frecuencia en `test/dominio/generacion/frecuencia_test.dart`: Precompetitivo, que pide tres sesiones semanales, con solo dos días disponibles produce `frecuenciaImposible` explicando la contradicción
-- [ ] T053 [P] [US3] Escribir pruebas de fase no admisible en `test/dominio/generacion/fase_no_admisible_test.dart`: Iniciación o Tecnificación con fase ATR declarada produce `faseNoAdmisible`
-- [ ] T054 [P] [US3] Escribir pruebas de duración insuficiente en `test/dominio/generacion/duracion_test.dart`: Precompetitivo con sesión de 20 minutos produce `duracionInsuficiente`
-- [ ] T055 [P] [US3] Escribir pruebas de que nada queda a medias en `test/dominio/generacion/sin_residuo_test.dart`: tras un resultado imposible **no queda ningún plan guardado** (invariante 15)
-- [ ] T056 [P] [US3] Escribir pruebas de supuestos marcados en `test/dominio/generacion/supuestos_test.dart`: cuando un supuesto es inevitable, queda dentro del plan generado y es visible (FR-007)
+- [X] T050 [P] [US3] Escribir pruebas de datos faltantes en `test/dominio/generacion/impedimentos_test.dart`: sin categoría, sin estilo objetivo o sin componente acentuado, el resultado es `GeneracionImposible` con `datoFaltante` nombrando el campo
+- [X] T051 [P] [US3] Escribir pruebas de acumulación en `test/dominio/generacion/impedimentos_acumulados_test.dart`: cuando faltan varios datos se devuelven **todos los impedimentos a la vez**, no de uno en uno
+- [X] T052 [P] [US3] Escribir pruebas de contradicción de frecuencia en `test/dominio/generacion/frecuencia_test.dart`: Precompetitivo, que pide tres sesiones semanales, con solo dos días disponibles produce `frecuenciaImposible` explicando la contradicción
+- [X] T053 [P] [US3] Escribir pruebas de fase no admisible en `test/dominio/generacion/fase_no_admisible_test.dart`: Iniciación o Tecnificación con fase ATR declarada produce `faseNoAdmisible`
+- [X] T054 [P] [US3] Escribir pruebas de duración insuficiente en `test/dominio/generacion/duracion_test.dart`: Precompetitivo con sesión de 20 minutos produce `duracionInsuficiente`
+- [X] T055 [P] [US3] Escribir pruebas de que nada queda a medias en `test/dominio/generacion/sin_residuo_test.dart`: tras un resultado imposible **no queda ningún plan guardado** (invariante 15)
+- [X] T056 [P] [US3] Escribir pruebas de supuestos marcados en `test/dominio/generacion/supuestos_test.dart`: cuando un supuesto es inevitable, queda dentro del plan generado y es visible (FR-007)
 
 ### Implementation for User Story 3
 
-- [ ] T057 [US3] Implementar la validación previa en `lib/dominio/generacion/validacion_peticion.dart` con las cinco comprobaciones del contrato **en su orden**, acumulando todos los impedimentos antes de devolver
-- [ ] T058 [US3] Hacer que el generador valide **antes de repartir** en `lib/dominio/generacion/generador.dart`, de modo que ningún plan a medias llegue a existir
-- [ ] T059 [US3] Construir el panel de impedimentos en `lib/ui/generacion/panel_impedimentos.dart`: cada uno con su explicación en términos que el entrenador reconozca, y los números concretos de la contradicción
-- [ ] T060 [US3] Mostrar los supuestos y los vacíos de biblioteca del plan generado en `lib/ui/editor/panel_avisos.dart`, distinguiéndolos de los avisos de auditoría
+- [X] T057 [US3] Implementar la validación previa en `lib/dominio/generacion/validacion_peticion.dart` con las cinco comprobaciones del contrato **en su orden**, acumulando todos los impedimentos antes de devolver
+- [X] T058 [US3] Hacer que el generador valide **antes de repartir** en `lib/dominio/generacion/generador.dart`, de modo que ningún plan a medias llegue a existir
+- [X] T059 [US3] Construir el panel de impedimentos en `lib/ui/generacion/panel_impedimentos.dart`: cada uno con su explicación en términos que el entrenador reconozca, y los números concretos de la contradicción
+- [X] T060 [US3] Mostrar los supuestos y los vacíos de biblioteca del plan generado en `lib/ui/editor/panel_avisos.dart`, distinguiéndolos de los avisos de auditoría
 
 **Checkpoint**: la app no entrega nunca un plan que incumple. Validar con G6 y G7.
 

@@ -5,7 +5,9 @@ import 'package:natacion_app/datos/recursos/version_metodologia.dart';
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
 import 'package:natacion_app/dominio/repositorios/repositorios.dart';
 import 'package:natacion_app/ui/editor/estado_editor.dart';
+import 'package:natacion_app/dominio/generacion/resultado.dart';
 import 'package:natacion_app/ui/editor/pantalla_editor.dart';
+import 'package:natacion_app/ui/generacion/pantalla_peticion.dart';
 import 'package:natacion_app/ui/nadadores/pantalla_perfiles.dart';
 import 'package:provider/provider.dart';
 
@@ -119,11 +121,31 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
   final RepositorioNadadores _nadadores = RepositorioNadadoresMemoria();
 
+  /// Un solo estado de editor para toda la app, para que lo generado en la
+  /// primera pestaña aparezca en la segunda.
+  late final EstadoEditor _editor =
+      EstadoEditor(biblioteca: widget.recursos.biblioteca);
+
+  @override
+  void dispose() {
+    _editor.dispose();
+    super.dispose();
+  }
+
+  void _abrirGenerado(MicrocicloGenerado generado) {
+    _editor.abrirGenerado(generado.plan);
+    setState(() => _indice = 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     final pantallas = <Widget>[
-      ChangeNotifierProvider(
-        create: (_) => EstadoEditor(biblioteca: widget.recursos.biblioteca),
+      PantallaPeticion(
+        biblioteca: widget.recursos.biblioteca,
+        alGenerar: _abrirGenerado,
+      ),
+      ChangeNotifierProvider<EstadoEditor>.value(
+        value: _editor,
         child: const PantallaEditor(),
       ),
       PantallaPerfiles(repositorio: _nadadores),
@@ -135,6 +157,11 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
         selectedIndex: _indice,
         onDestinationSelected: (indice) => setState(() => _indice = indice),
         destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.auto_awesome_outlined),
+            selectedIcon: Icon(Icons.auto_awesome),
+            label: 'Generar',
+          ),
           NavigationDestination(
             icon: Icon(Icons.edit_note_outlined),
             selectedIcon: Icon(Icons.edit_note),
