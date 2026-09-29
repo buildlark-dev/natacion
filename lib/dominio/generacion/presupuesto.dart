@@ -20,6 +20,7 @@ class Presupuesto {
     required this.metrosTecnicos,
     required this.metrosPorEstilo,
     required this.metrosPorSesion,
+    required this.porcentajesPorZona,
   });
 
   final int volumenTotal;
@@ -35,6 +36,10 @@ class Presupuesto {
   final Map<Estilo, int> metrosPorEstilo;
   final List<int> metrosPorSesion;
 
+  /// Porcentajes prescritos por zona, guardados para repartir cada sesión con
+  /// la misma distribución.
+  final Map<Zona, int> porcentajesPorZona;
+
   double get porcentajeTecnico =>
       volumenTotal == 0 ? 0 : (metrosTecnicos * 100) / volumenTotal;
 
@@ -46,32 +51,31 @@ class Presupuesto {
       ? 0
       : ((metrosPorEstilo[estilo] ?? 0) * 100) / volumenTotal;
 
-  /// Metros de una zona que corresponden a una sesión concreta.
+  /// Porcentajes prescritos por zona, guardados para poder repartir cada
+  /// sesión con la misma distribución.
+  /// Metros por zona de una sesión concreta.
   ///
-  /// Se reparten con la misma regla de resto mayor, para que la suma por
-  /// sesión sea exactamente el total de la zona.
+  /// Se derivan del **volumen de esa sesión**, no del total repartido entre
+  /// sesiones. Calcular ambas cosas por separado las hacía discrepar y el plan
+  /// perdía metros: el compositor pedía llenar bloques por un volumen y solo
+  /// tenía zonas por otro.
+  ///
+  /// Así el volumen de cada sesión sale exacto —que es una restricción dura,
+  /// nivel 3— y la distribución de zonas queda dentro de la tolerancia, que es
+  /// lo que el nivel 5 admite.
   Map<Zona, int> zonasDeSesion(int indiceSesion) {
-    final porSesion = <Zona, int>{};
+    final metrosSesion = metrosPorSesion[indiceSesion];
+    final unidadesSesion = aUnidades(metrosSesion, unidad);
 
-    for (final zona in ordenDeZonas) {
-      final metros = metrosPorZona[zona] ?? 0;
-      if (metros == 0) {
-        porSesion[zona] = 0;
-        continue;
-      }
+    final repartido = repartirZonas(
+      unidades: unidadesSesion,
+      porcentajes: porcentajesPorZona,
+    );
 
-      final unidades = aUnidades(metros, unidad);
-      final repartido = repartirPorRestoMayor(
-        unidades: unidades,
-        porcentajes: {
-          for (var i = 0; i < sesiones; i++) 'sesion$i': (100 / sesiones).floor(),
-        },
-        orden: [for (var i = 0; i < sesiones; i++) 'sesion$i'],
-      );
-      porSesion[zona] = aMetros(repartido['sesion$indiceSesion'] ?? 0, unidad);
-    }
-
-    return porSesion;
+    return <Zona, int>{
+      for (final zona in ordenDeZonas)
+        zona: aMetros(repartido[zona] ?? 0, unidad),
+    };
   }
 }
 
@@ -145,6 +149,10 @@ Presupuesto calcularPresupuesto(PeticionGeneracion peticion) {
     metrosTecnicos: metrosTecnicos,
     metrosPorEstilo: metrosPorEstilo,
     metrosPorSesion: metrosPorSesion,
+    porcentajesPorZona: fase?.distribucion ??
+        <Zona, int>{
+          for (final zona in ordenDeZonas) zona: zona == Zona.a1 ? 100 : 0,
+        },
   );
 }
 

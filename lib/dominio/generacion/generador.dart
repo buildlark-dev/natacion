@@ -160,6 +160,8 @@ class Generador {
       final series = _seriesDeBloque(
         bloque: bloque,
         estilo: estilo,
+        complementario: _complementario(peticion),
+        porcentajeComplementario: _porcentajeComplementario(peticion),
         unidad: unidad,
         ejercicios: seleccion.ejercicios,
         metrosTecnicosPendientes: faltanTecnicos,
@@ -200,9 +202,17 @@ class Generador {
   }
 
   /// Convierte los metros por zona de un bloque en series concretas.
+  ///
+  /// **El reparto de estilos ocurre dentro de la sesión, no entre sesiones.**
+  /// Asignar un estilo a cada sesión completa hacía imposible el 80-85% que la
+  /// sección 13 prescribe: el 82% de tres sesiones no es un número entero de
+  /// sesiones, y salía el 100% del estilo objetivo. Sus propias sesiones
+  /// mezclan los dos estilos en la misma serie central.
   List<Serie> _seriesDeBloque({
     required ReparteParte bloque,
     required Estilo estilo,
+    required Estilo? complementario,
+    required int porcentajeComplementario,
     required int unidad,
     required List<Ejercicio> ejercicios,
     required int metrosTecnicosPendientes,
@@ -216,36 +226,53 @@ class Generador {
       final metros = bloque.metrosPorZona[zona] ?? 0;
       if (metros <= 0) continue;
 
-      // Los metros técnicos se cubren con ejercicios de la Biblioteca; el
-      // resto es nado completo.
-      final tecnicos = ejercicios.isEmpty
+      // Parte de los metros de esta zona van al estilo complementario.
+      final paraComplementario = complementario == null
           ? 0
-          : (tecnicosRestantes < metros ? tecnicosRestantes : metros);
+          : cuantizar((metros * porcentajeComplementario / 100).round(), unidad);
+      final paraObjetivo = metros - paraComplementario;
 
-      if (tecnicos > 0) {
-        final ejercicio = ejercicios[indiceEjercicio % ejercicios.length];
-        indiceEjercicio++;
-        tecnicosRestantes -= tecnicos;
+      for (final tramo in [
+        (estilo, paraObjetivo),
+        if (paraComplementario > 0) (complementario!, paraComplementario),
+      ]) {
+        final estiloTramo = tramo.$1;
+        final metrosTramo = tramo.$2;
+        if (metrosTramo <= 0) continue;
 
-        series.add(_serie(
-          metros: tecnicos,
-          unidad: unidad,
-          zona: zona,
-          estilo: estilo,
-          ejercicio: ejercicio,
-        ));
-      }
+        // Los metros técnicos se cubren con ejercicios de la Biblioteca; el
+        // resto es nado completo.
+        final tecnicos = ejercicios.isEmpty
+            ? 0
+            : (tecnicosRestantes < metrosTramo
+                ? tecnicosRestantes
+                : metrosTramo);
 
-      final restantes = metros - tecnicos;
-      if (restantes > 0) {
-        series.add(_serie(
-          metros: restantes,
-          unidad: unidad,
-          zona: zona,
-          estilo: estilo,
-          modificadores:
-              esCierre ? const [Modificador.recuperacion] : const [],
-        ));
+        if (tecnicos > 0) {
+          final ejercicio = ejercicios[indiceEjercicio % ejercicios.length];
+          indiceEjercicio++;
+          tecnicosRestantes -= tecnicos;
+
+          series.add(_serie(
+            metros: tecnicos,
+            unidad: unidad,
+            zona: zona,
+            estilo: estiloTramo,
+            ejercicio: ejercicio,
+          ));
+        }
+
+        final restantes = metrosTramo - tecnicos;
+        if (restantes > 0) {
+          series.add(_serie(
+            metros: restantes,
+            unidad: unidad,
+            zona: zona,
+            estilo: estiloTramo,
+            modificadores:
+                esCierre ? const [Modificador.recuperacion] : const [],
+          ));
+        }
       }
     }
 
@@ -294,28 +321,49 @@ class Generador {
     );
   }
 
+  /// Estilo dominante de una sesión.
+  ///
+  /// Solo Tecnificación impone el estilo por sesión, por su regla de
+  /// alternancia. En el resto, el estilo dominante es el objetivo y el
+  /// complementario se reparte **dentro** de cada sesión.
   Estilo _estiloDeSesion(
     PeticionGeneracion peticion,
     Presupuesto presupuesto,
     int indice,
   ) {
-    // Tecnificación tiene alternancia obligatoria: Pecho y después Mariposa.
     if (peticion.categoria.tieneAlternanciaObligatoria) {
       const secuencia = [Estilo.pecho, Estilo.mariposa];
       return secuencia[indice % secuencia.length];
     }
 
-    final prioridad = PriorizacionEstilos.para(peticion.estiloObjetivo);
-    if (prioridad == null) return peticion.estiloObjetivo;
+    return peticion.estiloObjetivo;
+  }
 
-    return estiloDeSesion(
-      estiloObjetivo: peticion.estiloObjetivo,
-      complementarios: prioridad.estilosComplementarios,
-      indiceSesion: indice,
-      totalSesiones: presupuesto.sesiones,
-      porcentajeObjetivo:
-          presupuesto.porcentajeDeEstilo(peticion.estiloObjetivo),
-    );
+  /// Estilo complementario del objetivo, según la sección 13.
+  ///
+  /// Nulo cuando la categoría no está sujeta a la priorización, o cuando el
+  /// estilo objetivo no tiene una definida.
+  Estilo? _complementario(PeticionGeneracion peticion) {
+    if (peticion.categoria.tieneAlternanciaObligatoria) return null;
+    if (!peticion.categoria.usaAtr) return null;
+
+    final prioridad = PriorizacionEstilos.para(peticion.estiloObjetivo);
+    if (prioridad == null || prioridad.estilosComplementarios.isEmpty) {
+      return null;
+    }
+
+    return prioridad.estilosComplementarios.first;
+  }
+
+  /// Punto medio del rango complementario prescrito.
+  int _porcentajeComplementario(PeticionGeneracion peticion) {
+    final prioridad = PriorizacionEstilos.para(peticion.estiloObjetivo);
+    if (prioridad == null) return 0;
+
+    return ((prioridad.rangoComplementario.minimo +
+                prioridad.rangoComplementario.maximo) /
+            2)
+        .round();
   }
 
   String _objetivoDelMicrociclo(PeticionGeneracion peticion) =>

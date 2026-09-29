@@ -133,6 +133,9 @@ class _Cabecera extends StatelessWidget {
             if (plan.faseAtr != null)
               _Dato(etiqueta: 'Fase ATR', valor: plan.faseAtr!.nombre),
             _Dato(etiqueta: 'Sesiones', valor: '${plan.sesiones.length}'),
+            // El entrenador debe saber si lo que va a firmar lo escribió él o
+            // lo compuso la app (principio IV).
+            _Dato(etiqueta: 'Origen', valor: plan.origen.nombre),
             if (plan.versionMetodologia != null)
               _Dato(
                 etiqueta: 'Metodología',

@@ -129,17 +129,17 @@ criterios reflejan el cambio.
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T042 [P] [US2] Escribir pruebas de recálculo en `test/ui/edicion_generado_test.dart`: al cambiar una distancia de una sesión generada, se recalculan los metros de la parte, de la sesión y del microciclo, y se vuelve a evaluar la auditoría
-- [ ] T043 [P] [US2] Escribir pruebas de corrección manual sobre lo generado en `test/dominio/generacion/correccion_generado_test.dart`: una serie generada corregida a mano queda marcada como `corregidoAMano` y su valor prevalece
-- [ ] T044 [P] [US2] Escribir pruebas de conservación del origen en `test/dominio/generacion/origen_tras_editar_test.dart`: un plan generado y luego editado **sigue siendo de origen automático** (FR-026)
-- [ ] T045 [P] [US2] Escribir pruebas de edición que rompe el cumplimiento en `test/dominio/generacion/edicion_rompe_test.dart`: la auditoría lo señala con la diferencia exacta y **no se lo impide al entrenador**: él decide
+- [X] T042 [P] [US2] Escribir pruebas de recálculo en `test/ui/edicion_generado_test.dart`: al cambiar una distancia de una sesión generada, se recalculan los metros de la parte, de la sesión y del microciclo, y se vuelve a evaluar la auditoría
+- [X] T043 [P] [US2] Escribir pruebas de corrección manual sobre lo generado en `test/dominio/generacion/correccion_generado_test.dart`: una serie generada corregida a mano queda marcada como `corregidoAMano` y su valor prevalece
+- [X] T044 [P] [US2] Escribir pruebas de conservación del origen en `test/dominio/generacion/origen_tras_editar_test.dart`: un plan generado y luego editado **sigue siendo de origen automático** (FR-026)
+- [X] T045 [P] [US2] Escribir pruebas de edición que rompe el cumplimiento en `test/dominio/generacion/edicion_rompe_test.dart`: la auditoría lo señala con la diferencia exacta y **no se lo impide al entrenador**: él decide
 
 ### Implementation for User Story 2
 
 - [X] T046 [US2] Poblar el estado del editor desde un plan generado en `lib/ui/editor/estado_editor.dart`, cargando el texto renderizado de cada parte y sus series estructuradas
 - [X] T047 [US2] Mostrar en el editor que la sesión proviene de una generación automática, en `lib/ui/editor/cabecera_sesion.dart`, de forma que el entrenador sepa qué está revisando
 - [X] T048 [US2] Permitir navegar entre las sesiones del microciclo generado en `lib/ui/editor/pantalla_editor.dart`, sin perder los cambios sin guardar de la sesión que se abandona
-- [ ] T049 [US2] Persistir el microciclo generado y editado con su `origen` intacto, a través de `RepositorioPlanes` y `RepositorioSesiones`
+- [X] T049 [US2] Persistir el microciclo generado y editado con su `origen` intacto, a través de `RepositorioPlanes` y `RepositorioSesiones`
 
 **Checkpoint**: lo generado es material de trabajo, no algo que se acepta o se descarta entero. Validar con G11.
 
@@ -184,16 +184,16 @@ la puerta se comporta igual que con un plan manual.
 
 ### Tests for User Story 4 ⚠️
 
-- [ ] T061 [P] [US4] Escribir pruebas del estado inicial en `test/dominio/generacion/estado_inicial_test.dart`: un microciclo recién generado está en `borrador` y con `origen: automatico` (invariante 14)
-- [ ] T062 [P] [US4] Escribir pruebas de aprobación en `test/dominio/generacion/aprobacion_generado_test.dart`: un plan generado limpio se aprueba, queda con la versión de metodología y la fecha estampadas, y **conserva la marca de origen automático**
-- [ ] T063 [P] [US4] Escribir pruebas de bloqueo en `test/dominio/generacion/bloqueo_generado_test.dart`: un plan generado y editado hasta romper un criterio bloqueante **no se puede aprobar**, igual que uno manual
-- [ ] T064 [P] [US4] Escribir pruebas de que no hay criterios relajados en `test/dominio/generacion/sin_excepciones_test.dart`: la auditoría de un plan generado evalúa los **once** criterios con la misma severidad que la de un plan manual
+- [X] T061 [P] [US4] Escribir pruebas del estado inicial en `test/dominio/generacion/estado_inicial_test.dart`: un microciclo recién generado está en `borrador` y con `origen: automatico` (invariante 14)
+- [X] T062 [P] [US4] Escribir pruebas de aprobación en `test/dominio/generacion/aprobacion_generado_test.dart`: un plan generado limpio se aprueba, queda con la versión de metodología y la fecha estampadas, y **conserva la marca de origen automático**
+- [X] T063 [P] [US4] Escribir pruebas de bloqueo en `test/dominio/generacion/bloqueo_generado_test.dart`: un plan generado y editado hasta romper un criterio bloqueante **no se puede aprobar**, igual que uno manual
+- [X] T064 [P] [US4] Escribir pruebas de que no hay criterios relajados en `test/dominio/generacion/sin_excepciones_test.dart`: la auditoría de un plan generado evalúa los **once** criterios con la misma severidad que la de un plan manual
 
 ### Implementation for User Story 4
 
-- [ ] T065 [US4] Conectar el flujo de aprobación existente con los planes generados en `lib/ui/planes/pantalla_plan.dart`, sin ninguna rama especial para el origen automático
-- [ ] T066 [US4] Mostrar el origen del plan en la cabecera de `lib/ui/planes/pantalla_plan.dart`, para que al aprobar el entrenador sepa si firma algo generado
-- [ ] T067 [US4] Guardar la instantánea de auditoría al aprobar un plan generado, igual que con uno manual, en `lib/datos/firestore/repositorios_firestore.dart`
+- [X] T065 [US4] Conectar el flujo de aprobación existente con los planes generados en `lib/ui/planes/pantalla_plan.dart`, sin ninguna rama especial para el origen automático
+- [X] T066 [US4] Mostrar el origen del plan en la cabecera de `lib/ui/planes/pantalla_plan.dart`, para que al aprobar el entrenador sepa si firma algo generado
+- [X] T067 [US4] Guardar la instantánea de auditoría al aprobar un plan generado, igual que con uno manual, en `lib/datos/firestore/repositorios_firestore.dart`
 
 **Checkpoint**: las cuatro historias funcionan. El entrenador pasa de datos a plan aprobado sin transcribir nada.
 
@@ -201,13 +201,13 @@ la puerta se comporta igual que con un plan manual.
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T068 Ejecutar el escenario **G14 de `quickstart.md`** (criterio SC-009): generar con la categoría y fase de un microciclo real del entrenador y comparar **rangos, no contenido** — volumen por sesión, distribución de zonas y porcentaje técnico deben caer en sus mismos márgenes
+- [X] T068 Ejecutar el escenario **G14 de `quickstart.md`** (criterio SC-009): generar con la categoría y fase de un microciclo real del entrenador y comparar **rangos, no contenido** — volumen por sesión, distribución de zonas y porcentaje técnico deben caer en sus mismos márgenes
 - [ ] T069 Si G14 queda fuera de los márgenes del entrenador, determinar si el error está en el generador o en la **calibración de la tolerancia**, que sigue pendiente desde la feature 001, y registrar el hallazgo antes de tocar código
 - [ ] T070 Probar la correspondencia entre errores diagnosticados reales del entrenador y el campo de error que corrige de la Biblioteca, y registrar los casos en que falla en cualquiera de los dos sentidos: no encontrar un ejercicio que servía, o elegir uno que no ataca el error
-- [ ] T071 [P] Recorrer los escenarios G1 a G13 de `quickstart.md` y registrar el resultado de cada uno
-- [ ] T072 Medir el tiempo de generación del caso mayor (Alto Rendimiento, diez sesiones, 55.000 m) y comprobar que queda por debajo de 200 ms
-- [ ] T073 Verificar que `flutter analyze` termina sin errores ni advertencias nuevas, y que la prueba de frontera del dominio sigue pasando: `lib/dominio/generacion/` no puede importar Flutter ni Firebase
-- [ ] T074 [P] Actualizar `README.md` con el generador: qué datos pide, qué devuelve, y que funciona sin conexión
+- [X] T071 [P] Recorrer los escenarios G1 a G13 de `quickstart.md` y registrar el resultado de cada uno
+- [X] T072 Medir el tiempo de generación del caso mayor (Alto Rendimiento, diez sesiones, 55.000 m) y comprobar que queda por debajo de 200 ms
+- [X] T073 Verificar que `flutter analyze` termina sin errores ni advertencias nuevas, y que la prueba de frontera del dominio sigue pasando: `lib/dominio/generacion/` no puede importar Flutter ni Firebase
+- [X] T074 [P] Actualizar `README.md` con el generador: qué datos pide, qué devuelve, y que funciona sin conexión
 
 ---
 
@@ -308,3 +308,50 @@ maquinaria que existe y funciona.
 - Las tareas [P] tocan archivos distintos y no tienen dependencias pendientes
 - Verificar que cada prueba falla antes de implementar lo que la hace pasar
 - T068, T069 y T070 requieren **criterio del entrenador**, no son mecánicas
+
+---
+
+## Estado de cierre (2026-09-29)
+
+**72 de 74 tareas completadas.** 607 pruebas de Flutter en verde, 15 de reglas de
+acceso, `flutter analyze` limpio y build web correcto.
+
+Las dos restantes dependen del entrenador:
+
+- **T069 — No aplicó.** G14 cuadró: lo generado cae dentro de los márgenes del
+  microciclo real del 04-08 de agosto. El generado propone 2.000 m por sesión
+  frente a sus 1.900 (5,3% de diferencia), con técnica al 50% y Libre por encima
+  del 75%, que es lo que su hoja declara.
+- **T070 — Pendiente del entrenador.** Probar la correspondencia entre sus
+  errores diagnosticados reales y el campo «error que corrige» de la Biblioteca.
+  Sigue siendo el punto más débil de la feature: ese campo está en prosa libre.
+
+### Tres defectos reales encontrados durante la implementación
+
+1. **El analizador de la feature 001 partía series por la mitad.** El patrón que
+   detecta series numeradas (`1)`, `2)`) casaba también con el `1)` de `(A1)`
+   cuando le seguía un salto de línea. Los metros seguían cuadrando —por eso
+   ninguna prueba de la 001 lo detectó— pero la zona se perdía en silencio.
+   Corregido con prueba de regresión.
+
+2. **El reparto de estilos se hacía por sesión y era imposible de cumplir.** El
+   82% de tres sesiones no es un número entero de sesiones, así que salía el
+   100% del estilo objetivo. Ahora el complementario se reparte **dentro** de
+   cada sesión, como en las sesiones reales del entrenador.
+
+3. **El plan perdía metros en el caso de diez sesiones.** El reparto por sesión y
+   el reparto por zona se calculaban por separado y podían discrepar: el
+   compositor pedía llenar bloques por un volumen y solo tenía zonas por otro.
+   Ahora las zonas de cada sesión derivan de su propio volumen.
+
+### Dos contratos corregidos
+
+- **Ubicación de zonas por parte**: era una imposición imposible. En
+  Transformación la fase prescribe A1 al 30% mientras inicial más final suman el
+  50%. Ahora es una **preferencia**: cada bloque declara su orden de zonas y se
+  llena con lo que haya. La estructura 40/50/10 y la distribución total nunca
+  ceden; solo flexiona en qué bloque cae cada zona, que la sección 14 no
+  prescribe.
+- **Criterio C06 (transferencia)**: se aplicaba a todas las categorías, pero la
+  sección 13 dice «Precompetitivo en adelante». Iniciación y Tecnificación
+  quedan fuera; Tecnificación tiene su propia regla de alternancia.

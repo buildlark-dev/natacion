@@ -24,6 +24,12 @@ class PantallaEditor extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Editor de sesión'),
+        bottom: estado.revisandoGenerado
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(48),
+                child: _SelectorSesiones(estado: estado),
+              )
+            : null,
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -344,4 +350,47 @@ class _FilaSerie extends StatelessWidget {
 /// Estilos declarados, usados por el panel de avisos.
 extension EstiloLegible on Estilo {
   String get etiqueta => nombre;
+}
+
+/// Navegación entre las sesiones de un microciclo generado.
+///
+/// Aparece solo cuando el entrenador está revisando algo generado: cuando
+/// escribe a mano, no hay varias sesiones entre las que moverse.
+class _SelectorSesiones extends StatelessWidget {
+  const _SelectorSesiones({required this.estado});
+
+  final EstadoEditor estado;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 48,
+      child: Row(
+        children: [
+          const SizedBox(width: 12),
+          const Icon(Icons.auto_awesome, size: 16),
+          const SizedBox(width: 8),
+          const Text('Generado:'),
+          const SizedBox(width: 8),
+          Expanded(
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: estado.sesionesDelPlan.length,
+              itemBuilder: (context, indice) {
+                final seleccionada = indice == estado.indiceAbierta;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: ChoiceChip(
+                    label: Text('Sesión ${indice + 1}'),
+                    selected: seleccionada,
+                    onSelected: (_) => estado.abrirSesion(indice),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
