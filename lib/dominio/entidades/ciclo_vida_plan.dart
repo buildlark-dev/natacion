@@ -91,6 +91,8 @@ class CicloVidaPlan {
       sesiones: aprobado.sesiones,
       nadadoresIds: aprobado.nadadoresIds,
       estado: EstadoPlan.borrador,
+      // Una versión nueva de un plan generado sigue siendo generada (FR-026).
+      origen: aprobado.origen,
       justificaciones: aprobado.justificaciones,
       versionAnteriorId: aprobado.id,
     );

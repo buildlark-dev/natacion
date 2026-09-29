@@ -411,6 +411,16 @@ class CriterioTransferencia extends Criterio {
 
   @override
   CriterioEvaluado evaluar(Plan plan) {
+    // La priorización de estilos rige «de Precompetitivo en adelante»
+    // (sección 13). Iniciación y Tecnificación no la tienen: Tecnificación
+    // alterna Pecho y Mariposa por su propia regla.
+    if (!plan.categoria.usaAtr) {
+      return cumpliendo(
+        '${plan.categoria.nombre} no está sujeta a la priorización de estilos '
+        '(sección 13, «Precompetitivo en adelante»)',
+      );
+    }
+
     final agregacion = AgregacionPlan(plan);
     final reparto = agregacion.repartoDeEstilos;
 

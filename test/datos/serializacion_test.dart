@@ -77,6 +77,38 @@ void main() {
       expect(recuperado.metrosTecnicos, plan.metrosTecnicos);
     });
 
+    test('conserva el origen del plan', () {
+      final generado =
+          constructor.comoGenerado(constructor.planAcumulacionCorrecto());
+      final recuperado = planDesdeJson(
+        planAJson(generado, conSesiones: true),
+        cargarBibliotecaReal(),
+      );
+
+      expect(
+        recuperado.origen,
+        OrigenPlan.automatico,
+        reason: 'FR-026: la trazabilidad del origen sobrevive al guardado',
+      );
+    });
+
+    test('un plan manual se recupera como manual', () {
+      final recuperado = planDesdeJson(
+        planAJson(constructor.planAcumulacionCorrecto(), conSesiones: true),
+        cargarBibliotecaReal(),
+      );
+
+      expect(recuperado.origen, OrigenPlan.manual);
+    });
+
+    test('un documento sin origen se lee como manual', () {
+      final json = planAJson(constructor.planAcumulacionCorrecto())
+        ..remove('origen');
+
+      expect(planDesdeJson(json, cargarBibliotecaReal()).origen,
+          OrigenPlan.manual);
+    });
+
     test('no guarda los derivados: se recalculan', () {
       final plan = constructor.planAcumulacionCorrecto();
       final json = planAJson(plan, conSesiones: true);

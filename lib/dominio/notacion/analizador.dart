@@ -92,19 +92,27 @@ class Analizador {
   /// texto original.
   List<_Trozo> _dividirEnSeries(String texto) {
     final trozos = <_Trozo>[];
-    final patron = RegExp(r'(\n|<br>|\d+\)\s)');
+
+    // Solo se parte por salto de línea o por `<br>`.
+    //
+    // La numeración `1)`, `2)` se quita después, y solo al principio de la
+    // línea. Antes se incluía en este patrón, y eso partía por la mitad
+    // cualquier serie que llevara la zona escrita: en `200 N (A1)\n...`, el
+    // `1)` de `(A1)` seguido del salto casaba con el patrón y la serie perdía
+    // su zona en silencio.
+    final patron = RegExp(r'(\n|<br>)');
 
     var inicio = 0;
     for (final coincidencia in patron.allMatches(texto)) {
       final fragmento = texto.substring(inicio, coincidencia.start);
       if (fragmento.trim().isNotEmpty) {
-        trozos.add(_Trozo(fragmento, inicio));
+        trozos.add(_sinNumeracion(fragmento, inicio));
       }
       inicio = coincidencia.end;
     }
     final ultimo = texto.substring(inicio);
     if (ultimo.trim().isNotEmpty) {
-      trozos.add(_Trozo(ultimo, inicio));
+      trozos.add(_sinNumeracion(ultimo, inicio));
     }
 
     // El `+` de nivel superior separa tareas solo si no está dentro de un
@@ -148,6 +156,20 @@ class Analizador {
       .toSet()
       .toList()
     ..sort((a, b) => b.length.compareTo(a.length));
+
+  /// Quita la numeración `1)`, `2)` del principio de una línea.
+  ///
+  /// Solo al principio: dentro de la línea, `1)` puede ser el cierre de una
+  /// zona escrita como `(A1)`.
+  static _Trozo _sinNumeracion(String texto, int desplazamiento) {
+    final coincidencia = RegExp(r'^\s*\d+\)\s*').firstMatch(texto);
+    if (coincidencia == null) return _Trozo(texto, desplazamiento);
+
+    return _Trozo(
+      texto.substring(coincidencia.end),
+      desplazamiento + coincidencia.end,
+    );
+  }
 
   List<_Trozo> _partirPorMasDeNivelSuperior(_Trozo trozo) {
     final partes = <_Trozo>[];

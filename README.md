@@ -9,6 +9,15 @@ puede aprobar.
 
 ## Qué hay construido
 
+- **Generador determinista de microciclos**: el entrenador declara categoría,
+  fase ATR, estilo objetivo, componente acentuado de la semana, días y piscina, y
+  la app le devuelve la semana completa ya cuadrada: volumen dentro del rango de
+  la categoría, distribución de zonas de la fase, porcentaje técnico, reparto de
+  estilos y solo ejercicios de la Biblioteca. Mismos datos, mismo plan. Sin
+  conexión y sin costo: la composición sale de las reglas codificadas, no de un
+  modelo de lenguaje.
+- **Si los datos no alcanzan o se contradicen, no genera**: explica qué falta o
+  por qué es imposible, con los números concretos, y no deja nada a medias.
 - **Editor de sesión con entrada híbrida**: el entrenador escribe con su
   notación de siempre (`4x100 AL SNK PN / 2'`) y la app muestra al instante lo
   que entendió en campos editables. Lo que corrige a mano prevalece sobre la
