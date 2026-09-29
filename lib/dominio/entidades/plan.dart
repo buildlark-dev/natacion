@@ -9,6 +9,22 @@ import 'package:natacion_app/dominio/metodologia/categorias.dart';
 import 'package:natacion_app/dominio/metodologia/estilos.dart';
 import 'package:natacion_app/dominio/metodologia/fases_atr.dart';
 
+/// De dónde salió el plan.
+///
+/// Se fija al crear y **no cambia nunca**: ni al editar, ni al aprobar, ni al
+/// crear una versión nueva. Perderlo borraría la trazabilidad que el principio
+/// IV de la constitución exige (FR-026).
+enum OrigenPlan {
+  manual('Escrito a mano'),
+  automatico('Generado automáticamente');
+
+  const OrigenPlan(this.nombre);
+
+  final String nombre;
+
+  bool get fueGenerado => this == OrigenPlan.automatico;
+}
+
 /// Estado del plan. Solo el entrenador mueve un plan a `aprobado`
 /// (principio IV de la constitución).
 enum EstadoPlan {
@@ -83,6 +99,7 @@ class Plan {
     this.sesiones = const <Sesion>[],
     this.nadadoresIds = const <String>[],
     this.estado = EstadoPlan.borrador,
+    this.origen = OrigenPlan.manual,
     this.versionMetodologia,
     this.fechaAprobacion,
     this.justificaciones = const <Justificacion>[],
@@ -109,6 +126,9 @@ class Plan {
   final List<String> nadadoresIds;
 
   final EstadoPlan estado;
+
+  /// De dónde salió el plan. Se fija al construir y no cambia nunca (FR-026).
+  final OrigenPlan origen;
 
   /// Se estampa al aprobar, desde `metodologia.json` (FR-026).
   final String? versionMetodologia;
@@ -157,6 +177,9 @@ class Plan {
     List<Sesion>? sesiones,
     List<String>? nadadoresIds,
     EstadoPlan? estado,
+    /// Se acepta por uniformidad de la firma, pero NO se aplica: el origen
+    /// solo se fija al construir el plan (FR-026).
+    OrigenPlan? origen,
     String? versionMetodologia,
     DateTime? fechaAprobacion,
     List<Justificacion>? justificaciones,
@@ -176,6 +199,7 @@ class Plan {
       sesiones: sesiones ?? this.sesiones,
       nadadoresIds: nadadoresIds ?? this.nadadoresIds,
       estado: estado ?? this.estado,
+      origen: this.origen,
       versionMetodologia: versionMetodologia ?? this.versionMetodologia,
       fechaAprobacion: fechaAprobacion ?? this.fechaAprobacion,
       justificaciones: justificaciones ?? this.justificaciones,

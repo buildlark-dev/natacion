@@ -150,6 +150,32 @@ class ConstructorPlanes {
     );
   }
 
+  /// Reconstruye un plan declarando su origen.
+  ///
+  /// `copiarCon` no permite cambiar el origen a propósito (FR-026), así que la
+  /// única forma de tener un plan generado es construirlo como tal. Es lo mismo
+  /// que hará el generador.
+  Plan comoGenerado(Plan plan) => Plan(
+        id: plan.id,
+        nombre: plan.nombre,
+        categoria: plan.categoria,
+        estiloObjetivo: plan.estiloObjetivo,
+        pruebaObjetivo: plan.pruebaObjetivo,
+        longitudPiscina: plan.longitudPiscina,
+        fechaInicio: plan.fechaInicio,
+        fechaFin: plan.fechaFin,
+        faseAtr: plan.faseAtr,
+        microciclos: plan.microciclos,
+        sesiones: plan.sesiones,
+        nadadoresIds: plan.nadadoresIds,
+        estado: plan.estado,
+        origen: OrigenPlan.automatico,
+        versionMetodologia: plan.versionMetodologia,
+        fechaAprobacion: plan.fechaAprobacion,
+        justificaciones: plan.justificaciones,
+        versionAnteriorId: plan.versionAnteriorId,
+      );
+
   /// Igual que el anterior, pero con A1 al 45% en lugar del 60% prescrito.
   Plan planConIntensidadesDesviadas() {
     final sesion = sesionConZonas(

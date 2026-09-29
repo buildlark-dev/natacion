@@ -83,6 +83,8 @@ class RepositorioPlanesMemoria implements RepositorioPlanes {
       microciclos: aprobado.microciclos,
       sesiones: aprobado.sesiones,
       nadadoresIds: aprobado.nadadoresIds,
+      // Una versión nueva de un plan generado sigue siendo generada (FR-026).
+      origen: aprobado.origen,
       justificaciones: aprobado.justificaciones,
       versionAnteriorId: idAprobado,
     );

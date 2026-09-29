@@ -32,8 +32,8 @@ dominio es Dart puro: la prueba de frontera vigente lo vigila sin cambios.
 
 **Purpose**: abrir el hueco de la feature. No hay dependencias nuevas que instalar.
 
-- [ ] T001 Crear las carpetas `lib/dominio/generacion/`, `lib/ui/generacion/` y `test/dominio/generacion/`
-- [ ] T002 [P] Confirmar que `flutter analyze` y `flutter test` siguen limpios antes de empezar, para que cualquier fallo posterior sea atribuible a esta feature
+- [X] T001 Crear las carpetas `lib/dominio/generacion/`, `lib/ui/generacion/` y `test/dominio/generacion/`
+- [X] T002 [P] Confirmar que `flutter analyze` y `flutter test` siguen limpios antes de empezar, para que cualquier fallo posterior sea atribuible a esta feature
 
 ---
 
@@ -46,28 +46,28 @@ necesitan.
 
 ### Origen del plan
 
-- [ ] T003 Escribir pruebas del origen del plan en `test/dominio/entidades/origen_plan_test.dart`: el valor es `manual` o `automatico`, se fija al crear y **no cambia nunca, ni al editar ni al aprobar** (FR-026, invariante 14 de `data-model.md`)
-- [ ] T004 Añadir el campo `origen` a `lib/dominio/entidades/plan.dart` con los valores `manual` y `automatico`, por omisión `manual`, y hacer que `copiarCon` NO permita cambiarlo
-- [ ] T005 Propagar `origen` en `lib/datos/serializacion.dart` y comprobar en `test/datos/serializacion_test.dart` que sobrevive a la ida y vuelta y a la exportación
-- [ ] T006 Hacer que `crearVersionDesde` en `lib/dominio/entidades/ciclo_vida_plan.dart` conserve el `origen` del plan anterior: una versión nueva de un plan generado sigue siendo de origen automático
+- [X] T003 Escribir pruebas del origen del plan en `test/dominio/entidades/origen_plan_test.dart`: el valor es `manual` o `automatico`, se fija al crear y **no cambia nunca, ni al editar ni al aprobar** (FR-026, invariante 14 de `data-model.md`)
+- [X] T004 Añadir el campo `origen` a `lib/dominio/entidades/plan.dart` con los valores `manual` y `automatico`, por omisión `manual`, y hacer que `copiarCon` NO permita cambiarlo
+- [X] T005 Propagar `origen` en `lib/datos/serializacion.dart` y comprobar en `test/datos/serializacion_test.dart` que sobrevive a la ida y vuelta y a la exportación
+- [X] T006 Hacer que `crearVersionDesde` en `lib/dominio/entidades/ciclo_vida_plan.dart` conserve el `origen` del plan anterior: una versión nueva de un plan generado sigue siendo de origen automático
 
 ### Reparto por resto mayor
 
-- [ ] T007 [P] Escribir pruebas del reparto en `test/dominio/generacion/reparto_test.dart`: la suma de lo repartido es **exactamente** el total (invariante 1), toda cantidad es **múltiplo de la unidad** (invariante 2), y el resultado **no depende del orden de iteración** (invariante 7)
-- [ ] T008 [P] Escribir pruebas de desempate en `test/dominio/generacion/reparto_empates_test.dart`: cuando dos zonas tienen el mismo resto fraccionario, el sobrante se asigna según el orden fijo A1, A2, A3, AT, Máx, Velocidad, y el resultado es siempre el mismo
-- [ ] T009 Implementar el reparto en `lib/dominio/generacion/reparto.dart`: método del resto mayor sobre unidades de longitud de piscina, con desempate por orden fijo, según `contracts/generacion.md`
+- [X] T007 [P] Escribir pruebas del reparto en `test/dominio/generacion/reparto_test.dart`: la suma de lo repartido es **exactamente** el total (invariante 1), toda cantidad es **múltiplo de la unidad** (invariante 2), y el resultado **no depende del orden de iteración** (invariante 7)
+- [X] T008 [P] Escribir pruebas de desempate en `test/dominio/generacion/reparto_empates_test.dart`: cuando dos zonas tienen el mismo resto fraccionario, el sobrante se asigna según el orden fijo A1, A2, A3, AT, Máx, Velocidad, y el resultado es siempre el mismo
+- [X] T009 Implementar el reparto en `lib/dominio/generacion/reparto.dart`: método del resto mayor sobre unidades de longitud de piscina, con desempate por orden fijo, según `contracts/generacion.md`
 
 ### Petición e impedimentos
 
-- [ ] T010 [P] Escribir pruebas de la petición en `test/dominio/generacion/peticion_test.dart` cubriendo los campos obligatorios de `data-model.md`: `categoria`, `estiloObjetivo`, `pruebaObjetivo` (texto no vacío), `faseAtr` (obligatoria si la categoría usa ATR y **prohibida si no**), `componenteAcentuado` (texto no vacío), `diasDisponibles`, `longitudPiscina` (25 o 50) y `duracionSesionMinutos` (entero positivo)
-- [ ] T011 Implementar `PeticionGeneracion` en `lib/dominio/generacion/peticion.dart` con los campos obligatorios y opcionales de `data-model.md`, y el descuento de `fechasSinServicio` sobre `diasDisponibles`
-- [ ] T012 [P] Implementar `Impedimento` en `lib/dominio/generacion/impedimento.dart` con los seis tipos de `contracts/generacion.md`: `datoFaltante`, `faseNoAdmisible`, `frecuenciaImposible`, `duracionInsuficiente`, `componenteIncoherente` y `repartoImposible`, cada uno con su explicación con números concretos
-- [ ] T013 [P] Implementar `Supuesto` y `VacioDeBiblioteca` en `lib/dominio/generacion/resultado.dart`, junto al tipo `ResultadoGeneracion` como unión de `MicrocicloGenerado` y `GeneracionImposible` que **nunca son las dos cosas a la vez**
+- [X] T010 [P] Escribir pruebas de la petición en `test/dominio/generacion/peticion_test.dart` cubriendo los campos obligatorios de `data-model.md`: `categoria`, `estiloObjetivo`, `pruebaObjetivo` (texto no vacío), `faseAtr` (obligatoria si la categoría usa ATR y **prohibida si no**), `componenteAcentuado` (texto no vacío), `diasDisponibles`, `longitudPiscina` (25 o 50) y `duracionSesionMinutos` (entero positivo)
+- [X] T011 Implementar `PeticionGeneracion` en `lib/dominio/generacion/peticion.dart` con los campos obligatorios y opcionales de `data-model.md`, y el descuento de `fechasSinServicio` sobre `diasDisponibles`
+- [X] T012 [P] Implementar `Impedimento` en `lib/dominio/generacion/impedimento.dart` con los seis tipos de `contracts/generacion.md`: `datoFaltante`, `faseNoAdmisible`, `frecuenciaImposible`, `duracionInsuficiente`, `componenteIncoherente` y `repartoImposible`, cada uno con su explicación con números concretos
+- [X] T013 [P] Implementar `Supuesto` y `VacioDeBiblioteca` en `lib/dominio/generacion/resultado.dart`, junto al tipo `ResultadoGeneracion` como unión de `MicrocicloGenerado` y `GeneracionImposible` que **nunca son las dos cosas a la vez**
 
 ### Estimación de ritmos
 
-- [ ] T014 [P] Implementar la referencia de ritmo medio por categoría en `lib/dominio/generacion/ritmos.dart`, **en un solo lugar y revisable**, documentando que es un supuesto nuestro y no una regla del entrenador (decisión D8 de `research.md`)
-- [ ] T015 [P] Escribir pruebas en `test/dominio/generacion/ritmos_test.dart`: 2.000 m no caben en 20 minutos y sí en 90, con la referencia declarada
+- [X] T014 [P] Implementar la referencia de ritmo medio por categoría en `lib/dominio/generacion/ritmos.dart`, **en un solo lugar y revisable**, documentando que es un supuesto nuestro y no una regla del entrenador (decisión D8 de `research.md`)
+- [X] T015 [P] Escribir pruebas en `test/dominio/generacion/ritmos_test.dart`: 2.000 m no caben en 20 minutos y sí en 90, con la referencia declarada
 
 **Checkpoint**: el reparto cierra y es determinista, la petición se valida, el origen del plan es trazable.
 

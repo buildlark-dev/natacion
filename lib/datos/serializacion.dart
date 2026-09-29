@@ -216,6 +216,7 @@ Map<String, dynamic> planAJson(Plan plan, {bool conSesiones = false}) =>
           .toList(),
       'nadadoresIds': plan.nadadoresIds,
       'estado': plan.estado.name,
+      'origen': plan.origen.name,
       if (plan.versionMetodologia != null)
         'versionMetodologia': plan.versionMetodologia,
       if (plan.fechaAprobacion != null)
@@ -276,6 +277,10 @@ Plan planDesdeJson(
     estado: EstadoPlan.values.firstWhere(
       (e) => e.name == json['estado'],
       orElse: () => EstadoPlan.borrador,
+    ),
+    origen: OrigenPlan.values.firstWhere(
+      (o) => o.name == json['origen'],
+      orElse: () => OrigenPlan.manual,
     ),
     versionMetodologia: json['versionMetodologia'] as String?,
     fechaAprobacion: json['fechaAprobacion'] == null
