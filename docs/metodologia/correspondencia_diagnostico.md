@@ -8,13 +8,34 @@ las frases con las que el entrenador diagnostica de verdad, el ejercicio que le
 corresponde a cada una, y los casos en que la Biblioteca y el diagnóstico no
 coinciden.
 
-**Estado:** propuesta pendiente de confirmación del entrenador. Ningún ejercicio
-de esta tabla se incorpora al generador sin su visto bueno (regla R2: no
-invención; principio IV: el criterio del entrenador no se delega).
+**Estado: CONFIRMADO por el entrenador el 2026-10-07 e implementado.**
 
-## Resultado de la comprobación
+La tabla del §4 está volcada en
+[`assets/biblioteca/terminos_diagnostico.json`](../../assets/biblioteca/terminos_diagnostico.json),
+que es el índice que consulta el generador. Las 40 correspondencias están fijadas
+por pruebas: si alguien rompe una que él aprobó, falla
+`test/dominio/biblioteca/indice_terminos_test.dart`.
 
-De **40 frases** reales del entrenador, el generador solo encuentra ejercicio
+Queda **una entrada pendiente de confirmar**, señalada en el índice como
+`"origen": "heredada"`: `agarre del agua` → `VADEO`, `PUÑOS`. No está en la lista
+de 40, pero ya funcionaba con la búsqueda anterior porque la ficha de `VADEO`
+dice «Falta de sensibilidad y agarre del agua». Se mantuvo para no perder una
+correspondencia que servía.
+
+### Lo que cambió al implementarlo
+
+- Se retiraron del índice, por decisión suya, tres ejercicios que corregían el
+  error contrario al diagnosticado: `CHUTAR EL AGUA – DOBLAR RODILLA` (de E3 y
+  E4), `TOCANDO FRENTE` (de E6) y `DELFINEO` (de M4). Siguen en la Biblioteca
+  con su propio error: lo que se retiró es la correspondencia, no el ejercicio.
+- `PN EN SOLDADO` salió de M8, también por decisión suya.
+- Los cinco vacíos del §2 dejaron de serlo. Ninguno necesitaba un ejercicio
+  nuevo: la sección 19 ya los cubría, solo faltaba que él dijera cuál.
+- `2-2-2` entró en M7 y M9.
+
+## Resultado de la comprobación inicial
+
+De **40 frases** reales del entrenador, el generador solo encontraba ejercicio
 para **2**:
 
 | Frase | Estilo | Por qué sí coincide |
@@ -231,3 +252,33 @@ reportándose como vacío. Esa es la diferencia entre ampliar su vocabulario y
 suplantar su criterio.
 
 La tabla del §4, una vez confirmada, **es** ese índice.
+
+### Cómo quedó implementado
+
+La correspondencia va por **palabras significativas**, no por texto literal ni
+por parecido de letras. Los términos de la entrada tienen que estar todos en la
+frase diagnosticada; la frase puede decir más, pero no menos.
+
+Consecuencias prácticas:
+
+| Caso | Resultado | Por qué |
+|---|---|---|
+| `patada desde rodillas` ≡ `patada desde las rodillas` | misma cosa | los artículos no cuentan |
+| `patada caida` ≡ `patada caída` | misma cosa | las tildes no cuentan |
+| `tiene el codo bajo en el recobro` → `TOCAR AXILA` | encuentra | la frase dice más que el término |
+| `patada` a secas | reporta vacío | demasiado genérica para elegir un correctivo |
+| `no gira la cadera` ≠ `gira la cadera` | distintas | **la negación no se descarta**: son errores opuestos |
+
+Lo que **no** hace: comparar por parecido de letras. Esa tolerancia haría
+coincidir `patada` con `brazada` antes que `dosiflexión` con `dorsiflexión`.
+Las dos grafías de esa palabra están en el índice como entradas propias, que es
+la forma honesta de resolverlo.
+
+Tampoco hay vía de respaldo por la prosa de la ficha. Una frase que no esté
+declarada se reporta como vacío, y el bloque técnico de la sesión se completa
+con la progresión de la sección 15 —porque una sesión no puede quedarse sin
+técnica—, pero **nunca** con un ejercicio elegido a ojo para ese error.
+
+El índice no toca la sección 19. La prosa del campo «error que corrige» queda
+intacta, así que la versión de la metodología no cambia y los planes aprobados
+conservan su trazabilidad.

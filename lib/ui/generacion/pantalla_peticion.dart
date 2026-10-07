@@ -6,6 +6,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/biblioteca/indice_terminos.dart';
 import 'package:natacion_app/dominio/generacion/generador.dart';
 import 'package:natacion_app/dominio/generacion/peticion.dart';
 import 'package:natacion_app/dominio/generacion/resultado.dart';
@@ -19,9 +20,14 @@ class PantallaPeticion extends StatefulWidget {
     super.key,
     required this.biblioteca,
     required this.alGenerar,
+    this.indiceTerminos,
   });
 
   final Biblioteca biblioteca;
+
+  /// Vocabulario de diagnóstico del entrenador. Sin él, un diagnóstico se
+  /// reporta como vacío de Biblioteca en lugar de resolverse a ojo.
+  final IndiceTerminos? indiceTerminos;
 
   /// Qué hacer con el microciclo generado: normalmente, abrirlo en el editor.
   final void Function(MicrocicloGenerado) alGenerar;
@@ -31,7 +37,10 @@ class PantallaPeticion extends StatefulWidget {
 }
 
 class _PantallaPeticionState extends State<PantallaPeticion> {
-  late final Generador _generador = Generador(biblioteca: widget.biblioteca);
+  late final Generador _generador = Generador(
+    biblioteca: widget.biblioteca,
+    indice: widget.indiceTerminos,
+  );
 
   Categoria _categoria = Categoria.precompetitivo;
   Estilo _estilo = Estilo.libre;

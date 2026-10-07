@@ -15,7 +15,10 @@ import '../notacion/ayuda_pruebas.dart';
 /// la feature.
 void main() {
   test('el caso mayor se genera por debajo de 200 ms', () {
-    final generador = Generador(biblioteca: cargarBibliotecaReal());
+    final generador = Generador(
+      biblioteca: cargarBibliotecaReal(),
+      indice: cargarIndiceReal(),
+    );
 
     final peticion = PeticionGeneracion(
       categoria: Categoria.altoRendimiento,

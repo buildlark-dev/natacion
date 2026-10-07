@@ -17,7 +17,10 @@ void main() {
   late Generador generador;
 
   setUpAll(() {
-    generador = Generador(biblioteca: cargarBibliotecaReal());
+    generador = Generador(
+      biblioteca: cargarBibliotecaReal(),
+      indice: cargarIndiceReal(),
+    );
   });
 
   PeticionGeneracion peticion({

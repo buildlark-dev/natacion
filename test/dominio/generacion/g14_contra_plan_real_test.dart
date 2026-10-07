@@ -23,7 +23,10 @@ void main() {
   late Generador generador;
 
   setUpAll(() {
-    generador = Generador(biblioteca: cargarBibliotecaReal());
+    generador = Generador(
+      biblioteca: cargarBibliotecaReal(),
+      indice: cargarIndiceReal(),
+    );
   });
 
   // Datos del microciclo real, leídos de la hoja del entrenador.

@@ -119,27 +119,47 @@ dart run tool/extraer_biblioteca.dart
 El resultado **debe revisarlo el entrenador** antes de darlo por válido: un
 ejercicio mal transcrito es una regla mal aplicada.
 
-## Comprobar la correspondencia del diagnóstico (tarea T070)
+## El vocabulario de diagnóstico del entrenador
 
-El generador elige ejercicios buscando el error diagnosticado dentro del campo
-«error que corrige» de la Biblioteca. Ese campo está en **prosa libre**, así que
-la correspondencia puede fallar en los dos sentidos: no encontrar un ejercicio
-que servía, o traer uno que no ataca el error. Para revisarlo con los errores
-que el entrenador diagnostica de verdad:
+Cuando el entrenador declara un error técnico, el generador elige el ejercicio
+correctivo por el **índice de términos** de
+[`assets/biblioteca/terminos_diagnostico.json`](assets/biblioteca/terminos_diagnostico.json):
+cada forma en que él nombra un error, y los ejercicios que le corresponden en su
+orden de prioridad. Las correspondencias las confirmó él una por una; el registro
+está en [`docs/metodologia/correspondencia_diagnostico.md`](docs/metodologia/correspondencia_diagnostico.md).
+
+Lo que el índice tolera y lo que no:
+
+- `patada desde rodillas` y `patada desde las rodillas` son lo mismo. Los
+  artículos, las tildes y las mayúsculas no deciden nada.
+- `no gira la cadera` y `gira la cadera` **no** son lo mismo. La negación nunca
+  se descarta: son errores opuestos.
+- `patada` a secas no alcanza. Es demasiado genérica para elegir un correctivo, y
+  se reporta como vacío.
+- **No hay comparación por parecido de letras.** Esa tolerancia haría coincidir
+  `patada` con `brazada` antes que `dosiflexión` con `dorsiflexión`. Las dos
+  grafías de esa palabra están declaradas como entradas propias.
+
+Una frase que no esté en el índice se reporta como vacío de Biblioteca. El bloque
+técnico de la sesión se completa con la progresión de la sección 15 —una sesión
+no puede quedarse sin técnica—, pero **nunca** con un ejercicio elegido a ojo
+para ese error.
+
+El índice **no** modifica la sección 19. La prosa del campo «error que corrige»
+queda intacta, así que la versión de la metodología no cambia y los planes
+aprobados conservan su trazabilidad.
+
+Para comprobar qué encuentra la app con una frase cualquiera:
 
 ```bash
-dart run tool/probar_diagnostico.dart "codo caido" "agarre del agua"
+dart run tool/probar_diagnostico.dart "codo bajo" "dosiflexion"
 ```
 
-Para ver con qué palabras está escrita la Biblioteca:
+Para ver el catálogo completo con su campo de error:
 
 ```bash
 dart run tool/probar_diagnostico.dart --vocabulario
 ```
-
-Las frases cortas funcionan; las oraciones completas no, porque la búsqueda es
-por término contenido. Un error sin coincidencia **se reporta como vacío y no se
-sustituye** por un ejercicio aproximado: sustituirlo sería inventar por otra vía.
 
 ## Gobernanza
 

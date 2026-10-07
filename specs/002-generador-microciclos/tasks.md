@@ -203,18 +203,29 @@ la puerta se comporta igual que con un plan manual.
 
 - [X] T068 Ejecutar el escenario **G14 de `quickstart.md`** (criterio SC-009): generar con la categoría y fase de un microciclo real del entrenador y comparar **rangos, no contenido** — volumen por sesión, distribución de zonas y porcentaje técnico deben caer en sus mismos márgenes
 - [ ] T069 Si G14 queda fuera de los márgenes del entrenador, determinar si el error está en el generador o en la **calibración de la tolerancia**, que sigue pendiente desde la feature 001, y registrar el hallazgo antes de tocar código
-- [~] T070 Probar la correspondencia entre errores diagnosticados reales del entrenador y el campo de error que corrige de la Biblioteca, y registrar los casos en que falla en cualquiera de los dos sentidos: no encontrar un ejercicio que servía, o elegir uno que no ataca el error
-  - **Probado.** 40 frases reales del entrenador, 4 estilos. Solo 2 coinciden. Registro
-    completo en [`docs/metodologia/correspondencia_diagnostico.md`](../../docs/metodologia/correspondencia_diagnostico.md),
+- [X] T070 Probar la correspondencia entre errores diagnosticados reales del entrenador y el campo de error que corrige de la Biblioteca, y registrar los casos en que falla en cualquiera de los dos sentidos: no encontrar un ejercicio que servía, o elegir uno que no ataca el error
+  - **Probado.** 40 frases reales del entrenador, 4 estilos. Solo 2 coincidían.
+    Registro completo en [`docs/metodologia/correspondencia_diagnostico.md`](../../docs/metodologia/correspondencia_diagnostico.md),
     reproducible con `dart run tool/probar_diagnostico.dart`.
-  - **Causa acotada:** no faltan ejercicios, falla el método de búsqueda. La misma
-    idea escrita «Rolido insuficiente/excesivo» coincide y escrita «Rolido de
-    cadera/hombro insuficiente» no.
-  - **Pendiente del entrenador:** confirmar la tabla del §4 (40 filas), resolver las
-    cuatro contradicciones del §1 —dos ejercicios corrigen lo contrario de lo
-    diagnosticado— y decidir sobre los cinco vacíos del §2.
-  - **Pendiente de implementar** tras su confirmación: índice de términos declarados
-    por ejercicio, en lugar de búsqueda literal sobre la prosa de la ficha.
+  - **Causa acotada:** no faltaban ejercicios, fallaba el método de búsqueda. La
+    misma idea escrita «Rolido insuficiente/excesivo» coincidía y escrita «Rolido
+    de cadera/hombro insuficiente» no.
+  - **Confirmado por el entrenador el 2026-10-07.** Revisó las 40 filas, resolvió
+    las cuatro contradicciones del §1 y cerró los cinco vacíos del §2, que dejaron
+    de serlo: la sección 19 ya los cubría, solo faltaba que él dijera cuál.
+  - **Falla en los dos sentidos, encontrada:** tres ejercicios que él había
+    señalado corregían el error **contrario** al diagnosticado
+    (`CHUTAR EL AGUA – DOBLAR RODILLA`, `TOCANDO FRENTE`, `DELFINEO`). Retirados
+    del índice por su decisión; siguen en la Biblioteca con su propio error.
+  - **Implementado:** índice de términos declarados en
+    `assets/biblioteca/terminos_diagnostico.json`, consultado por
+    `lib/dominio/biblioteca/indice_terminos.dart`. Sustituye la búsqueda literal
+    sobre la prosa de la ficha, sin tocar la sección 19 ni la versión de la
+    metodología. Las 40 correspondencias quedan fijadas por
+    `test/dominio/biblioteca/indice_terminos_test.dart`.
+  - **Pendiente de confirmar:** una entrada heredada, `agarre del agua` →
+    `VADEO`, `PUÑOS`. No está en su lista de 40, pero ya funcionaba antes y se
+    mantuvo para no perder una correspondencia que servía.
 - [X] T071 [P] Recorrer los escenarios G1 a G13 de `quickstart.md` y registrar el resultado de cada uno
 - [X] T072 Medir el tiempo de generación del caso mayor (Alto Rendimiento, diez sesiones, 55.000 m) y comprobar que queda por debajo de 200 ms
 - [X] T073 Verificar que `flutter analyze` termina sin errores ni advertencias nuevas, y que la prueba de frontera del dominio sigue pasando: `lib/dominio/generacion/` no puede importar Flutter ni Firebase
@@ -324,18 +335,19 @@ maquinaria que existe y funciona.
 
 ## Estado de cierre (2026-09-29)
 
-**72 de 74 tareas completadas.** 607 pruebas de Flutter en verde, 15 de reglas de
+**73 de 74 tareas completadas.** 672 pruebas de Flutter en verde, 15 de reglas de
 acceso, `flutter analyze` limpio y build web correcto.
-
-Las dos restantes dependen del entrenador:
 
 - **T069 — No aplicó.** G14 cuadró: lo generado cae dentro de los márgenes del
   microciclo real del 04-08 de agosto. El generado propone 2.000 m por sesión
   frente a sus 1.900 (5,3% de diferencia), con técnica al 50% y Libre por encima
   del 75%, que es lo que su hoja declara.
-- **T070 — Pendiente del entrenador.** Probar la correspondencia entre sus
-  errores diagnosticados reales y el campo «error que corrige» de la Biblioteca.
-  Sigue siendo el punto más débil de la feature: ese campo está en prosa libre.
+- **T070 — Cerrada el 2026-10-07.** Era el punto más débil de la feature y lo
+  fue: de 40 frases reales del entrenador, el generador encontraba ejercicio
+  para 2. La causa no era la Biblioteca sino la búsqueda literal sobre la prosa
+  de la ficha, sustituida por un índice de términos que él declara. Encontró
+  además la falla en el sentido contrario que la tarea buscaba: tres ejercicios
+  que llevaban al error **opuesto** al diagnosticado.
 
 ### Tres defectos reales encontrados durante la implementación
 

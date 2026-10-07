@@ -20,6 +20,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/biblioteca/indice_terminos.dart';
 import 'package:natacion_app/dominio/generacion/selector_ejercicios.dart';
 import 'package:natacion_app/dominio/metodologia/estilos.dart';
 
@@ -50,7 +51,7 @@ void main(List<String> argumentos) {
     return;
   }
 
-  final selector = SelectorEjercicios(biblioteca);
+  final selector = SelectorEjercicios(biblioteca, indice: _cargarIndice());
   var sinCoincidencia = 0;
 
   for (final frase in frases) {
@@ -179,6 +180,26 @@ bool _esValorDeEstilo(List<String> argumentos, String candidato) {
   return indice != -1 &&
       indice + 1 < argumentos.length &&
       argumentos[indice + 1] == candidato;
+}
+
+/// Índice de términos confirmado por el entrenador.
+///
+/// Si falta, se avisa y se sigue con un índice vacío: así se nota que ningún
+/// diagnóstico va a encontrar ejercicio, en lugar de parecer que la Biblioteca
+/// no cubre nada.
+IndiceTerminos _cargarIndice() {
+  final archivo = File('assets/biblioteca/terminos_diagnostico.json');
+  if (!archivo.existsSync()) {
+    stdout.writeln(
+      'Aviso: no encuentro assets/biblioteca/terminos_diagnostico.json. '
+      'Sin índice, ninguna frase encontrará ejercicio.',
+    );
+    return IndiceTerminos.vacio();
+  }
+
+  return IndiceTerminos.desdeJson(
+    jsonDecode(archivo.readAsStringSync()) as Map<String, dynamic>,
+  );
 }
 
 Biblioteca _cargarBiblioteca() {

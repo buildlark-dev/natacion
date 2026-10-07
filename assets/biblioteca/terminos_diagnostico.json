@@ -1,0 +1,293 @@
+{
+  "version": "1.0.0",
+  "fecha": "2026-10-07",
+  "confirmadoPor": "entrenador",
+  "fuente": "docs/metodologia/correspondencia_diagnostico.md",
+  "nota": "Indice de terminos de diagnostico. Cada entrada es una forma en que el entrenador nombra un error, y los ejercicios que le corresponden en orden de prioridad. Lo declara el entrenador, no lo deduce la app: una frase que no este aqui se reporta como vacio de Biblioteca y NO se resuelve con un ejercicio aproximado (regla R2).",
+  "notaSobreLaSeccion19": "Este indice no modifica la seccion 19 del documento normativo. La prosa del campo «error que corrige» queda intacta, asi que la version de la metodologia no cambia y los planes aprobados conservan su trazabilidad.",
+  "entradas": [
+    {
+      "frase": "rolido insuficiente",
+      "estilo": "libre",
+      "ejercicios": ["ROLIDO (Libre)", "ROLIDO CON 1 BRAZO (Libre)", "3+3 PATADA LATERAL"],
+      "origen": "L1"
+    },
+    {
+      "frase": "poco rolido",
+      "estilo": "libre",
+      "ejercicios": ["ROLIDO (Libre)", "ROLIDO CON 1 BRAZO (Libre)", "3+3 PATADA LATERAL"],
+      "origen": "L2"
+    },
+    {
+      "frase": "no gira la cadera",
+      "estilo": "libre",
+      "ejercicios": ["3+3 PATADA LATERAL", "ROLIDO (Libre)"],
+      "origen": "L3"
+    },
+    {
+      "frase": "codo bajo",
+      "estilo": "libre",
+      "ejercicios": ["TOCAR AXILA", "ROZAR SUPERFICIE"],
+      "origen": "L4",
+      "nota": "El entrenador confirmo que «codo bajo» apunta al recobro. El codo caido en el agarre es otro error, con sus propios ejercicios."
+    },
+    {
+      "frase": "codo caido",
+      "estilo": "libre",
+      "ejercicios": ["TRACC", "PUÑOS", "VADEO", "REMO"],
+      "origen": "§3"
+    },
+    {
+      "frase": "codo caido en el agarre",
+      "estilo": "libre",
+      "ejercicios": ["TRACC", "PUÑOS", "VADEO", "REMO"],
+      "origen": "§3"
+    },
+    {
+      "frase": "cabeza alta",
+      "estilo": "libre",
+      "ejercicios": ["PATADA MIRANDO EL FONDO", "FLECHA (Libre)"],
+      "origen": "L5"
+    },
+    {
+      "frase": "agarre del agua",
+      "estilo": "libre",
+      "ejercicios": ["VADEO", "PUÑOS"],
+      "origen": "heredada",
+      "nota": "PENDIENTE DE CONFIRMAR. No esta en la lista de 40 frases del entrenador, pero funcionaba con la busqueda por prosa porque la ficha de VADEO dice «Falta de sensibilidad y agarre del agua». Se mantiene para no perder una correspondencia que ya funcionaba."
+    },
+    {
+      "frase": "mirada al frente",
+      "estilo": "libre",
+      "ejercicios": ["PATADA MIRANDO EL FONDO", "FLECHA (Libre)"],
+      "origen": "L6"
+    },
+    {
+      "frase": "cadera abajo",
+      "estilo": "libre",
+      "ejercicios": ["PATADA MIRANDO EL FONDO", "FLECHA (Libre)", "DESLIZAMIENTO HIDRODINÁMICO"],
+      "origen": "L7"
+    },
+    {
+      "frase": "cadera caida",
+      "estilo": "libre",
+      "ejercicios": ["PATADA MIRANDO EL FONDO", "FLECHA (Libre)", "DESLIZAMIENTO HIDRODINÁMICO"],
+      "origen": "L8"
+    },
+    {
+      "frase": "piernas caidas",
+      "estilo": "libre",
+      "ejercicios": ["PATADA MIRANDO EL FONDO", "FLECHA (Libre)", "BAND"],
+      "origen": "L9"
+    },
+    {
+      "frase": "brazada cruzada",
+      "estilo": "libre",
+      "ejercicios": ["PUNTO MUERTO"],
+      "origen": "L10 · §2"
+    },
+    {
+      "frase": "empujes cortos",
+      "estilo": "libre",
+      "ejercicios": ["PULGAR ROZA EL MUSLO", "TRACC", "REMO"],
+      "origen": "L11"
+    },
+    {
+      "frase": "patada desde rodillas",
+      "estilo": "libre",
+      "ejercicios": ["PATADA CORTA – PIES CON ESPUMA"],
+      "origen": "L12"
+    },
+    {
+      "frase": "respira al frente",
+      "estilo": "libre",
+      "ejercicios": ["FLECHA (Libre)"],
+      "origen": "L13 · §2",
+      "nota": "El entrenador: «se corrige con ejercicios de patada de libre en flecha. La flecha debe estar bien hecha, cabeza abajo y brazos pegados a la cabeza»."
+    },
+
+    {
+      "frase": "rolido insuficiente",
+      "estilo": "espalda",
+      "ejercicios": ["ROLIDO (Espalda)", "ROLIDO CON 1 BRAZO (Espalda)", "3+3 PATADA LATERAL (Espalda)"],
+      "origen": "E1"
+    },
+    {
+      "frase": "cabeza alta",
+      "estilo": "espalda",
+      "ejercicios": ["PATADA MIRANDO EL TECHO", "FLECHA (Espalda)"],
+      "origen": "E2"
+    },
+    {
+      "frase": "cabeza levantada",
+      "estilo": "espalda",
+      "ejercicios": ["PATADA MIRANDO EL TECHO", "FLECHA (Espalda)"],
+      "origen": "E2"
+    },
+    {
+      "frase": "patada desde las rodillas",
+      "estilo": "espalda",
+      "ejercicios": ["PATADA MI EXTENDIDOS – ANTI-BICICLETA"],
+      "origen": "E3 · §1.1",
+      "nota": "CHUTAR EL AGUA – DOBLAR RODILLA queda fuera: corrige el error contrario (rodillas en extension). Retirado por decision del entrenador."
+    },
+    {
+      "frase": "patada caida",
+      "estilo": "espalda",
+      "ejercicios": ["PATADA MI EXTENDIDOS – ANTI-BICICLETA", "PATADA MIRANDO EL TECHO"],
+      "origen": "E4 · §1.1"
+    },
+    {
+      "frase": "cadera caida",
+      "estilo": "espalda",
+      "ejercicios": ["PATADA MIRANDO EL TECHO", "FLECHA (Espalda)"],
+      "origen": "E5"
+    },
+    {
+      "frase": "brazo flexionado en fase aerea",
+      "estilo": "espalda",
+      "ejercicios": ["MANO AL CIELO"],
+      "origen": "E6 · §1.2",
+      "nota": "TOCANDO FRENTE queda fuera: su ejecucion flexiona el codo, que es justo el error a eliminar. Retirado por decision del entrenador."
+    },
+
+    {
+      "frase": "dosiflexion",
+      "estilo": "pecho",
+      "ejercicios": ["TOCANDO TALÓN/TOBILLO"],
+      "origen": "P1 · §2"
+    },
+    {
+      "frase": "dorsiflexion",
+      "estilo": "pecho",
+      "ejercicios": ["TOCANDO TALÓN/TOBILLO"],
+      "origen": "P1 · §2",
+      "nota": "Misma palabra que «dosiflexion», escrita de la forma estandar. Anadida para que el indice reconozca las dos grafias."
+    },
+    {
+      "frase": "patada sin flexionar tobillos",
+      "estilo": "pecho",
+      "ejercicios": ["TOCANDO TALÓN/TOBILLO"],
+      "origen": "P2 · §2"
+    },
+    {
+      "frase": "patada con plantiflexion",
+      "estilo": "pecho",
+      "ejercicios": ["TOCANDO TALÓN/TOBILLO"],
+      "origen": "P3 · §2"
+    },
+    {
+      "frase": "saca los pies del agua",
+      "estilo": "pecho",
+      "ejercicios": ["MI × RESPIRACIÓN (Pecho)"],
+      "origen": "P4"
+    },
+    {
+      "frase": "mirada al frente",
+      "estilo": "pecho",
+      "ejercicios": ["MI × RESPIRACIÓN (Pecho)", "FLECHA (Pecho)"],
+      "origen": "P5"
+    },
+    {
+      "frase": "cabeza arriba",
+      "estilo": "pecho",
+      "ejercicios": ["MI × RESPIRACIÓN (Pecho)", "FLECHA (Pecho)"],
+      "origen": "P6"
+    },
+    {
+      "frase": "no coordina el estilo",
+      "estilo": "pecho",
+      "ejercicios": ["BRAZA 1-2-3", "2 PN X 1 BR", "COORD DE EXTREMIDADES"],
+      "origen": "P7"
+    },
+    {
+      "frase": "patada y brazada al mismo tiempo",
+      "estilo": "pecho",
+      "ejercicios": ["BRAZA 1-2-3", "2 PN X 1 BR"],
+      "origen": "P8"
+    },
+    {
+      "frase": "baja las manos hasta la cadera",
+      "estilo": "pecho",
+      "ejercicios": ["BRAZADA CORTA – CODOS JUNTOS"],
+      "origen": "P9"
+    },
+    {
+      "frase": "no desliza",
+      "estilo": "pecho",
+      "ejercicios": ["FLECHA (Pecho)", "BRAZA 1-2-3", "TALÓN A LAS MANOS – DORSAL/VENTRAL"],
+      "origen": "P10"
+    },
+    {
+      "frase": "sin timing",
+      "estilo": "pecho",
+      "ejercicios": ["BRAZA 1-2-3", "2 PN X 1 BR"],
+      "origen": "P11"
+    },
+
+    {
+      "frase": "patada desde las rodillas",
+      "estilo": "mariposa",
+      "ejercicios": ["SACAR LA CADERA – ONDULACIÓN", "FLECHA (Mariposa)"],
+      "origen": "M1"
+    },
+    {
+      "frase": "no mueve la cadera",
+      "estilo": "mariposa",
+      "ejercicios": ["SACAR LA CADERA – ONDULACIÓN", "DELFINEO"],
+      "origen": "M2"
+    },
+    {
+      "frase": "separa los pies",
+      "estilo": "mariposa",
+      "ejercicios": ["PN EN SOLDADO", "FLECHA (Mariposa)"],
+      "origen": "M3 · §2",
+      "nota": "El entrenador: «es mas el enfasis que haga el entrenador en su momento»."
+    },
+    {
+      "frase": "brazos no salen del agua",
+      "estilo": "mariposa",
+      "ejercicios": ["DELFINEO COMPLETO"],
+      "origen": "M4 · §1.3",
+      "nota": "DELFINEO queda fuera: en ese ejercicio los brazos regresan por dentro del agua. El entrenador precisa que DELFINEO atiende el timing, no la fase aerea."
+    },
+    {
+      "frase": "cabeza levantada siempre",
+      "estilo": "mariposa",
+      "ejercicios": ["PN EN SOLDADO", "FLECHA (Mariposa)"],
+      "origen": "M5"
+    },
+    {
+      "frase": "no empuja hasta la cadera",
+      "estilo": "mariposa",
+      "ejercicios": ["PULGAR ROZA EL MUSLO (Mariposa)"],
+      "origen": "M6"
+    },
+    {
+      "frase": "brazos flexionados en el recobro",
+      "estilo": "mariposa",
+      "ejercicios": ["DELFINEO COMPLETO", "2-2-2"],
+      "origen": "M7 · §2"
+    },
+    {
+      "frase": "no lleva las manos hasta adelante",
+      "estilo": "mariposa",
+      "ejercicios": ["FLECHA (Mariposa)", "DELFINEO COMPLETO"],
+      "origen": "M8",
+      "nota": "PN EN SOLDADO retirado por decision del entrenador: «OK SIN PN EN SOLDADO»."
+    },
+    {
+      "frase": "sin timing",
+      "estilo": "mariposa",
+      "ejercicios": ["DELFÍN 2 BATIDAS – ENTRADA/SALIDA", "DELFINEO COMPLETO", "2-2-2"],
+      "origen": "M9"
+    },
+    {
+      "frase": "muchas patadas por cada brazada",
+      "estilo": "mariposa",
+      "ejercicios": ["DELFÍN 2 BATIDAS – ENTRADA/SALIDA"],
+      "origen": "M10 · §1.4",
+      "nota": "La ficha de la seccion 19 solo nombra el error contrario (un solo batido por ciclo). El ejercicio fija dos batidas, asi que corrige los dos sentidos; el indice lo recoge sin tocar la prosa normativa."
+    }
+  ]
+}

@@ -12,6 +12,7 @@ library;
 
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
 import 'package:natacion_app/dominio/biblioteca/ejercicio.dart';
+import 'package:natacion_app/dominio/biblioteca/indice_terminos.dart';
 import 'package:natacion_app/dominio/entidades/parte.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/entidades/serie.dart';
@@ -29,10 +30,19 @@ import 'package:natacion_app/dominio/metodologia/zonas.dart';
 import 'package:natacion_app/dominio/notacion/renderizador.dart';
 
 class Generador {
-  Generador({required this.biblioteca})
-      : _selector = SelectorEjercicios(biblioteca);
+  Generador({required this.biblioteca, IndiceTerminos? indice})
+      : indice = indice ?? IndiceTerminos.vacio(),
+        _selector = SelectorEjercicios(
+          biblioteca,
+          indice: indice ?? IndiceTerminos.vacio(),
+        );
 
   final Biblioteca biblioteca;
+
+  /// Vocabulario de diagnóstico del entrenador. Sin él, un diagnóstico se
+  /// reporta como vacío en lugar de resolverse con un ejercicio aproximado.
+  final IndiceTerminos indice;
+
   final SelectorEjercicios _selector;
 
   static const ValidacionPeticion _validacion = ValidacionPeticion();

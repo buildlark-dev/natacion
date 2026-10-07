@@ -23,7 +23,7 @@ void main() {
 
   setUpAll(() {
     final biblioteca = cargarBibliotecaReal();
-    generador = Generador(biblioteca: biblioteca);
+    generador = Generador(biblioteca: biblioteca, indice: cargarIndiceReal());
     analizador = Analizador(biblioteca: biblioteca);
   });
 

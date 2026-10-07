@@ -18,6 +18,7 @@ library;
 
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
 import 'package:natacion_app/dominio/biblioteca/ejercicio.dart';
+import 'package:natacion_app/dominio/biblioteca/indice_terminos.dart';
 import 'package:natacion_app/dominio/generacion/resultado.dart';
 import 'package:natacion_app/dominio/metodologia/estilos.dart';
 
@@ -50,9 +51,17 @@ class SeleccionEjercicios {
 }
 
 class SelectorEjercicios {
-  const SelectorEjercicios(this.biblioteca);
+  SelectorEjercicios(this.biblioteca, {IndiceTerminos? indice})
+      : indice = indice ?? IndiceTerminos.vacio();
 
   final Biblioteca biblioteca;
+
+  /// Vocabulario de diagnóstico declarado por el entrenador.
+  ///
+  /// Sin índice, ningún diagnóstico encuentra ejercicio y todos se reportan
+  /// como vacío. Es el comportamiento correcto: antes de que el entrenador
+  /// declare sus términos, la app no tiene con qué elegir y no debe adivinar.
+  final IndiceTerminos indice;
 
   /// Elige ejercicios para un estilo, atendiendo al diagnóstico si lo hay.
   ///
@@ -82,7 +91,7 @@ class SelectorEjercicios {
     final vacios = <VacioDeBiblioteca>[];
 
     for (final error in diagnostico) {
-      final candidatos = _queCorrigen(estilo, error);
+      final candidatos = _paraElDiagnostico(estilo, error);
 
       if (candidatos.isEmpty) {
         vacios.add(
@@ -135,13 +144,41 @@ class SelectorEjercicios {
     return _tomarRotando(ordenados, cuantos, desplazamiento);
   }
 
+  /// Ejercicios que corresponden a un error **diagnosticado**.
+  ///
+  /// Van por el índice de términos, no por la prosa de la ficha: el entrenador
+  /// declara cómo nombra cada error y a qué ejercicio lleva, en su orden de
+  /// prioridad. Una frase que no esté declarada devuelve lista vacía, y quien
+  /// llama la reporta como vacío de Biblioteca (tarea T070).
+  ///
+  /// Los nombres del índice se resuelven contra la Biblioteca: si uno no
+  /// existe, se ignora en silencio aquí, pero hay una prueba que impide que el
+  /// índice referencie ejercicios inexistentes.
+  List<Ejercicio> _paraElDiagnostico(Estilo estilo, String error) {
+    final nombres = indice.ejerciciosPara(estilo: estilo, frase: error);
+    if (nombres.isEmpty) return const [];
+
+    final delEstilo = _delEstilo(estilo);
+    final encontrados = <Ejercicio>[];
+
+    // Se recorre el índice, no la Biblioteca: así se conserva el orden de
+    // prioridad que declaró el entrenador.
+    for (final nombre in nombres) {
+      for (final ejercicio in delEstilo) {
+        if (ejercicio.nombre == nombre && !encontrados.contains(ejercicio)) {
+          encontrados.add(ejercicio);
+        }
+      }
+    }
+
+    return encontrados;
+  }
+
   /// Ejercicios del estilo cuyo error corregido menciona [termino].
   ///
-  /// La correspondencia es por término normalizado sobre el texto en prosa de
-  /// la Biblioteca. **Es el punto más débil de la feature**: ese campo está
-  /// escrito en lenguaje libre y el emparejamiento puede fallar en los dos
-  /// sentidos. Por eso un error sin coincidencia se reporta como vacío en
-  /// lugar de resolverse con un ejercicio aproximado.
+  /// Se usa **solo para la progresión técnica de la sección 15**, donde los
+  /// términos son los del documento y no los del entrenador. El camino del
+  /// diagnóstico va por [_paraElDiagnostico].
   List<Ejercicio> _queCorrigen(Estilo estilo, String termino) {
     final buscado = _normalizar(termino);
     if (buscado.isEmpty) return const [];

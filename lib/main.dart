@@ -3,6 +3,7 @@ import 'package:natacion_app/datos/memoria/repositorios_memoria.dart';
 import 'package:natacion_app/datos/recursos/biblioteca_empaquetada.dart';
 import 'package:natacion_app/datos/recursos/version_metodologia.dart';
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/biblioteca/indice_terminos.dart';
 import 'package:natacion_app/dominio/repositorios/repositorios.dart';
 import 'package:natacion_app/ui/editor/estado_editor.dart';
 import 'package:natacion_app/dominio/generacion/resultado.dart';
@@ -28,10 +29,16 @@ class RecursosIniciales {
   const RecursosIniciales({
     required this.biblioteca,
     required this.versionMetodologia,
+    required this.indiceTerminos,
   });
 
   final Biblioteca biblioteca;
   final String versionMetodologia;
+
+  /// Vocabulario de diagnóstico del entrenador. Puede venir vacío: entonces
+  /// los diagnósticos se reportan como vacío de Biblioteca en lugar de
+  /// resolverse con un ejercicio aproximado.
+  final IndiceTerminos indiceTerminos;
 }
 
 class AppNatacion extends StatelessWidget {
@@ -66,9 +73,11 @@ class _PantallaInicioState extends State<PantallaInicio> {
   Future<RecursosIniciales> _cargar() async {
     final biblioteca = await CargadorBiblioteca().cargar();
     final version = await CargadorVersionMetodologia().cargar();
+    final indice = await CargadorIndiceTerminos().cargar();
     return RecursosIniciales(
       biblioteca: biblioteca,
       versionMetodologia: version,
+      indiceTerminos: indice,
     );
   }
 
@@ -142,6 +151,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     final pantallas = <Widget>[
       PantallaPeticion(
         biblioteca: widget.recursos.biblioteca,
+        indiceTerminos: widget.recursos.indiceTerminos,
         alGenerar: _abrirGenerado,
       ),
       ChangeNotifierProvider<EstadoEditor>.value(
