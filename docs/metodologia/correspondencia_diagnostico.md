@@ -55,6 +55,8 @@ Señalaste dos ejercicios, y corrigen errores **opuestos**:
 sienta los dos extremos? Si es así lo registro como progresión y no como
 correctivo, porque el generador los prescribiría a la vez.
 
+**Respuesta** Aquí me equivoqué, funciona como tu lo sospechas que debería funcionar, arréglalo y quita el ejercicio que no corrige.
+
 ### 1.2 Espalda · «brazo flexionado en fase aérea»
 
 Señalaste `TOCANDO FRENTE` y `MANO AL CIELO`. Pero la ejecución de
@@ -69,6 +71,8 @@ uno apuntando al cielo, que es la posición extendida.
 **Pregunta:** ¿`TOCANDO FRENTE` lo usas como paso previo —sentir el recorrido
 antes de extenderlo— o fue un desliz al listarlo?
 
+**Respuesta** Quita ese ejercicio, no sirve. Error mío.
+
 ### 1.3 Mariposa · «brazos no salen del agua»
 
 | Ejercicio | Qué hace |
@@ -79,12 +83,17 @@ antes de extenderlo— o fue un desliz al listarlo?
 Para ese error corresponde `DELFINEO COMPLETO`. `DELFINEO` es el ejercicio donde
 los brazos justamente no salen.
 
+**Respuesta** Delfineo no corrige la fase aérea de la brazada, más bien ayuda a sincronizar el primer recorrido de la brazada con la respiración. (el timing)
+Y el Delfineo completo si corrige la brazada y el timing.
+
 ### 1.4 Mariposa · «muchas patadas por cada brazada»
 
 `DELFÍN 2 BATIDAS – ENTRADA/SALIDA` fija dos batidas por ciclo, así que sirve
 para tu error. Pero su ficha solo nombra el error contrario: «un solo batido por
 ciclo». **Propongo** que la ficha nombre los dos sentidos, porque el ejercicio
 corrige ambos.
+
+**Respuesta** Córrelo así como lo propones.
 
 ---
 
@@ -104,6 +113,12 @@ aproximado: el generador reporta el vacío.
 **Decisión tuya:** o añadimos ejercicios a la sección 19, o aceptamos que el
 generador reporte el vacío en estos casos y los resuelvas a mano.
 
+**Respuesta**
+Para las 3 de pecho aplica Tocando Talón/Tobillo.
+Para respirar al frente, se corrige con ejercicios de patada de libre en flecha. La flecha debe estar bien hecha, cabeza abajo y brazos pegados a la cabeza.
+Brazada cruzada se corrige con punto muerto
+Separar los pies se corrige con patada en soldado o en flecha pero es más el énfasis que haga el entrenador en su momento.
+Brazos flexionados en el recobro con Delfineo completo o 2-2-2 y el énfasis que se haga en su momento por parte del entrenador.
 ---
 
 ## 3. Frases que significan cosas distintas según el contexto
@@ -118,6 +133,11 @@ necesita saber cuál, porque los ejercicios no son los mismos.
 | `mirada al frente` | **nadando** | `PATADA MIRANDO EL FONDO` |
 | | en la **aproximación al viraje** | `SIN RESPIRAR ANTES DEL VIRAJE` |
 
+**Respuesta** 
+Codo bajo apunta al recobro ahí tienes los ejercicios
+codo caído en el agarre también tienes los ejercicios correctos
+Mirada al frente se corrige con patada mirando al fondo, está correcto, o patada en flecha.
+Todo esta ok aquí
 ---
 
 ## 4. Tabla de correspondencia propuesta
@@ -128,19 +148,19 @@ Marca cada fila: **OK** si corresponde, o escribe el ejercicio correcto.
 
 | # | Frase | Ejercicio propuesto | Secundarios |
 |---|---|---|---|
-| L1 | `rolido insuficiente` | `ROLIDO (Libre)` | `ROLIDO CON 1 BRAZO (Libre)`, `3+3 PATADA LATERAL` |
-| L2 | `poco rolido` | `ROLIDO (Libre)` | igual que L1 |
-| L3 | `no gira la cadera` | `3+3 PATADA LATERAL` | `ROLIDO (Libre)` |
-| L4 | `codo bajo` | ver §3 | — |
-| L5 | `cabeza alta` | `PATADA MIRANDO EL FONDO` | `FLECHA (Libre)` |
-| L6 | `mirada al frente` | ver §3 | — |
-| L7 | `cadera abajo` | `PATADA MIRANDO EL FONDO` | `FLECHA (Libre)`, `DESLIZAMIENTO HIDRODINÁMICO` |
-| L8 | `cadera caída` | `PATADA MIRANDO EL FONDO` | igual que L7 |
-| L9 | `piernas caídas` | `PATADA MIRANDO EL FONDO` | `FLECHA (Libre)`, `BAND` |
-| L10 | `brazada cruzada` | **vacío** (ver §2) | `ROTAR PALMAS EN RECUPERACIÓN` |
-| L11 | `empujes cortos` | `PULGAR ROZA EL MUSLO` | `TRACC`, `REMO` |
-| L12 | `patada desde rodillas` | `PATADA CORTA – PIES CON ESPUMA` | ¿usar `PATADA MI EXTENDIDOS – ANTI-BICICLETA`, que es de Espalda? |
-| L13 | `respira al frente` | **vacío** (ver §2) | — |
+| L1 | `rolido insuficiente` | `ROLIDO (Libre)` | `ROLIDO CON 1 BRAZO (Libre)`, `3+3 PATADA LATERAL` | OK
+| L2 | `poco rolido` | `ROLIDO (Libre)` | igual que L1 | OK
+| L3 | `no gira la cadera` | `3+3 PATADA LATERAL` | `ROLIDO (Libre)` | OK
+| L4 | `codo bajo` | ver §3 | — | OK 
+| L5 | `cabeza alta` | `PATADA MIRANDO EL FONDO` | `FLECHA (Libre)` | OK
+| L6 | `mirada al frente` | ver §3 | — | OK
+| L7 | `cadera abajo` | `PATADA MIRANDO EL FONDO` | `FLECHA (Libre)`, `DESLIZAMIENTO HIDRODINÁMICO` | OK
+| L8 | `cadera caída` | `PATADA MIRANDO EL FONDO` | igual que L7 | OK
+| L9 | `piernas caídas` | `PATADA MIRANDO EL FONDO` | `FLECHA (Libre)`, `BAND` | OK
+| L10 | `brazada cruzada` | **vacío** (ver §2) | `ROTAR PALMAS EN RECUPERACIÓN` | YA TE LO ANOTÉ EN §2
+| L11 | `empujes cortos` | `PULGAR ROZA EL MUSLO` | `TRACC`, `REMO` | OK
+| L12 | `patada desde rodillas` | `PATADA CORTA – PIES CON ESPUMA` | ¿usar `PATADA MI EXTENDIDOS – ANTI-BICICLETA`, que es de Espalda? | OK
+| L13 | `respira al frente` | **vacío** (ver §2) | — |RESPONDIDO EN §2
 
 Nota sobre L7-L9: ninguna ficha de libre menciona la cadera en su campo de error,
 aunque la **descripción** de `PATADA MIRANDO EL FONDO` sí dice «cadera alta». El
@@ -150,28 +170,28 @@ campo de error habría que completarlo.
 
 | # | Frase | Ejercicio propuesto | Secundarios |
 |---|---|---|---|
-| E1 | `rolido insuficiente` | `ROLIDO (Espalda)` | `ROLIDO CON 1 BRAZO (Espalda)`, `3+3 PATADA LATERAL (Espalda)` |
-| E2 | `cabeza alta` · `cabeza levantada` | `PATADA MIRANDO EL TECHO` | `FLECHA (Espalda)` |
-| E3 | `patada desde las rodillas` | `PATADA MI EXTENDIDOS – ANTI-BICICLETA` | ver §1.1 |
-| E4 | `patada caída` | `PATADA MI EXTENDIDOS – ANTI-BICICLETA` | `PATADA MIRANDO EL TECHO` · ver §1.1 |
-| E5 | `cadera caída` | `PATADA MIRANDO EL TECHO` | `FLECHA (Espalda)` |
-| E6 | `brazo flexionado en fase aérea` | `MANO AL CIELO` | ver §1.2 |
+| E1 | `rolido insuficiente` | `ROLIDO (Espalda)` | `ROLIDO CON 1 BRAZO (Espalda)`, `3+3 PATADA LATERAL (Espalda)` |OK
+| E2 | `cabeza alta` · `cabeza levantada` | `PATADA MIRANDO EL TECHO` | `FLECHA (Espalda)` | OK
+| E3 | `patada desde las rodillas` | `PATADA MI EXTENDIDOS – ANTI-BICICLETA` | ver §1.1 | RESPONDIDO EN §1
+| E4 | `patada caída` | `PATADA MI EXTENDIDOS – ANTI-BICICLETA` | `PATADA MIRANDO EL TECHO` · ver §1.1 | RESPONDIDO EN §1
+| E5 | `cadera caída` | `PATADA MIRANDO EL TECHO` | `FLECHA (Espalda)` | OK
+| E6 | `brazo flexionado en fase aérea` | `MANO AL CIELO` | ver §1.2 | OK
 
 ### Pecho
 
 | # | Frase | Ejercicio propuesto | Secundarios |
 |---|---|---|---|
-| P1 | `dosiflexión` | **vacío** (ver §2) | `TOCANDO TALÓN/TOBILLO` |
-| P2 | `patada sin flexionar tobillos` | **vacío** (ver §2) | `TOCANDO TALÓN/TOBILLO` |
-| P3 | `patada con plantiflexión` | **vacío** (ver §2) | `TOCANDO TALÓN/TOBILLO` |
-| P4 | `saca los pies del agua` | `MI × RESPIRACIÓN (Pecho)` | — |
-| P5 | `mirada al frente` | `MI × RESPIRACIÓN (Pecho)` | `FLECHA (Pecho)` |
-| P6 | `cabeza arriba` | `MI × RESPIRACIÓN (Pecho)` | `FLECHA (Pecho)` |
-| P7 | `no coordina el estilo` | `BRAZA 1-2-3` | `2 PN X 1 BR`, `COORD DE EXTREMIDADES` |
-| P8 | `patada y brazada al mismo tiempo` | `BRAZA 1-2-3` | `2 PN X 1 BR` |
-| P9 | `baja las manos hasta la cadera` | `BRAZADA CORTA – CODOS JUNTOS` | — |
-| P10 | `no desliza` | `FLECHA (Pecho)` | `BRAZA 1-2-3`, `TALÓN A LAS MANOS – DORSAL/VENTRAL` |
-| P11 | `sin timing` | `BRAZA 1-2-3` | `2 PN X 1 BR` |
+| P1 | `dosiflexión` | **vacío** (ver §2) | `TOCANDO TALÓN/TOBILLO` | RESPONDIDO EN §2 OK
+| P2 | `patada sin flexionar tobillos` | **vacío** (ver §2) | `TOCANDO TALÓN/TOBILLO` | OK RESPONDIDO EN §2
+| P3 | `patada con plantiflexión` | **vacío** (ver §2) | `TOCANDO TALÓN/TOBILLO` | OK
+| P4 | `saca los pies del agua` | `MI × RESPIRACIÓN (Pecho)` | — | OK
+| P5 | `mirada al frente` | `MI × RESPIRACIÓN (Pecho)` | `FLECHA (Pecho)` | OK
+| P6 | `cabeza arriba` | `MI × RESPIRACIÓN (Pecho)` | `FLECHA (Pecho)` | OK
+| P7 | `no coordina el estilo` | `BRAZA 1-2-3` | `2 PN X 1 BR`, `COORD DE EXTREMIDADES` | OK
+| P8 | `patada y brazada al mismo tiempo` | `BRAZA 1-2-3` | `2 PN X 1 BR` | OK
+| P9 | `baja las manos hasta la cadera` | `BRAZADA CORTA – CODOS JUNTOS` | — | OK
+| P10 | `no desliza` | `FLECHA (Pecho)` | `BRAZA 1-2-3`, `TALÓN A LAS MANOS – DORSAL/VENTRAL` |OK
+| P11 | `sin timing` | `BRAZA 1-2-3` | `2 PN X 1 BR` | OK
 
 `MI × RESPIRACIÓN (Pecho)` cubre P4, P5 y P6 porque su ficha dice «cuerpo poco
 inclinado; pies que emergen». Es la única que nombra los pies emergiendo.
@@ -180,16 +200,16 @@ inclinado; pies que emergen». Es la única que nombra los pies emergiendo.
 
 | # | Frase | Ejercicio propuesto | Secundarios |
 |---|---|---|---|
-| M1 | `patada desde las rodillas` | `SACAR LA CADERA – ONDULACIÓN` | `FLECHA (Mariposa)` |
-| M2 | `no mueve la cadera` | `SACAR LA CADERA – ONDULACIÓN` | `DELFINEO` |
-| M3 | `separa los pies` | **vacío** (ver §2) | `FLECHA (Mariposa)` |
-| M4 | `brazos no salen del agua` | `DELFINEO COMPLETO` | ver §1.3 |
-| M5 | `cabeza levantada siempre` | `PN EN SOLDADO` | `FLECHA (Mariposa)` |
-| M6 | `no empuja hasta la cadera` | `PULGAR ROZA EL MUSLO (Mariposa)` | — |
-| M7 | `brazos flexionados en el recobro` | **vacío** (ver §2) | `DELFINEO COMPLETO` |
-| M8 | `no lleva las manos hasta adelante` | `PN EN SOLDADO` | `FLECHA (Mariposa)`, `DELFINEO COMPLETO` |
-| M9 | `sin timing` | `DELFÍN 2 BATIDAS – ENTRADA/SALIDA` | `DELFINEO COMPLETO` |
-| M10 | `muchas patadas por cada brazada` | `DELFÍN 2 BATIDAS – ENTRADA/SALIDA` | ver §1.4 |
+| M1 | `patada desde las rodillas` | `SACAR LA CADERA – ONDULACIÓN` | `FLECHA (Mariposa)` | OK
+| M2 | `no mueve la cadera` | `SACAR LA CADERA – ONDULACIÓN` | `DELFINEO` | OK
+| M3 | `separa los pies` | **vacío** (ver §2) | `FLECHA (Mariposa)` | RESPONDIDO EN §2
+| M4 | `brazos no salen del agua` | `DELFINEO COMPLETO` | ver §1.3 | OK
+| M5 | `cabeza levantada siempre` | `PN EN SOLDADO` | `FLECHA (Mariposa)` | OK
+| M6 | `no empuja hasta la cadera` | `PULGAR ROZA EL MUSLO (Mariposa)` | — | OK
+| M7 | `brazos flexionados en el recobro` | **vacío** (ver §2) | `DELFINEO COMPLETO` | OK
+| M8 | `no lleva las manos hasta adelante` | `PN EN SOLDADO` | `FLECHA (Mariposa)`, `DELFINEO COMPLETO` | OK SIN PN EN SOLDADO
+| M9 | `sin timing` | `DELFÍN 2 BATIDAS – ENTRADA/SALIDA` | `DELFINEO COMPLETO` | OK Y 2-2-2
+| M10 | `muchas patadas por cada brazada` | `DELFÍN 2 BATIDAS – ENTRADA/SALIDA` | ver §1.4 | OK
 
 ---
 
