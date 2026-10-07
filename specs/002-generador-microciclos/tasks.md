@@ -203,7 +203,18 @@ la puerta se comporta igual que con un plan manual.
 
 - [X] T068 Ejecutar el escenario **G14 de `quickstart.md`** (criterio SC-009): generar con la categoría y fase de un microciclo real del entrenador y comparar **rangos, no contenido** — volumen por sesión, distribución de zonas y porcentaje técnico deben caer en sus mismos márgenes
 - [ ] T069 Si G14 queda fuera de los márgenes del entrenador, determinar si el error está en el generador o en la **calibración de la tolerancia**, que sigue pendiente desde la feature 001, y registrar el hallazgo antes de tocar código
-- [ ] T070 Probar la correspondencia entre errores diagnosticados reales del entrenador y el campo de error que corrige de la Biblioteca, y registrar los casos en que falla en cualquiera de los dos sentidos: no encontrar un ejercicio que servía, o elegir uno que no ataca el error
+- [~] T070 Probar la correspondencia entre errores diagnosticados reales del entrenador y el campo de error que corrige de la Biblioteca, y registrar los casos en que falla en cualquiera de los dos sentidos: no encontrar un ejercicio que servía, o elegir uno que no ataca el error
+  - **Probado.** 40 frases reales del entrenador, 4 estilos. Solo 2 coinciden. Registro
+    completo en [`docs/metodologia/correspondencia_diagnostico.md`](../../docs/metodologia/correspondencia_diagnostico.md),
+    reproducible con `dart run tool/probar_diagnostico.dart`.
+  - **Causa acotada:** no faltan ejercicios, falla el método de búsqueda. La misma
+    idea escrita «Rolido insuficiente/excesivo» coincide y escrita «Rolido de
+    cadera/hombro insuficiente» no.
+  - **Pendiente del entrenador:** confirmar la tabla del §4 (40 filas), resolver las
+    cuatro contradicciones del §1 —dos ejercicios corrigen lo contrario de lo
+    diagnosticado— y decidir sobre los cinco vacíos del §2.
+  - **Pendiente de implementar** tras su confirmación: índice de términos declarados
+    por ejercicio, en lugar de búsqueda literal sobre la prosa de la ficha.
 - [X] T071 [P] Recorrer los escenarios G1 a G13 de `quickstart.md` y registrar el resultado de cada uno
 - [X] T072 Medir el tiempo de generación del caso mayor (Alto Rendimiento, diez sesiones, 55.000 m) y comprobar que queda por debajo de 200 ms
 - [X] T073 Verificar que `flutter analyze` termina sin errores ni advertencias nuevas, y que la prueba de frontera del dominio sigue pasando: `lib/dominio/generacion/` no puede importar Flutter ni Firebase
