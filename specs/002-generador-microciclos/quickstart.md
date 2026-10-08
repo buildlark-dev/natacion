@@ -43,7 +43,9 @@ Los detalles de precedencia y redondeo están en
    componente acentuado «técnica de eficiencia», tres días disponibles, piscina 25 m, sesión
    de 90 minutos.
 2. Comprobar: **tres sesiones**, cada una de **2.000 m**, microciclo de **6.000 m**.
-3. Comprobar la distribución: A1 3.600 · A2 1.500 · A3 600 · AT 300 m, que es 60/25/10/5.
+3. Comprobar la distribución: A1 3.300 · A2 1.375 · A3 600 · AT 300 · Máx 425 m. Agrupada
+   en el modelo de tres zonas da **Z1 77,9% · Z2 15,0% · Z3 7,1%**, dentro del envolvente
+   piramidal de Acumulación (60-81 / 12-30 / 6-10). *Actualizado en la metodología 3.5.*
 4. Comprobar el trabajo técnico: **50%** del volumen, el prescrito para Acumulación.
 5. Comprobar el reparto de estilos: Libre entre 80 y 85%, Espalda entre 15 y 20%.
 

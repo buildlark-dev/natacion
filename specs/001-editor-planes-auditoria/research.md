@@ -104,7 +104,7 @@ extracción debe terminar con una revisión manual y un conteo confirmado por es
 versión, la fecha, y la huella SHA-256 de cada documento normativo. La app lee esa versión
 y la estampa en cada plan al aprobarlo (FR-026).
 
-**Estado**: implementado. La versión vigente es **3.4.1** desde el 2026-09-25, tras las dos
+**Estado**: implementado. La versión vigente es **3.5.0** desde el 2026-10-08. La 3.4.1, del 2026-09-25, trajo las dos
 correcciones que el entrenador confirmó (nombre unificado `CAMBIO POSIC` y lista completa de
 los cinco ejercicios que exigen desambiguación). El nombre del archivo conserva `V3.4` a
 propósito, por la razón que se explica abajo.

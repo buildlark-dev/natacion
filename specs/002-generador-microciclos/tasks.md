@@ -202,7 +202,7 @@ la puerta se comporta igual que con un plan manual.
 ## Phase 7: Polish & Cross-Cutting Concerns
 
 - [X] T068 Ejecutar el escenario **G14 de `quickstart.md`** (criterio SC-009): generar con la categoría y fase de un microciclo real del entrenador y comparar **rangos, no contenido** — volumen por sesión, distribución de zonas y porcentaje técnico deben caer en sus mismos márgenes
-- [ ] T069 Si G14 queda fuera de los márgenes del entrenador, determinar si el error está en el generador o en la **calibración de la tolerancia**, que sigue pendiente desde la feature 001, y registrar el hallazgo antes de tocar código
+- [X] T069 (no aplicó: G14 cuadró) Si G14 queda fuera de los márgenes del entrenador, determinar si el error está en el generador o en la **calibración de la tolerancia**, que sigue pendiente desde la feature 001, y registrar el hallazgo antes de tocar código
 - [X] T070 Probar la correspondencia entre errores diagnosticados reales del entrenador y el campo de error que corrige de la Biblioteca, y registrar los casos en que falla en cualquiera de los dos sentidos: no encontrar un ejercicio que servía, o elegir uno que no ataca el error
   - **Probado.** 40 frases reales del entrenador, 4 estilos. Solo 2 coincidían.
     Registro completo en [`docs/metodologia/correspondencia_diagnostico.md`](../../docs/metodologia/correspondencia_diagnostico.md),
@@ -335,7 +335,7 @@ maquinaria que existe y funciona.
 
 ## Estado de cierre (2026-09-29)
 
-**73 de 74 tareas completadas.** 672 pruebas de Flutter en verde, 15 de reglas de
+**74 de 74 tareas completadas.** 705 pruebas de Flutter en verde, 15 de reglas de
 acceso, `flutter analyze` limpio y build web correcto.
 
 - **T069 — No aplicó.** G14 cuadró: lo generado cae dentro de los márgenes del

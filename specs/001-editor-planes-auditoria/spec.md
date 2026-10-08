@@ -385,7 +385,7 @@ comprobando que cada plan conserva sus destinatarios y que los perfiles se puede
 - **Digitalización de la biblioteca**: la Biblioteca Oficial debe existir como datos
   consultables dentro del producto. Su carga inicial forma parte del trabajo de esta
   feature.
-- **Versión de metodología**: la vigente es la **3.4.1**, declarada en
+- **Versión de metodología**: la vigente es la **3.5.0**, declarada en
   `docs/metodologia/metodologia.json` junto a la huella de cada documento normativo. La
   versión de referencia es la del manifiesto, no la del nombre del archivo: renombrarlo
   alteraría la trazabilidad de los planes aprobados bajo una versión anterior.

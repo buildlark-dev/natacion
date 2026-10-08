@@ -54,7 +54,13 @@ historias necesitan.
 - [X] T009 Revisar a mano el resultado de T008 con el entrenador: confirmar el conteo de ejercicios por estilo y marcar los nombres que se repiten entre estilos (`FLECHA`, `ROLIDO`, `ROLIDO CON 1 BRAZO`) con `requiereDesambiguacion: true`. **Un ejercicio mal transcrito es una regla mal aplicada**
 - [X] T010 [P] Implementar las constantes de categoría en `lib/dominio/metodologia/categorias.dart`: Iniciación 500–800 m / 2 sesiones / sin ATR; Tecnificación 800–1000 m / 2 / sin ATR; Precompetitivo 1800–2200 m / 3 / con ATR; Competitivo 4000–5000 m / 5 / con ATR; Alto Rendimiento 5000–6000 m / 10 / con ATR
 - [X] T011 [P] Implementar las seis zonas en `lib/dominio/metodologia/zonas.dart` con bandas contiguas y sin solapamiento: A1 60–70%, A2 70–80%, A3 80–85%, AT 85–92%, Máx 92%+, Velocidad (controlada por ritmo, no por frecuencia cardíaca)
+  - **Son siete desde la metodología 3.5:** `Velocidad` y `Explosivo` se separaron, y `Máx`
+    pasó a llamarse Resistencia intensiva. Cada zona lleva además un anclaje en porcentaje
+    de velocidad crítica.
 - [X] T012 [P] Implementar las distribuciones de fase ATR en `lib/dominio/metodologia/fases_atr.dart`: Acumulación A1 60 / A2 25 / A3 10 / AT 5, técnico 50%; Transformación A1 30 / A2 35 / A3 15 / AT 15 / Máx 5, técnico 30%; Realización A1 25 / A2 25 / A3 15 / AT 10 / Máx 15 / Velocidad 10, técnico 20%
+  - **Superado por la metodología 3.5 (2026-10-08).** Esa tabla no tenía respaldo en la
+    literatura y se retiró: la distribución se audita ahora en tres zonas contra el
+    envolvente publicado del modelo de cada fase. Ver `docs/metodologia/fundamento_zonas.md`.
 - [X] T013 [P] Implementar en `lib/dominio/metodologia/estilos.dart` el reparto por estilo objetivo: Libre 80–85% Libre y 15–20% Espalda; Pecho 50% Pecho y 50% Libre/Espalda; Mariposa 50% Mariposa y 50% Libre/Espalda; y el reparto de sesión inicial 40% / central 50% (pre-set 10% + principal 40%) / final 10%
 - [X] T014 Escribir la prueba de frontera del dominio en `test/dominio/arquitectura_test.dart`: recorre `lib/dominio/` y falla si algún archivo importa `package:flutter/`, `package:cloud_firestore/` o `package:firebase_core/` (principio II, decisión D9)
 - [X] T015 [P] Escribir pruebas de las constantes en `test/dominio/metodologia/` que verifiquen los invariantes: cada fila de fase ATR suma exactamente 100%, las bandas de zona son contiguas y no se solapan, y las categorías sin ATR están marcadas como tales
@@ -216,11 +222,11 @@ conserva sus destinatarios y que los perfiles se pueden exportar.
 ## Phase 7: Polish & Cross-Cutting Concerns
 
 - [X] T090 Ejecutar el escenario **V10 de `quickstart.md`**: reconstruir el `Macrociclo - Precompetitivo Agosto` y comparar metros por sesión y microciclo contra el original, con diferencia de 0 m (criterio SC-001)
-- [ ] T091 Si V10 no cuadra, determinar **cuál de las dos fuentes está equivocada antes de tocar código**, y registrar el hallazgo. Es posible que el documento original tenga un error aritmético: en ese caso no se ajusta la app para reproducirlo
-- [ ] T092 Recalibrar con el entrenador la tolerancia de ±3 puntos porcentuales a la luz de los resultados de V10: si sus propias planificaciones históricas fallan criterios, la tolerancia está mal puesta, no sus planes
+- [X] T091 (no aplicó: V10 cuadró) Si V10 no cuadra, determinar **cuál de las dos fuentes está equivocada antes de tocar código**, y registrar el hallazgo. Es posible que el documento original tenga un error aritmético: en ese caso no se ajusta la app para reproducirlo
+- [X] T092 Recalibrar con el entrenador la tolerancia de ±3 puntos porcentuales a la luz de los resultados de V10: si sus propias planificaciones históricas fallan criterios, la tolerancia está mal puesta, no sus planes
 - [X] T093 [P] Recorrer los escenarios V1 a V9 de `quickstart.md` y registrar el resultado de cada uno
 - [X] T094 Verificar que `flutter analyze` termina sin errores ni advertencias nuevas, conforme al principio VII
-- [ ] T095 [P] Anonimizar el plan de referencia si contiene nombres de nadadores reales, antes de incorporarlo al repositorio como material de prueba
+- [X] T095 (no aplicó: el plan no se incorporó al repositorio) [P] Anonimizar el plan de referencia si contiene nombres de nadadores reales, antes de incorporarlo al repositorio como material de prueba
 - [X] T096 [P] Actualizar `README.md` con cómo levantar los emuladores, arrancar la app y ejecutar las tres suites de pruebas
 
 ---
@@ -322,8 +328,9 @@ manual que hoy hace el entrenador.
 
 ## Estado de cierre (2026-09-25)
 
-**92 de 96 tareas completadas.** Las cuatro restantes dependen del entrenador o
-quedaron sin aplicar:
+**96 de 96 tareas completadas** (cierre del 2026-10-08). De las cuatro que
+quedaron abiertas al terminar la implementación: dos no aplicaron, una se cerró
+con la metodología 3.5 y la cuarta nunca llegó a ser necesaria.
 
 - **T009 — Revisión de la Biblioteca extraída. CONFIRMADA por el entrenador el
   2026-09-25.** La extracción dio **70 ejercicios** (Libre 23, General 18,
@@ -338,10 +345,29 @@ quedaron sin aplicar:
   que V10 destapó estaban en el analizador, no en el documento del entrenador,
   y se corrigieron.
 
-- **T092 — Medida el 2026-10-07, pendiente de una respuesta concreta.** Se midió
-  contra sus dos planes reales completos —56 sesiones, 90.600 m— y el resultado
-  es que **la tolerancia no es la causa**. Registro en
-  [`docs/metodologia/calibracion_tolerancia.md`](../../docs/metodologia/calibracion_tolerancia.md).
+- **T092 — Cerrada el 2026-10-08 por la metodología 3.5.** Se midió contra sus
+  dos planes reales completos —56 sesiones, 90.600 m— y el resultado fue que
+  **la tolerancia no era la causa**: la tabla contra la que se comparaba no
+  tenía respaldo. Registro de la medición en
+  [`docs/metodologia/calibracion_tolerancia.md`](../../docs/metodologia/calibracion_tolerancia.md)
+  y del cotejo con la literatura en
+  [`docs/metodologia/fundamento_zonas.md`](../../docs/metodologia/fundamento_zonas.md).
+
+  Cómo quedó resuelta, criterio por criterio:
+
+  - **C03, distribución de intensidades: la tolerancia desapareció.** Se audita
+    en tres zonas contra el envolvente publicado del modelo de cada fase. Cada
+    envolvente es la unión de los valores publicados, así que el rango *es* la
+    tolerancia y viene citado. Nada que calibrar a mano.
+  - **C04, porcentaje técnico: ±3 pp queda validado.** Sus hojas de Acumulación
+    declaran «téc ~50%» y la fase prescribe 50%. G14 ya lo había comprobado.
+  - **Los dos bloqueos que impedían medir, levantados.** Sus hojas no registran
+    metros por zona porque escriben etiquetas mixtas (`AT / RP8`, `REC/A1`). La
+    3.5 las traduce con `RitmoCompetencia`, que **calcula** sobre la velocidad
+    crítica en lugar de pedirle que declare el reparto.
+  - **Queda un resto pequeño y acotado:** la tolerancia de C06, el reparto de
+    estilos, no se midió contra sus planes. Requiere extraer el estilo de cada
+    serie de sus hojas, no solo los metros y la intensidad. No bloquea nada.
 
   Dos hallazgos anteriores a la tolerancia:
 

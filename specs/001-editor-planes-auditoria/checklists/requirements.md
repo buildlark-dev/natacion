@@ -45,7 +45,7 @@ Estado de las observaciones que quedaron abiertas en su momento:
    confirmados por el entrenador el 2026-09-25.
 
 3. **Versionado de la metodología.** RESUELTO. `docs/metodologia/metodologia.json` declara
-   la versión vigente (**3.4.1**) y la huella SHA-256 de cada documento normativo. La app
+   la versión vigente (**3.5.0**) y la huella SHA-256 de cada documento normativo. La app
    lee esa versión y la estampa al aprobar. Si una huella deja de coincidir, un documento
    cambió sin subir la versión, que es lo que el flujo de la constitución prohíbe.
 
