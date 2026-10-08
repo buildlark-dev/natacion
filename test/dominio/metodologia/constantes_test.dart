@@ -1,6 +1,7 @@
 import 'package:natacion_app/dominio/metodologia/categorias.dart';
 import 'package:natacion_app/dominio/metodologia/estilos.dart';
 import 'package:natacion_app/dominio/metodologia/fases_atr.dart';
+import 'package:natacion_app/dominio/metodologia/modelo_tid.dart';
 import 'package:natacion_app/dominio/metodologia/zonas.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -20,36 +21,72 @@ void main() {
       }
     });
 
-    test('Acumulación prescribe 60/25/10/5 y 50% técnico', () {
+    test('cada fase lleva el modelo que la literatura le asocia', () {
+      expect(FaseAtr.acumulacion.modelo, ModeloTid.piramidal);
+      expect(FaseAtr.transformacion.modelo, ModeloTid.umbral);
+      expect(FaseAtr.realizacion.modelo, ModeloTid.polarizado);
+    });
+
+    test('el reparto fino de cada fase cabe en su envolvente publicado', () {
+      // Es la regla que separa lo que está publicado de lo que es criterio del
+      // entrenador: él elige el desglose entre las siete zonas, pero no puede
+      // salirse del rango que la literatura da para su modelo.
+      for (final fase in FaseAtr.values) {
+        expect(
+          fase.repartoCabeEnElModelo,
+          isTrue,
+          reason: '${fase.nombre} declara '
+              'Z1 ${fase.prescritoParaTid(ZonaTid.z1)}% · '
+              'Z2 ${fase.prescritoParaTid(ZonaTid.z2)}% · '
+              'Z3 ${fase.prescritoParaTid(ZonaTid.z3)}%, '
+              'fuera del envolvente ${fase.modelo.nombre}',
+        );
+      }
+    });
+
+    test('Acumulación es piramidal: Z1 78 · Z2 15 · Z3 7, y 50% técnico', () {
       const fase = FaseAtr.acumulacion;
-      expect(fase.prescritoPara(Zona.a1), 60);
-      expect(fase.prescritoPara(Zona.a2), 25);
-      expect(fase.prescritoPara(Zona.a3), 10);
-      expect(fase.prescritoPara(Zona.at), 5);
-      expect(fase.prescritoPara(Zona.maximo), 0);
-      expect(fase.prescritoPara(Zona.velocidad), 0);
+      expect(fase.prescritoParaTid(ZonaTid.z1), 78);
+      expect(fase.prescritoParaTid(ZonaTid.z2), 15);
+      expect(
+        fase.prescritoParaTid(ZonaTid.z3),
+        7,
+        reason: 'Puntos medios de Filipas et al. 2022. Acumulación ahora lleva '
+            'Z3: la tabla anterior no pedía ninguno',
+      );
       expect(fase.porcentajeTecnico, 50);
     });
 
-    test('Transformación prescribe 30/35/15/15/5 y 30% técnico', () {
+    test('Transformación es de umbral: Z1 65 · Z2 25 · Z3 10, y 30% técnico',
+        () {
       const fase = FaseAtr.transformacion;
-      expect(fase.prescritoPara(Zona.a1), 30);
-      expect(fase.prescritoPara(Zona.a2), 35);
-      expect(fase.prescritoPara(Zona.a3), 15);
-      expect(fase.prescritoPara(Zona.at), 15);
-      expect(fase.prescritoPara(Zona.maximo), 5);
+      expect(fase.prescritoParaTid(ZonaTid.z1), 65);
+      expect(fase.prescritoParaTid(ZonaTid.z2), 25);
+      expect(fase.prescritoParaTid(ZonaTid.z3), 10);
       expect(fase.porcentajeTecnico, 30);
     });
 
-    test('Realización prescribe 25/25/15/10/15/10 y 20% técnico', () {
+    test('Realización es polarizada: Z1 81 · Z2 4 · Z3 15, y 20% técnico', () {
       const fase = FaseAtr.realizacion;
-      expect(fase.prescritoPara(Zona.a1), 25);
-      expect(fase.prescritoPara(Zona.a2), 25);
-      expect(fase.prescritoPara(Zona.a3), 15);
-      expect(fase.prescritoPara(Zona.at), 10);
-      expect(fase.prescritoPara(Zona.maximo), 15);
-      expect(fase.prescritoPara(Zona.velocidad), 10);
+      expect(fase.prescritoParaTid(ZonaTid.z1), 81);
+      expect(
+        fase.prescritoParaTid(ZonaTid.z2),
+        4,
+        reason: 'Polarizado significa poco trabajo en la zona intermedia',
+      );
+      expect(fase.prescritoParaTid(ZonaTid.z3), 15);
       expect(fase.porcentajeTecnico, 20);
+    });
+
+    test('las cifras de las fases salen de ensayos hechos en nadadores', () {
+      // Pla et al. 2019: polarizado 81/4/15 y umbral 65/25/10.
+      expect(FaseAtr.transformacion.modelo.fuente, contains('Pla'));
+      expect(FaseAtr.realizacion.modelo.fuente, contains('Pla'));
+      expect(
+        FaseAtr.acumulacion.modelo.fuente,
+        contains('Filipas'),
+        reason: 'Toda cifra que la app exija debe poder citarse',
+      );
     });
 
     test('el trabajo técnico decrece de Acumulación a Realización', () {
@@ -77,7 +114,7 @@ void main() {
 
   group('zonas de intensidad', () {
     test('las bandas son contiguas y no se solapan', () {
-      const conBanda = [Zona.a1, Zona.a2, Zona.a3, Zona.at, Zona.maximo];
+      const conBanda = [Zona.a1, Zona.a2, Zona.a3, Zona.at, Zona.resistenciaIntensiva];
       for (var i = 0; i < conBanda.length - 1; i++) {
         final actual = conBanda[i].banda!;
         final siguiente = conBanda[i + 1].banda!;
@@ -111,15 +148,15 @@ void main() {
     });
 
     test('Máx no tiene techo', () {
-      expect(Zona.maximo.banda!.maximo, isNull);
-      expect(Zona.maximo.banda!.contiene(100), isTrue);
+      expect(Zona.resistenciaIntensiva.banda!.maximo, isNull);
+      expect(Zona.resistenciaIntensiva.banda!.contiene(100), isTrue);
     });
 
     test('reconoce la abreviatura escrita con y sin tilde', () {
       expect(Zona.porAbreviatura('A1'), Zona.a1);
       expect(Zona.porAbreviatura('at'), Zona.at);
-      expect(Zona.porAbreviatura('Máx'), Zona.maximo);
-      expect(Zona.porAbreviatura('Max'), Zona.maximo);
+      expect(Zona.porAbreviatura('Máx'), Zona.resistenciaIntensiva);
+      expect(Zona.porAbreviatura('Max'), Zona.resistenciaIntensiva);
       expect(Zona.porAbreviatura('Vel'), Zona.velocidad);
       expect(Zona.porAbreviatura('A7'), isNull);
     });

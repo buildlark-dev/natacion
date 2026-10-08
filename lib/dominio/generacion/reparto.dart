@@ -24,8 +24,9 @@ const List<Zona> ordenDeZonas = [
   Zona.a2,
   Zona.a3,
   Zona.at,
-  Zona.maximo,
+  Zona.resistenciaIntensiva,
   Zona.velocidad,
+  Zona.explosivo,
 ];
 
 /// Reparte [unidades] entre las claves de [porcentajes] por el método del

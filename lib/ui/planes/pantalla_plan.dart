@@ -72,6 +72,7 @@ class _PantallaPlanState extends State<PantallaPlan> {
   Widget build(BuildContext context) {
     final resultado = _auditoria.evaluar(_plan);
     final fase = const ValidacionFase().admiteFase(_plan);
+    final duracion = const ValidacionFase().duracionDelBloque(_plan);
     final alternancia =
         const ReglaAlternanciaTecnificacion().comprobar(_plan);
 
@@ -98,6 +99,10 @@ class _PantallaPlanState extends State<PantallaPlan> {
           _Cabecera(plan: _plan),
           if (!fase.valida) _Advertencia(texto: fase.motivo),
           if (!alternancia.valida) _Advertencia(texto: alternancia.motivo),
+          // La duración de bloque avisa en tono neutro, no en rojo: los rangos
+          // de Issurin son de otros deportes y la literatura de natación usa
+          // fases más largas.
+          if (!duracion.valida) _Aviso(texto: duracion.motivo),
           const SizedBox(height: 12),
           PanelDistribucion(plan: _plan),
           const SizedBox(height: 12),
@@ -234,6 +239,42 @@ class _Advertencia extends StatelessWidget {
               child: Text(
                 texto,
                 style: TextStyle(color: esquema.onErrorContainer),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Aviso en tono neutro, para lo que no es un incumplimiento.
+///
+/// Se distingue de `_Advertencia`, que va en rojo: un bloque más largo que el
+/// rango de Issurin no es un error del plan, porque la literatura de natación
+/// usa fases más largas y el macrociclo del entrenador coincide con ella.
+class _Aviso extends StatelessWidget {
+  const _Aviso({required this.texto});
+
+  final String texto;
+
+  @override
+  Widget build(BuildContext context) {
+    final esquema = Theme.of(context).colorScheme;
+
+    return Card(
+      color: esquema.surfaceContainerHighest,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.info_outline, color: esquema.onSurfaceVariant),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                texto,
+                style: TextStyle(color: esquema.onSurfaceVariant),
               ),
             ),
           ],

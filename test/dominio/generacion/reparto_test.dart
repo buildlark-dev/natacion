@@ -137,9 +137,23 @@ void main() {
     });
 
     test('el orden de zonas de la metodología es el que se usa', () {
+      expect(ordenDeZonas, [
+        Zona.a1,
+        Zona.a2,
+        Zona.a3,
+        Zona.at,
+        Zona.resistenciaIntensiva,
+        Zona.velocidad,
+        Zona.explosivo,
+      ]);
+    });
+
+    test('el orden cubre las siete zonas, sin olvidar ninguna', () {
       expect(
-        ordenDeZonas,
-        [Zona.a1, Zona.a2, Zona.a3, Zona.at, Zona.maximo, Zona.velocidad],
+        ordenDeZonas.toSet(),
+        Zona.values.toSet(),
+        reason: 'Una zona fuera del orden de desempate no recibiría metros y '
+            'el reparto dejaría de cerrar exacto',
       );
     });
   });
@@ -153,7 +167,7 @@ void main() {
           Zona.a2: 25,
           Zona.a3: 10,
           Zona.at: 5,
-          Zona.maximo: 0,
+          Zona.resistenciaIntensiva: 0,
           Zona.velocidad: 0,
         },
       );
@@ -162,7 +176,7 @@ void main() {
       expect(reparto[Zona.a2], 60);
       expect(reparto[Zona.a3], 24);
       expect(reparto[Zona.at], 12);
-      expect(reparto[Zona.maximo], 0);
+      expect(reparto[Zona.resistenciaIntensiva], 0);
       expect(reparto[Zona.velocidad], 0);
     });
 
@@ -174,7 +188,7 @@ void main() {
           Zona.a2: 25,
           Zona.a3: 15,
           Zona.at: 10,
-          Zona.maximo: 15,
+          Zona.resistenciaIntensiva: 15,
           Zona.velocidad: 10,
         },
       );

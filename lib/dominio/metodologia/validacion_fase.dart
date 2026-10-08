@@ -37,6 +37,44 @@ class ValidacionFase {
 
     return ValidacionCategoria.correcta;
   }
+
+  /// Avisa si la duración del bloque se aparta de los rangos de Issurin (2010).
+  ///
+  /// **Es un aviso, no un dictamen**, y el motivo va con la fuente a la vista.
+  /// La literatura de natación revisada para la versión 3.5 no respalda esos
+  /// rangos: el estudio de caso del nadador de 400 estilos usa fases
+  /// específicas de 7 a 10 semanas, y Maglischo (2003) da taper de 1 a 3
+  /// semanas para medio fondo y fondo. El macrociclo del entrenador coincide
+  /// con eso y se aparta de Issurin.
+  ///
+  /// Devuelve correcta cuando el plan no declara fechas: sin ellas no hay
+  /// duración que medir, y suponerla sería inventar.
+  ValidacionCategoria duracionDelBloque(Plan plan) {
+    final fase = plan.faseAtr;
+    final inicio = plan.fechaInicio;
+    final fin = plan.fechaFin;
+
+    if (fase == null || inicio == null || fin == null) {
+      return ValidacionCategoria.correcta;
+    }
+
+    final dias = fin.difference(inicio).inDays + 1;
+    if (dias <= 0) return ValidacionCategoria.correcta;
+
+    final semanas = (dias / 7).ceil();
+    if (fase.duracionSegunIssurin(semanas)) {
+      return ValidacionCategoria.correcta;
+    }
+
+    final (minimo, maximo) = fase.semanasSegunIssurin;
+    return ValidacionCategoria(
+      valida: false,
+      motivo: '${fase.nombre} dura $semanas semanas. Issurin (2010) da '
+          '$minimo-$maximo para ese bloque. Es un aviso, no un impedimento: '
+          'la literatura de natación usa fases más largas, y su macrociclo '
+          'coincide con ella',
+    );
+  }
 }
 
 /// Regla obligatoria de Tecnificación en programas de dos meses:

@@ -1,18 +1,48 @@
 {
-  "version": "3.4.1",
-  "fecha": "2026-09-25",
+  "version": "3.5.0",
+  "fecha": "2026-10-08",
   "descripcion": "Version vigente de la metodologia del entrenador. La app estampa esta version en cada plan aprobado (FR-026).",
-  "correccionesDeEstaVersion": [
-    "Nombre unificado del ejercicio de cambios de posicion: CAMBIO POSIC en la seccion 14 y en la seccion 19. Antes la seccion 14 escribia CAMBIO POSI y la seccion 19 definia CAMB POSIC.",
-    "Seccion 7 completada: los ejercicios que exigen desambiguacion son cinco, no tres. Se anaden 3+3 PATADA LATERAL y PULGAR ROZA EL MUSLO."
+  "cambiosDeEstaVersion": [
+    "Zona Max renombrada a Resistencia intensiva: Swimming Canada define esa banda como ~ritmo 400 en esfuerzos largos con descanso medio-bajo, no como trabajo intervalico de VO2 max. La abreviatura Max se conserva, porque es lo que el entrenador escribe y lo que hay guardado en los planes.",
+    "Siete zonas en lugar de seis: Velocidad y Explosivo se separan, porque la fuente las distingue por sistema energetico (hidratos frente a fosfagenos).",
+    "Los ritmos de competencia dejan de tratarse como zonas. Swimming Canada: «Race-Specific training is not a training zone». RP1 a RP15 reciben una regla de clasificacion por defecto, calculada sobre la velocidad critica y sobreescribible por serie.",
+    "Velocidad critica redefinida como el limite inferior del dominio severo, sostenible del orden de 15 a 40 minutos. La definicion anterior es la que Scott (2024), citado en esa misma fila, llama «imprecise and misleading».",
+    "La distribucion del ATR se audita en tres zonas contra el envolvente publicado del modelo de cada fase. La tabla de porcentajes por zona de la 3.4 se retira: no tenia respaldo, y la fuente citada (Issurin) no da distribucion de intensidades.",
+    "Las duraciones de bloque avisan y no suspenden: los rangos de Issurin se conservan como referencia de origen, con la constancia de que la literatura de natacion usa fases mas largas.",
+    "Cada zona lleva un segundo anclaje en porcentaje de velocidad critica, ademas del de %FCmax. La frecuencia cardiaca orienta; el ritmo contra velocidad critica clasifica y audita."
   ],
-  "nota_version": "Es una correccion, no una revision metodologica: no cambia ninguna regla de entrenamiento. Por eso 3.4.1 y no 3.5. Los planes aprobados antes siguen sellados con 3.4 y su contenido no se reescribe (FR-026).",
+  "nota_version": "Es una revision metodologica, no una correccion: cambia el numero de zonas, el nombre de una, la unidad en que se audita la distribucion y la definicion de la velocidad critica. Por eso 3.5 y no 3.4.2. Los planes aprobados antes siguen sellados con 3.4 o 3.4.1 y su contenido no se reescribe (FR-026).",
   "nota_nombre_archivo": "El nombre del archivo conserva V3.4 a proposito. La version de referencia es la de este manifiesto, no la del nombre: renombrarlo alteraria la trazabilidad de los planes ya aprobados (decision D4 de research.md).",
+  "fundamento": {
+    "ruta": "docs/metodologia/fundamento_zonas.md",
+    "papel": "Cotejo de cada zona y cada distribucion contra la literatura publicada, con las citas. Es donde se justifica toda cifra que la app exige."
+  },
+  "fuentes": [
+    "Vandenbogaerde, T. (2024). Swim Training Zone Terminology. Swimming Canada / CSI Pacific.",
+    "Ginn, E. M. (1993). Critical Speed and Training Intensities for Swimming. The Performance Edge.",
+    "Scott, B. et al. (2024). Stroke-Specific Swimming Critical Speed Testing. J Hum Kinet 90:239-251.",
+    "Wakayoshi, K. et al. (1992). Determination and validity of critical velocity. Eur J Appl Physiol 64:153-157.",
+    "Gonzalez-Rave, J., Hermosilla, F., Gonzalez-Mohino, F., Casado, A., Pyne, D. (2021). Training Intensity Distribution, Training Volume, and Periodization Models in Elite Swimmers: A Systematic Review. Int J Sports Physiol Perform 16(7):913-926. DOI 10.1123/ijspp.2020-0906.",
+    "Pla, R. et al. (2019). Polarizado 81/4/15 frente a umbral 65/25/10 en 22 nadadores.",
+    "Arroyo-Toledo, J. J. et al. (2021). Polarizado 82/0/18 frente a piramidal 60/30/10 en 12 nadadores de nivel nacional.",
+    "Stoggl, T., Sperlich, B. (2014). Rangos de los modelos de distribucion de intensidades.",
+    "Filipas, L. et al. (2022). Piramidal 75-81/12-18/6-8.",
+    "Papadimitriou, K., Ruiz-Navarro, J. J., Cuenca-Fernandez, F., Margaritelis, N. V. (2025). Training intensity distribution for sprinter swimmers. Eur J Appl Physiol.",
+    "Issurin, V. (2010). New Horizons for the Methodology and Physiology of Training Periodization. Sports Med 40(3):189-206.",
+    "Maglischo, E. (2003), citado en Papadimitriou et al. (2025): taper de 1-3 semanas para medio fondo y fondo."
+  ],
+  "advertencias": [
+    "La periodizacion en bloques NO esta bien probada en natacion: Gonzalez-Rave et al. (2021) terminan pidiendo estudios experimentales, y la mayoria de los estudios que incluyen usan ciclos ondulatorios. El modelo ATR es una eleccion legitima del entrenador, pero la evidencia que lo respalda viene de otros deportes.",
+    "De los nueve estudios de esa revision, seis son retrospectivos. Las cifras son el mejor anclaje disponible, no una ley.",
+    "Los envolventes por fase sirven para medio fondo y fondo. Para un velocista de 50 m, Papadimitriou et al. (2025) advierten que ninguno de estos modelos sirve tal cual.",
+    "El borde de A3 en porcentaje de velocidad critica esta interpolado: Ginn no tiene A3 y Swimming Canada no da ritmos.",
+    "La rejilla fase x modelo es una sintesis de dos hallazgos (el modelo por prueba de Gonzalez-Rave y la progresion por fase de dos estudios de caso), no una tabla publicada."
+  ],
   "documentos": [
     {
       "ruta": "docs/metodologia/PROMPT_MAESTRO_V3.4.md",
       "papel": "Fuente normativa. La seccion 19 es la Biblioteca Oficial de ejercicios.",
-      "sha256": "ee529ae181c840a181baca8b96c2b2e69eab95b06b44043f16c43c890dafaaf1"
+      "sha256": "63863da4cdce507c9949b8d8dd46cc279253a50b54d7c15e700dd21f8e8d33c1"
     },
     {
       "ruta": "docs/metodologia/Biblioteca de ejercicios.docx",

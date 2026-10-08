@@ -30,7 +30,7 @@ const Map<TipoParte, List<Zona>> preferenciaDeZonas = {
   TipoParte.inicial: [Zona.a1, Zona.a2, Zona.a3],
   // La parte central se trata aparte, porque se divide en pre-set y principal.
   TipoParte.central: [
-    Zona.maximo,
+    Zona.resistenciaIntensiva,
     Zona.velocidad,
     Zona.at,
     Zona.a3,

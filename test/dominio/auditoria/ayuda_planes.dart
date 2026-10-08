@@ -94,22 +94,33 @@ class ConstructorPlanes {
   /// reparto de estilos 80-85% Libre / 15-20% Espalda del estilo objetivo
   /// Libre (sección 13).
   ///
-  /// Sobre 2.000 m: A1 1.200 · A2 500 · A3 200 · AT 100, con 1.000 m técnicos
-  /// y 360 m de Espalda (18%).
+  /// Sobre 2.000 m, con el reparto de Acumulación de la versión 3.5:
+  /// A1 1.100 · A2 460 · A3 200 · AT 100 · Máx 140. Agrupado en el modelo de
+  /// tres zonas da **Z1 78% · Z2 15% · Z3 7%**, que cae en el envolvente
+  /// piramidal (60-81 / 12-30 / 6-10).
+  ///
+  /// Lleva 1.000 m técnicos (50%) y 360 m de Espalda (18%).
   Sesion sesionModelo() {
     final series = <Serie>[
-      // A1: 1.200 m, de los cuales 840 técnicos y 360 de Espalda.
+      // A1: 1.100 m, de los cuales 840 técnicos y 360 de Espalda.
       _serieTecnica(640, Zona.a1, Estilo.libre),
       _serieTecnica(200, Zona.a1, Estilo.espalda),
-      const Serie(distancia: 200, zona: Zona.a1, estilo: Estilo.libre),
+      const Serie(distancia: 100, zona: Zona.a1, estilo: Estilo.libre),
       const Serie(distancia: 160, zona: Zona.a1, estilo: Estilo.espalda),
-      // A2: 500 m, 160 técnicos.
+      // A2: 460 m, 160 técnicos.
       _serieTecnica(160, Zona.a2, Estilo.libre),
-      const Serie(distancia: 340, zona: Zona.a2, estilo: Estilo.libre),
+      const Serie(distancia: 300, zona: Zona.a2, estilo: Estilo.libre),
       // A3: 200 m.
       const Serie(distancia: 200, zona: Zona.a3, estilo: Estilo.libre),
       // AT: 100 m.
       const Serie(distancia: 100, zona: Zona.at, estilo: Estilo.libre),
+      // Resistencia intensiva: 140 m. Es el Z3 que el modelo piramidal exige y
+      // que la tabla anterior no pedía en Acumulación.
+      const Serie(
+        distancia: 140,
+        zona: Zona.resistenciaIntensiva,
+        estilo: Estilo.libre,
+      ),
     ];
 
     return Sesion(
@@ -125,8 +136,8 @@ class ConstructorPlanes {
     );
   }
 
-  /// Plan de Acumulación que cumple la distribución prescrita
-  /// (A1 60 / A2 25 / A3 10 / AT 5), el 50% técnico y el reparto de estilos.
+  /// Plan de Acumulación que cae en el modelo piramidal publicado, con el 50%
+  /// técnico y el reparto de estilos de la sección 13.
   Plan planAcumulacionCorrecto() {
     final sesion = sesionModelo();
 
@@ -176,11 +187,15 @@ class ConstructorPlanes {
         versionAnteriorId: plan.versionAnteriorId,
       );
 
-  /// Igual que el anterior, pero con A1 al 45% en lugar del 60% prescrito.
+  /// Igual que el anterior, pero fuera del envolvente piramidal.
+  ///
+  /// Todo el volumen en Z1 (A1 + A2): 100% frente al máximo publicado de 81%, y
+  /// sin nada de Z3 donde el modelo pide del 6 al 10%. Es, por cierto, la forma
+  /// que tiene la fase de Acumulación de su macrociclo real.
   Plan planConIntensidadesDesviadas() {
     final sesion = sesionConZonas(
-      const {Zona.a1: 900, Zona.a2: 800, Zona.a3: 200, Zona.at: 100},
-      metrosTecnicosPorZona: const {Zona.a1: 900},
+      const {Zona.a1: 1200, Zona.a2: 800},
+      metrosTecnicosPorZona: const {Zona.a1: 1000},
     );
 
     return planAcumulacionCorrecto().copiarCon(

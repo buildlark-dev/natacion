@@ -1,5 +1,38 @@
 # PROMPT MAESTRO V3.4 — DIRECTOR TÉCNICO DE NATACIÓN
 
+> **Versión 3.5** (2026-10-08). Revisión metodológica de las zonas de intensidad y de la
+> distribución del modelo ATR, decidida por el entrenador sobre un cotejo con la literatura
+> publicada. Trazabilidad completa de cada cifra y cada cita en
+> [`docs/metodologia/fundamento_zonas.md`](fundamento_zonas.md).
+>
+> 1. **`Máx` dejó de llamarse «VO₂ máx»** y pasa a **Resistencia intensiva**. Swimming
+>    Canada define esa banda como ~ritmo 400 en esfuerzos largos con descanso medio-bajo,
+>    que no es trabajo interválico de VO₂ máx. La abreviatura `Máx` se conserva.
+> 2. **Siete zonas, no seis:** `Velocidad` y `Explosivo` se separan, porque la fuente las
+>    distingue por sistema energético —hidratos frente a fosfágenos—.
+> 3. **Los ritmos de competencia no son zonas.** Swimming Canada: *«Race-Specific training
+>    is not a training zone»*. `RP1` a `RP15` reciben una regla de clasificación por
+>    defecto, **calculada** sobre la velocidad crítica y sobreescribible por serie.
+> 4. **Velocidad crítica redefinida** como el límite inferior del dominio severo,
+>    sostenible del orden de 15 a 40 minutos. La definición anterior —«por tiempo
+>    prolongado sin fatiga»— es la que Scott (2024), citado en esa misma fila, llama
+>    *«imprecise and misleading»*.
+> 5. **La distribución del ATR se audita en tres zonas**, contra el envolvente publicado del
+>    modelo de cada fase, y la tabla de porcentajes por zona de la 3.4 se retira: no tenía
+>    respaldo. El desglose fino entre las siete zonas queda como criterio del entrenador y
+>    no suspende.
+> 6. **Las duraciones de bloque avisan, no suspenden.** Los rangos de Issurin se conservan
+>    como referencia de origen del modelo, con la constancia de que la literatura de
+>    natación usa fases más largas.
+> 7. **Cada zona lleva un segundo anclaje en % de velocidad crítica**, además del de % FCmáx.
+>    La frecuencia cardíaca orienta; el ritmo contra velocidad crítica clasifica y audita,
+>    porque se mide con dos pruebas cronometradas.
+>
+> Los planes aprobados antes conservan su sello (3.4 o 3.4.1) y su contenido no se reescribe.
+
+---
+
+
 > **Correcciones de la versión 3.4.1** (2026-09-25), confirmadas por el entrenador. No
 > cambian ninguna regla de entrenamiento: solo corrigen inconsistencias internas del
 > documento, detectadas al implementar la verificación automática.
@@ -142,28 +175,35 @@ Si se desea enfatizar una corrección técnica, hacerlo mediante ejercicios de l
 
 **Etiquetas de bloque técnico:** las expresiones `TEC L`, `TEC E`, `TEC P`, `TEC M`, `TEC EST` son válidas únicamente como **etiqueta de un bloque** compuesto por ejercicios de la Biblioteca Oficial (p. ej., "200 TEC L" = 200 m de ejercicios técnicos de libre, detallando cuáles). Nunca como nombre de un nado completo.
 
-## 9. CAPACIDADES FISIOLÓGICAS Y ZONAS DE INTENSIDAD — [MEJORA PROPUESTA]
+## 9. CAPACIDADES FISIOLÓGICAS Y ZONAS DE INTENSIDAD
 
-*Fundamento: Swimming Canada — Swim Training Zone Terminology (T. Vandenbogaerde, 2024); Wakayoshi et al. (1992); Scott et al. (2024).*
+*Fundamento: Swimming Canada — Swim Training Zone Terminology (T. Vandenbogaerde, 2024); Ginn (1993); Scott et al. (2024); Wakayoshi et al. (1992). Trazabilidad de cada cifra: `docs/metodologia/fundamento_zonas.md`.*
 
 Los porcentajes se refieren a **% de la frecuencia cardíaca máxima (% FCmáx)**. Se añade **latidos por debajo del máximo (LBM)** y **RPE (escala de Borg 0-10)** como control de **carga interna**, porque la relación entre velocidad de nado y fisiología es individual: la FC orienta, el RPE y la calidad técnica confirman.
 
-| Abrev. | Significado | % FCmáx | LBM (aprox.) | RPE (0-10) | Uso principal |
-|---|---|---|---|---|---|
-| A1 | Aeróbico regenerativo / técnico | 60-70% | 80-60 | 1-2 | Técnica y drills a muy baja intensidad; recuperación |
-| A2 | Aeróbico extensivo | 70-80% | 60-40 | 2-4 | Volumen continuo, base aeróbica, cuenta de brazadas y virajes |
-| A3 | Aeróbico intensivo | 80-85% | 40-30 | 4-5 | Aeróbico "algo duro a duro" a FC relativamente baja |
-| AT | Umbral anaeróbico | 85-92% | 30-20 | 5-6 | Máximo ritmo sostenible (~ritmo 2000 m); splits parejos |
-| Máx | VO₂ máx / esfuerzos de resistencia intensiva | 92%+ | 20-0 | 7-10 | ~ritmo 400 m con descanso medio-bajo; alta carga |
-| Velocidad | Velocidad pura (alta intensidad y explosiva) | Por ritmo, no por FC | — | Máx | ~ritmo 200 o más rápido; esfuerzos de ~6-25 m; controlar por técnica y ritmo, no por FC |
+| Abrev. | Significado | % FCmáx | % de CS | LBM (aprox.) | RPE (0-10) | Uso principal |
+|---|---|---|---|---|---|---|
+| A1 | Aeróbico regenerativo / técnico | 60-70% | 75-80% | 80-60 | 1-2 | Técnica y drills a muy baja intensidad; recuperación |
+| A2 | Aeróbico extensivo | 70-80% | 80-86% | 60-40 | 2-4 | Volumen continuo, base aeróbica, cuenta de brazadas y virajes |
+| A3 | Aeróbico intensivo | 80-85% | 86-90%* | 40-30 | 4-5 | Aeróbico "algo duro a duro" a FC relativamente baja |
+| AT | Umbral anaeróbico | 85-92% | 90-100% | 30-20 | 5-6 | Máximo ritmo sostenible (~ritmo 2000 m); splits parejos |
+| Máx | **Resistencia intensiva** | 92%+ | 100-110% | 20-0 | 7-10 | ~ritmo 400 m en esfuerzos de duración larga con descanso medio-bajo |
+| Velocidad | Alta intensidad | Por ritmo | >110% | — | Máx | ~ritmo 200 o más rápido, en repeticiones de 25 a 100 m |
+| Explosivo | Explosivo | Por ritmo | No aplica | — | Máx | ~10 a 20 m a velocidad muy alta, con descanso pasivo largo |
 
-> **Nota de cambio:** en v3.3, A2 se definía 80-90% y A3 ~90%, dejando un vacío en 70-80% y solapamiento en ~90%. La v3.4 usa bandas contiguas y sin solapamiento (Swimming Canada). Si el entrenador prefiere conservar los valores previos, indicarlo y se revierte esta tabla.
+\* El borde de A3 en porcentaje de velocidad crítica está **interpolado**: Ginn (1993) no tiene A3 —su sistema va A1, A2, AT, MVO2, LT/LP— y Swimming Canada no da ritmos. Queda marcado para que no se cite como publicado.
+
+**Dos anclajes, y para qué sirve cada uno.** La banda de **% FCmáx** orienta: exige conocer la FCmáx individual y medirla dentro del agua. La banda de **% de velocidad crítica** clasifica y audita: la velocidad crítica **se mide** con dos pruebas cronometradas, es específica por estilo, y se expresa en ritmo por 100, que es lo que el entrenador ya escribe. Una serie escrita `6×100 / 1'40"` se clasifica calculando, no declarando. *Niveles de Ginn (1993) con los bordes cerrados; el nivel 4 de Ginn no se adopta, porque etiquetar el 100% de CS como «MVO2» no sobrevive a Scott (2024).*
+
+**Siete zonas, no seis.** La versión 3.5 separa `Velocidad` de `Explosivo`. Swimming Canada las distingue por sistema energético: los esfuerzos de alta intensidad (~ritmo 200, repeticiones de 25-100 m) son aerobio y anaerobio de hidratos; los explosivos (~10-20 m con descanso pasivo largo) son fosfágenos. Fusionarlas escondía esa diferencia y hacía imposible auditar que una sesión de afinación tuviera trabajo explosivo y no solo velocidad sostenida.
+
+**`Máx` dejó de llamarse «VO₂ máx».** Swimming Canada define esa banda como *«~400-m pace in longer duration efforts with medium to low rest»*: es resistencia intensiva, no el trabajo interválico que la literatura llama VO₂ máx. La **abreviatura sigue siendo `Máx`** a propósito, porque es lo que el entrenador escribe y lo que hay guardado en los planes aprobados.
 
 **Ritmos de prueba y velocidad crítica:**
 
 | Abrev. | Significado |
 |---|---|
-| CS | **Velocidad crítica**: máxima velocidad que el nadador puede sostener por tiempo prolongado sin fatiga. Es **específica por estilo** y fisiológicamente cercana al **umbral anaeróbico (AT)**. Se estima con esfuerzos máximos de dos distancias (p. ej., 200 y 400 m). Sirve como referencia de intensidad y como prueba de control (sección 4, paso 8). *Refs.: Wakayoshi 1992; Scott 2024.* |
+| CS | **Velocidad crítica**: límite inferior del dominio de intensidad severa — la frontera entre la intensidad en la que el organismo mantiene el equilibrio fisiológico y la que no. Se sostiene del orden de **15 a 40 minutos, no indefinidamente**. Es **específica por estilo** y fisiológicamente cercana al **umbral anaeróbico (AT)**. Se estima con esfuerzos máximos de dos distancias (200 y 400 m): es un **compromiso de viabilidad**, no el ideal metodológico —un modelo de dos parámetros válido pide de 3 a 7 esfuerzos de 2 a 15 minutos—, pero está validado como fiable en todos los estilos (CV < 4%). *Refs.: Scott 2024; Dekerle 2010; Ginn 1993.* |
 | RP1 | Ritmo 100 |
 | RP2 | Ritmo 200 |
 | RP4 | Ritmo 400 |
@@ -217,21 +257,41 @@ Si los datos del nadador no encajan con su categoría nominal (p. ej., volumen d
 
 El orden de las fases (Acumulación → Transformación → Realización) respeta la lógica de la periodización en bloques: cada fase concentra un tipo de carga compatible y aprovecha el **efecto residual** de la anterior (la base aeróbica y técnica construida en Acumulación sostiene el trabajo de umbral/ritmo de Transformación, y este sostiene la velocidad/afinación de Realización). *Fundamento: Issurin (2010, 2015).*
 
-**[MEJORA PROPUESTA] Distribución realineada a las zonas de la sección 9.** La tabla usa las **seis zonas** de la sección 9 (A1, A2, A3, AT, Máx, Velocidad), en lugar de la etiqueta "Recuperación" (ahora incluida en A1, zona regenerativa/técnica). Esto elimina la doble contabilización que obligaba a la antigua "regla de contabilización" (AT dentro de A2, Velocidad dentro de Máx): ahora **cada intensidad tiene su columna** y se contabiliza donde realmente ocurre. Cada fila suma 100%.
+**Distribución de intensidades: se audita en tres zonas.** La versión 3.5 retiró la tabla de porcentajes por zona que la 3.4 traía marcada como `[MEJORA PROPUESTA]`. Esa tabla **no tenía respaldo**: Issurin, que era la fuente citada, da concentración de carga y duración de bloques, no distribución de intensidades, y ninguna fuente respaldaba cifras como «A3 = 10% en Acumulación».
 
-| Fase | Objetivos | A1 | A2 | A3 | AT | Máx | Velocidad | Trabajo técnico |
-|---|---|---|---|---|---|---|---|---|
-| Acumulación | Técnica, economía de nado, base aeróbica | 60% | 25% | 10% | 5% | — | — | 50% |
-| Transformación | Umbral, ritmo competitivo, velocidad-resistencia | 30% | 35% | 15% | 15% | 5% | — | 30% |
-| Realización | Velocidad, afinación, competencia | 25% | 25% | 15% | 10% | 15% | 10% | 20% |
+La literatura de distribución de intensidades mide en **tres zonas**, separadas por los dos puntos de inflexión del lactato. El segundo coincide con la **velocidad crítica**, lo que hace la frontera medible:
 
-**Lógica de la propuesta:**
+| Zona de tres | Qué la delimita | Zonas de la sección 9 |
+|---|---|---|
+| Z1 | por debajo de LT1 (~2 mmol·L⁻¹) | A1 + A2 |
+| Z2 | entre LT1 y LT2 | A3 + AT |
+| Z3 | por encima de LT2 ≈ 100% de velocidad crítica | Máx + Velocidad + Explosivo |
 
-- **Acumulación:** predomina el trabajo aeróbico de baja intensidad y técnica (A1 60% + A2 25%), con toques de A3/AT para no perder contacto con la intensidad. Coincide con el 50% de trabajo técnico y con la fase de "acumular" capacidad de base.
-- **Transformación:** el peso se desplaza al aeróbico intensivo y al umbral (A2 35% + A3 15% + AT 15%), que es donde vive el ritmo competitivo y la velocidad-resistencia; aparece un 5% de Máx para introducir la máxima intensidad. Técnica al 30%.
-- **Realización:** se reparte para la puesta a punto conservando calidad: la alta intensidad (Máx 15% + Velocidad 10% = 25%) y el AT 10% dan el estímulo específico, mientras A1 25% sostiene la afinación/recuperación del taper. Técnica al 20%, siempre presente.
+Cada fase recibe el **envolvente publicado** de su modelo. Es la unión de todos los valores que la literatura da para ese modelo, así que **el rango es la tolerancia, y viene citado**: no hay número elegido a mano.
 
-> Si el entrenador prefiere la distribución de v3.3 (A1 75/A2 15/Rec 10, etc.), se revierte esta tabla y se restaura la regla de contabilización anterior. Ajustar los porcentajes es una decisión metodológica del entrenador: esta es la propuesta que mejor concuerda con la sección 9.
+| Fase | Modelo | Z1 | Z2 | Z3 | Trabajo técnico | Fuente del envolvente |
+|---|---|---|---|---|---|---|
+| Acumulación | Piramidal | 60-81% | 12-30% | 6-10% | 50% | Filipas 2022 ∪ Arroyo-Toledo 2021 |
+| Transformación | Umbral | 39-65% | 25-61% | 0-10% | 30% | Stöggl & Sperlich 2014 ∪ Pla 2019 |
+| Realización | Polarizado | 56-82% | 0-14% | 15-33% | 20% | Stöggl & Sperlich 2014 ∪ Pla 2019 ∪ Arroyo-Toledo 2021 |
+
+*Por qué este modelo en esta fase:* dos estudios de caso de nadadores de élite describen la misma progresión —piramidal en el entrenamiento general, umbral y polarizado en el específico, polarizado antes de competir—, que coincide con la lógica Acumulación → Transformación → Realización.
+
+**El desglose entre las siete zonas es criterio del entrenador**, no hallazgo publicado, y por eso **no suspende**. La literatura no llega a ese detalle. El desglose que la app usa para generar es el siguiente, y cabe dentro de su propio envolvente:
+
+| Fase | A1 | A2 | A3 | AT | Máx | Velocidad | Explosivo |
+|---|---|---|---|---|---|---|---|
+| Acumulación | 55% | 23% | 10% | 5% | 7% | — | — |
+| Transformación | 35% | 30% | 12% | 13% | 8% | 2% | — |
+| Realización | 50% | 31% | — | 4% | 5% | 7% | 3% |
+
+El trabajo técnico (50/30/20) es criterio del entrenador: la literatura de distribución de intensidades no lo mide. El escenario G14 lo validó contra su macrociclo real, cuyas hojas de Acumulación declaran «téc ~50%».
+
+**Alcance.** González-Ravé et al. (2021) concluyen que el nadador basa su distribución en su prueba principal: velocistas polarizado y umbral, medio fondo umbral y piramidal, fondo principalmente piramidal. Esta tabla sirve para **medio fondo y fondo**. Para un velocista de 50 m, Papadimitriou et al. (2025) advierten que ninguno de estos modelos sirve tal cual.
+
+**Dos advertencias sobre la evidencia.** La periodización en bloques **no está bien probada en natación**: la propia revisión de González-Ravé termina pidiendo estudios experimentales, y la mayoría de los estudios que incluye usan ciclos ondulatorios. Y de sus nueve estudios, seis son retrospectivos. Estas cifras son el mejor anclaje disponible, no una ley.
+
+**Duración de los bloques.** Issurin (2010) da acumulación 2-6 semanas, transmutación 2-4 semanas y realización 8-15 días. La app **avisa** cuando una fase se sale de esos rangos, sin suspender, porque la literatura de natación usa fases más largas: el estudio de caso del nadador de 400 estilos emplea fases específicas de 7 a 10 semanas, Maglischo (2003) da taper de 1-3 semanas para medio fondo y fondo, y un estudio de cohorte de 20 años asocia el rendimiento máximo a macrociclos de 14-15 semanas.
 
 ## 13. PRIORIZACIÓN DE ESTILOS (Precompetitivo en adelante)
 

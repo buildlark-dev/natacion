@@ -154,22 +154,45 @@ void main() {
       );
     });
 
-    test('falla con A1 al 45% donde se prescribe 60%', () {
+    test('falla con todo el volumen en Z1, fuera del modelo piramidal', () {
       final plan = constructor.planConIntensidadesDesviadas();
       final veredicto = const CriterioIntensidadesFase().evaluar(plan);
 
       expect(veredicto.cumple, isFalse);
-      expect(veredicto.observacion, contains('A1'));
       expect(
         veredicto.observacion,
-        contains('prescrito'),
-        reason: 'La observación debe traer real, prescrito y diferencia',
+        contains('Z1'),
+        reason: 'Se audita en las tres zonas con las que mide la literatura',
+      );
+      expect(
+        veredicto.observacion,
+        contains('Z3'),
+        reason: 'El modelo piramidal pide del 6 al 10% de Z3',
       );
     });
 
-    test('cumple con la distribución prescrita', () {
+    test('la observación cita la fuente del envolvente', () {
+      final plan = constructor.planConIntensidadesDesviadas();
+      final veredicto = const CriterioIntensidadesFase().evaluar(plan);
+
+      expect(
+        veredicto.observacion,
+        contains('Filipas'),
+        reason: 'El entrenador tiene derecho a saber qué respalda lo que la '
+            'app le exige: un rango citado, no un número elegido a mano',
+      );
+    });
+
+    test('cumple cuando cae en el envolvente publicado', () {
       final plan = constructor.planAcumulacionCorrecto();
-      expect(const CriterioIntensidadesFase().evaluar(plan).cumple, isTrue);
+      final veredicto = const CriterioIntensidadesFase().evaluar(plan);
+
+      expect(
+        veredicto.cumple,
+        isTrue,
+        reason: veredicto.observacion,
+      );
+      expect(veredicto.observacion, contains('Piramidal'));
     });
 
     test('no se puede evaluar si quedan metros sin zona', () {

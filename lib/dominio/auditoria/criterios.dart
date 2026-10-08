@@ -7,6 +7,7 @@ import 'package:natacion_app/dominio/calculo/agregacion_plan.dart';
 import 'package:natacion_app/dominio/entidades/parte.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/metodologia/estilos.dart';
+import 'package:natacion_app/dominio/metodologia/zonas.dart';
 
 // ---------------------------------------------------------------------------
 // Criterios bloqueantes
@@ -221,16 +222,34 @@ class CriterioTecnicaPrioritaria extends Criterio {
 }
 
 /// C03: la fase ATR respeta las intensidades (sección 12).
+/// C03: la distribución de intensidades cae en el modelo publicado de la fase.
+///
+/// **Cambió de unidad en la versión 3.5.** Antes comparaba las seis zonas contra
+/// una tabla de porcentajes que el propio documento normativo traía marcada como
+/// `[MEJORA PROPUESTA]` y que ninguna fuente respaldaba: Issurin, que era la
+/// cita, da concentración de carga y duración de bloques, no distribución de
+/// intensidades.
+///
+/// Ahora compara en las **tres zonas con las que mide la literatura** contra el
+/// envolvente publicado del modelo de la fase. Dos consecuencias:
+///
+/// - **No hace falta tolerancia.** El envolvente es un rango citado, unión de
+///   todos los valores publicados para ese modelo. El rango *es* la tolerancia.
+/// - **El desglose fino deja de suspender.** Cómo se reparte el envolvente entre
+///   las siete zonas es criterio del entrenador, no hallazgo publicado, y no
+///   puede sostener un dictamen. Lo informa `repartoPorZona`, que sigue ahí.
 class CriterioIntensidadesFase extends Criterio {
   const CriterioIntensidadesFase({this.tolerancia = Tolerancia.predeterminada});
 
+  /// Se conserva por compatibilidad de firma. **Ya no se usa**: el envolvente
+  /// publicado sustituyó a la tolerancia elegida a mano.
   final Tolerancia tolerancia;
 
   @override
   String get id => 'C03_intensidades_fase';
 
   @override
-  String get nombre => 'La fase ATR respeta intensidades';
+  String get nombre => 'La distribución cae en el modelo de la fase';
 
   @override
   Severidad get severidad => Severidad.justificable;
@@ -261,21 +280,38 @@ class CriterioIntensidadesFase extends Criterio {
       );
     }
 
-    final desviadas = agregacion.repartoPorZona
-        .where((r) => !tolerancia.admite(r.diferencia))
-        .toList();
+    final modelo = fase.modelo;
+    final reales = agregacion.porcentajePorTid;
+    final fuera = <String>[];
 
-    if (desviadas.isEmpty) {
+    for (final tid in ZonaTid.values) {
+      final real = reales[tid] ?? 0;
+      final rango = modelo.rangoDe(tid);
+      if (rango.contiene(real)) continue;
+
+      final desviacion = rango.desviacion(real);
+      fuera.add(
+        '${tid.abreviatura} ${real.toStringAsFixed(1)}% frente a $rango '
+        '(${desviacion >= 0 ? '+' : ''}${desviacion.toStringAsFixed(1)} puntos)',
+      );
+    }
+
+    if (fuera.isEmpty) {
       return cumpliendo(
-        'Todas las zonas dentro de $tolerancia en ${fase.nombre}',
+        '${fase.nombre} cae en el modelo ${modelo.nombre}: '
+        '${_resumen(reales)}. Envolvente de ${modelo.fuente}',
       );
     }
 
     return fallando(
-      '${desviadas.length} zonas fuera de $tolerancia en ${fase.nombre}: '
-      '${desviadas.map((r) => r.descripcion).join(' · ')}',
+      '${fase.nombre} se sale del modelo ${modelo.nombre} '
+      '(${modelo.fuente}): ${fuera.join(' · ')}',
     );
   }
+
+  String _resumen(Map<ZonaTid, double> reales) => ZonaTid.values
+      .map((t) => '${t.abreviatura} ${(reales[t] ?? 0).toStringAsFixed(1)}%')
+      .join(' · ');
 }
 
 /// C04: la fase ATR respeta el porcentaje técnico (sección 12).

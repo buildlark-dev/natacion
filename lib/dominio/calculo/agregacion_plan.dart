@@ -66,6 +66,40 @@ class AgregacionPlan {
     };
   }
 
+  /// Metros agrupados en las tres zonas con las que mide la literatura.
+  ///
+  /// Las series sin zona **no se reparten**: quedan fuera de la suma, y
+  /// `metrosSinZona` las delata. Repartirlas por suposición falsearía la
+  /// distribución, que es justo lo que la auditoría quiere comprobar.
+  Map<ZonaTid, int> get metrosPorTid {
+    final acumulado = <ZonaTid, int>{for (final t in ZonaTid.values) t: 0};
+    for (final entrada in metrosPorZona.entries) {
+      final zona = entrada.key;
+      if (zona == null) continue;
+      acumulado[zona.tid] = (acumulado[zona.tid] ?? 0) + entrada.value;
+    }
+    return acumulado;
+  }
+
+  /// Volumen con zona asignada. Es la base del porcentaje de las tres zonas.
+  int get metrosConZona => metros - metrosSinZona;
+
+  /// Porcentaje real de cada zona del modelo de tres.
+  ///
+  /// Se calcula **sobre el volumen con zona**, no sobre el total: si faltan
+  /// zonas por asignar, los porcentajes de lo asignado siguen siendo
+  /// comparables entre sí.
+  Map<ZonaTid, double> get porcentajePorTid {
+    final base = metrosConZona;
+    if (base == 0) {
+      return {for (final t in ZonaTid.values) t: 0};
+    }
+    final porTid = metrosPorTid;
+    return {
+      for (final t in ZonaTid.values) t: ((porTid[t] ?? 0) * 100) / base,
+    };
+  }
+
   /// Comparación zona por zona contra la fase ATR del plan.
   ///
   /// Devuelve una lista vacía si el plan no tiene fase, porque entonces no hay

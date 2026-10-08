@@ -5,6 +5,7 @@ import 'package:natacion_app/dominio/generacion/peticion.dart';
 import 'package:natacion_app/dominio/metodologia/categorias.dart';
 import 'package:natacion_app/dominio/metodologia/estilos.dart';
 import 'package:natacion_app/dominio/metodologia/fases_atr.dart';
+import 'package:natacion_app/dominio/metodologia/modelo_tid.dart';
 import 'package:natacion_app/dominio/metodologia/zonas.dart';
 
 /// Las treinta combinaciones de categoría, fase y longitud de piscina, más el
@@ -54,13 +55,39 @@ void main() {
       expect(presupuesto.volumenTotal, 6000);
     });
 
-    test('la distribución es A1 3.600 · A2 1.500 · A3 600 · AT 300', () {
-      expect(presupuesto.metrosPorZona[Zona.a1], 3600);
-      expect(presupuesto.metrosPorZona[Zona.a2], 1500);
+    test('la distribución es A1 3.300 · A2 1.375 · A3 600 · AT 300 · Máx 425',
+        () {
+      expect(presupuesto.metrosPorZona[Zona.a1], 3300);
+      expect(presupuesto.metrosPorZona[Zona.a2], 1375);
       expect(presupuesto.metrosPorZona[Zona.a3], 600);
       expect(presupuesto.metrosPorZona[Zona.at], 300);
-      expect(presupuesto.metrosPorZona[Zona.maximo], 0);
+      expect(presupuesto.metrosPorZona[Zona.resistenciaIntensiva], 425);
       expect(presupuesto.metrosPorZona[Zona.velocidad], 0);
+      expect(presupuesto.metrosPorZona[Zona.explosivo], 0);
+    });
+
+    test('agrupada en tres zonas, cae en el envolvente piramidal', () {
+      // Z1 = A1 + A2 · Z2 = A3 + AT · Z3 = el resto.
+      final z1 = presupuesto.metrosPorZona[Zona.a1]! +
+          presupuesto.metrosPorZona[Zona.a2]!;
+      final z2 = presupuesto.metrosPorZona[Zona.a3]! +
+          presupuesto.metrosPorZona[Zona.at]!;
+      final z3 = presupuesto.metrosPorZona[Zona.resistenciaIntensiva]! +
+          presupuesto.metrosPorZona[Zona.velocidad]! +
+          presupuesto.metrosPorZona[Zona.explosivo]!;
+
+      final total = presupuesto.volumenTotal;
+      final modelo = FaseAtr.acumulacion.modelo;
+
+      expect(modelo, ModeloTid.piramidal);
+      expect(modelo.rangoDe(ZonaTid.z1).contiene(z1 * 100 / total), isTrue);
+      expect(modelo.rangoDe(ZonaTid.z2).contiene(z2 * 100 / total), isTrue);
+      expect(
+        modelo.rangoDe(ZonaTid.z3).contiene(z3 * 100 / total),
+        isTrue,
+        reason: 'Acumulación ahora lleva Z3: el modelo piramidal publicado '
+            'prescribe del 6 al 10%, y la tabla anterior no pedía ninguno',
+      );
     });
 
     test('el trabajo técnico es el 50% prescrito para Acumulación', () {
