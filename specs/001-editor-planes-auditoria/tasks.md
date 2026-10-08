@@ -338,9 +338,40 @@ quedaron sin aplicar:
   que V10 destapó estaban en el analizador, no en el documento del entrenador,
   y se corrigieron.
 
-- **T092 — Recalibración de la tolerancia.** Pendiente del entrenador. La
-  tolerancia de ±3 puntos porcentuales sigue sin calibrar contra sus planes
-  históricos completos: V10 validó metros, no distribuciones.
+- **T092 — Medida el 2026-10-07, pendiente de una respuesta concreta.** Se midió
+  contra sus dos planes reales completos —56 sesiones, 90.600 m— y el resultado
+  es que **la tolerancia no es la causa**. Registro en
+  [`docs/metodologia/calibracion_tolerancia.md`](../../docs/metodologia/calibracion_tolerancia.md).
+
+  Dos hallazgos anteriores a la tolerancia:
+
+  1. **Sus hojas no registran metros por zona.** Declaran la intensidad por
+     parte y con etiquetas mixtas (`A1-A2`, `REC/A1`, `AT / RP8`, `Máx / RP8`).
+     El criterio C03 compara metros por zona, así que no se puede evaluar sin
+     que él declare cómo se reparten esas etiquetas (regla R3: preguntar, no
+     suponer).
+  2. **La zona A3 está casi ausente del macrociclo**, y eso sale igual en la
+     interpretación más favorable de las etiquetas: −6,1 pp en Acumulación,
+     −11,9 en Transformación, −15,0 en Realización. Ninguna tolerancia razonable
+     absorbe quince puntos.
+
+  La explicación más probable es que `RP8` comprenda A3, o A3 y AT a la vez. Si
+  es así, el plan cumple de sobra sin tocar la tolerancia. **Falta su tabla de
+  equivalencias entre sus etiquetas de trabajo y las seis zonas.** Con ella la
+  calibración es aritmética.
+
+  Lo que sí quedó medido:
+
+  - Para el porcentaje técnico (C04), ±3 pp sirve: sus hojas declaran «téc ~50%»
+    y Acumulación prescribe 50%.
+  - Para la estructura 40/50/10, que hoy **no** es criterio: 14 de sus 56
+    sesiones pasarían de ±3 pp. Si llega a serlo haría falta ±6 pp, porque su
+    parte final son 200 m fijos y no el 10% de la sesión — del 9,1% en una
+    sesión de 2.200 m al 15,4% en una de 1.300.
+  - **Diferencia de criterio a resolver:** la distribución ATR es para él un
+    objetivo de fase que alcanza variando las semanas (MC02 es solo A1 y A2). El
+    generador de la 002 la hace cumplir semana a semana, así que produce semanas
+    más uniformes que las suyas.
 
 - **T095 — No aplica todavía.** El plan de referencia no se incorporó al
   repositorio; las pruebas reproducen su texto sin nombres de nadadores. Si más
