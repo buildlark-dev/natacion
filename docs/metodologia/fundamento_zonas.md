@@ -385,3 +385,174 @@ Dos huecos, y conviene nombrarlos para no taparlos con una interpolación:
 Nada de esto se toca en el código hasta que lo confirme. Cambiar las zonas afecta
 al analizador, al generador, a la auditoría y a la versión de la metodología:
 sería una 3.5, no una 3.4.2.
+
+---
+
+# Resolución — decisiones del entrenador, 2026-10-08
+
+Las siete confirmadas. Decisión 5 por la vía **(c)**: reemplazar la tabla sin
+respaldo por lo que está publicado. Eso obligó a traer literatura que no estaba
+en la carpeta.
+
+## Literatura añadida
+
+| Fuente | Qué aporta |
+|---|---|
+| González-Ravé, J., Hermosilla, F., González-Mohíno, F., Casado, A., Pyne, D. (2021). *Training Intensity Distribution, Training Volume, and Periodization Models in Elite Swimmers: A Systematic Review*. Int J Sports Physiol Perform 16(7):913-926. DOI 10.1123/ijspp.2020-0906 | Revisión sistemática. Qué modelo usa cada tipo de nadador |
+| Pla, R. et al. (2019) | Ensayo cruzado, 22 nadadores (17±3 años), dos periodos de 6 semanas: polarizado **81/4/15** frente a umbral **65/25/10** |
+| Arroyo-Toledo, J. J. et al. (2021) | 12 nadadores de nivel nacional, 12 semanas: polarizado **82/0/18** frente a piramidal **60/30/10** |
+| Stöggl, T., Sperlich, B. (2014) | Rangos de los modelos: polarizado 56-80/0-14/19-33; umbral 39-53/47-61/0 |
+| Filipas, L. et al. (2022) | Piramidal: 75-81/12-18/6-8 |
+| Papadimitriou, K. et al. (2025). *Training intensity distribution for sprinter swimmers*. Eur J Appl Physiol | Revisión invitada que recopila lo anterior; advierte que los modelos de resistencia no sirven para velocistas de 50 m |
+| Maglischo (2003), citado en la anterior | Duración del taper: velocistas 3-5 semanas; medio fondo y fondo **1-3 semanas** |
+
+### Dos advertencias que vienen con esta literatura
+
+1. **La periodización en bloques no está bien probada en natación.** González-Ravé
+   y colaboradores terminan pidiendo estudios experimentales de periodización en
+   bloques y en reversa, porque no se han ensayado bien en este deporte. La
+   mayoría de los estudios incluidos usan ciclos ondulatorios en mesociclos. El
+   modelo ATR que usa el entrenador es una elección legítima, pero la evidencia
+   que lo respalda viene de otros deportes (Issurin), no de natación.
+2. **La evidencia es mayoritariamente observacional.** De los 9 estudios de la
+   revisión, 6 son retrospectivos y solo 3 son de intervención. Las cifras de
+   abajo son el mejor anclaje disponible, no una ley.
+
+## Lo que sustituye a la tabla ATR
+
+El cambio de fondo: **se audita en tres zonas, que es como la literatura mide.**
+La distribución fina entre las siete zonas pasa a ser criterio del entrenador,
+declarado como tal, dentro de un envolvente publicado.
+
+### Correspondencia de las siete zonas con el modelo de tres
+
+El modelo de tres zonas separa por los dos puntos de inflexión del lactato. El
+segundo (LT2) coincide con la velocidad crítica, lo que hace la frontera
+objetiva y medible:
+
+| Zona de tres | Qué la delimita | Zonas del entrenador |
+|---|---|---|
+| **Z1** | por debajo de LT1 (~2 mmol·L⁻¹) | A1 + A2 |
+| **Z2** | entre LT1 y LT2 | A3 + AT |
+| **Z3** | por encima de LT2 ≈ **100% de velocidad crítica** | Resistencia intensiva + Velocidad + Explosivo |
+
+### Envolventes por fase
+
+Cada envolvente es la **unión de todos los valores publicados** para ese modelo:
+cualquier cifra que aparezca en la literatura cae dentro. No hay tolerancia
+inventada — el rango *es* la tolerancia, y viene citado.
+
+| Fase | Modelo | Z1 | Z2 | Z3 | De dónde sale |
+|---|---|---|---|---|---|
+| Acumulación | **Piramidal** | 60-81% | 12-30% | 6-10% | Filipas 2022 (75-81/12-18/6-8) ∪ Arroyo-Toledo 2021 (60/30/10) |
+| Transformación | **Umbral** | 39-65% | 25-61% | 0-10% | Stöggl & Sperlich 2014 (39-53/47-61/0) ∪ Pla 2019 (65/25/10) |
+| Realización | **Polarizado** | 56-82% | 0-14% | 15-33% | Stöggl & Sperlich 2014 (56-80/0-14/19-33) ∪ Pla 2019 (81/4/15) ∪ Arroyo-Toledo 2021 (82/0/18) |
+
+**Por qué este modelo en esta fase.** Dos estudios de caso de nadadores de élite
+describen la misma progresión: piramidal en el entrenamiento general, umbral y
+polarizado en el específico, polarizado antes de competir. Coincide con la
+lógica de Acumulación → Transformación → Realización.
+
+**Y depende de la prueba objetivo.** La conclusión central de González-Ravé es que
+el nadador basa su volumen y su distribución en su prueba principal: velocistas
+polarizado y umbral; medio fondo umbral y piramidal; **fondo principalmente
+piramidal**. La tabla de arriba sirve para medio fondo y fondo, que es el perfil
+del `Macrociclo - Precompetitivo Agosto` (800 Libre). Para un velocista de 50 m,
+Papadimitriou advierte que ninguno de estos modelos sirve tal cual.
+
+> La rejilla fase x modelo es **una síntesis de dos hallazgos** —el modelo por
+> prueba de González-Ravé y la progresión por fase de los estudios de caso—, no
+> una tabla publicada. Queda dicho para que nadie la cite como si lo fuera.
+
+## Qué le pasa a su macrociclo con estas cifras
+
+Recalculado en tres zonas, con `RP8` como AT según la DECISIÓN 3:
+
+| Fase | Z1 real | Z2 real | Z3 real | Envolvente | |
+|---|---|---|---|---|---|
+| Acumulación | ~97% | ~2% | 0% | 60-81 / 12-30 / 6-10 | **fuera**: demasiado Z1, sin Z3 |
+| Transformación | ~53% | ~38% | ~8% | 39-65 / 25-61 / 0-10 | **dentro**, las tres |
+| Realización | ~50% | ~31% | ~19% | 56-82 / 0-14 / 15-33 | **fuera en Z2**: 31% contra un máximo de 14% |
+
+Tres cosas que esto dice, y ninguna salía de la tabla anterior:
+
+1. **Su Transformación encaja con el modelo de umbral publicado**, en las tres
+   zonas. No es casualidad: es la fase donde escribe `AT / RP8`.
+2. **Su Acumulación tiene más trabajo suave que cualquier modelo publicado.**
+   ~97% de Z1 contra un máximo de 81%. No es que le falte A3 respecto de una
+   tabla que nadie firmó: le falta intensidad respecto de la literatura.
+3. **Su Realización no es polarizada, es de umbral.** Y según González-Ravé eso
+   es legítimo para medio fondo. Lo que no encaja es llamarla «Realización ·
+   velocidad y afinación» mientras la distribución dice umbral.
+
+## Las zonas, con los dos anclajes
+
+Siete zonas (DECISIÓN 2), con `Máx` renombrada (DECISIÓN 1) y el anclaje de
+ritmo contra velocidad crítica (DECISIÓN 7), tomando los niveles de Ginn con los
+bordes cerrados:
+
+| Zona | %FCmáx | % de CS | RPE | Ginn / Swimming Canada |
+|---|---|---|---|---|
+| A1 | 60-70 | 75-80 | 1-2 | Ginn L1 · SC A1 |
+| A2 | 70-80 | 80-86 | 2-4 | Ginn L2 (80-90) · SC A2 |
+| A3 | 80-85 | **86-90** | 4-5 | SC A3 · **borde interpolado, Ginn no tiene A3** |
+| AT | 85-92 | 90-100 | 5-6 | Ginn L3 · SC Threshold (~ritmo 2000) |
+| Resistencia intensiva | 92+ | 100-110 | 7-10 | Ginn L5 (LT/LP) · SC Endurance-Intensive (~ritmo 400) |
+| Velocidad | por ritmo | >110 | — | SC High-Intensity (~ritmo 200 o más rápido, 25-100 m) |
+| Explosivo | por ritmo | no aplica | — | SC Explosive (~10-20 m, descanso pasivo largo) · Ginn L6, que él mismo deja fuera del cálculo por CS |
+
+**El nivel 4 de Ginn no se adopta.** Etiqueta el 100% de velocidad crítica como
+«MVO2», y si la velocidad crítica está en el umbral, el 100% de velocidad crítica
+no es VO2 máx. Es la imprecisión de 1993 que Scott (2024) corrige. Ese punto
+queda como la frontera entre AT y Resistencia intensiva.
+
+## Reglas por defecto de los ritmos (DECISIÓN 3)
+
+Los ritmos **no son zonas** —Swimming Canada: «Race-Specific training is not a
+training zone»—, así que lo que sigue es una regla de clasificación por defecto,
+calculada, y sobreescribible en cualquier serie:
+
+| Ritmo | % de CS aprox. | Zona por defecto |
+|---|---|---|
+| RP15 / RP1500 | 95-100 | AT |
+| RP8 | 98-105 | **AT**, pasa a Resistencia intensiva en conjuntos del dominio severo |
+| RP4 | 105-111 | Resistencia intensiva |
+| RP2 | >111 | Velocidad |
+| RP1 | >>111 | Velocidad |
+
+Derivado de Ginn: la velocidad crítica es el 90-95% de la velocidad máxima de
+400 m, así que el ritmo de 400 queda en el 105-111% de CS. Y de Swimming Canada:
+umbral ≈ ritmo 2000, resistencia intensiva ≈ ritmo 400.
+
+## Duraciones de bloque (DECISIÓN 6)
+
+Las de Issurin (2010), que es lo que se pidió hacer coincidir:
+
+| Bloque | Issurin | Su macrociclo |
+|---|---|---|
+| Acumulación | 2-6 semanas | 5 ✔ |
+| Transformación | 2-4 semanas | 5 ✘ |
+| Realización | 8-15 días | ~26 días ✘ |
+
+> **Esto hay que conversarlo antes de implementarlo como regla dura**, porque la
+> literatura de natación que se acaba de traer **no respalda** los rangos de
+> Issurin:
+>
+> - El estudio de caso del nadador de 400 estilos usa, en sus tres macrociclos,
+>   fases general/específica/competitiva de **6/10/5**, **4/7/10** y **3/10/3**
+>   semanas. Ninguna de sus fases específicas cabe en los 2-4 semanas de Issurin,
+>   y ninguna competitiva cabe en 8-15 días.
+> - Maglischo (2003) da taper de **1-3 semanas** para medio fondo y fondo. Su
+>   Realización son 4 semanas, de las cuales MC13 y MC14 son taper: **2 semanas**,
+>   justo en ese rango.
+> - Un estudio de cohorte de 20 años en nadadores de élite asocia el rendimiento
+>   máximo a macrociclos de **14-15 semanas**. El suyo tiene 14.
+>
+> Es decir: su macrociclo coincide con la literatura **de natación** en duración
+> total y en taper, y se aparta de Issurin, que es literatura de otros deportes.
+> Hacer que coincida con Issurin lo alejaría de lo publicado en natación.
+>
+> **Propuesta:** validar contra los rangos de natación —macrociclo 14-15 semanas,
+> taper 1-3 semanas en medio fondo y fondo— y dejar los de Issurin anotados como
+> referencia de origen del modelo. Si aun así quiere los de Issurin, se
+> implementan.
