@@ -27,3 +27,5 @@ In active development.
 Live demo / video: Not published yet.
 
 Screenshots: Soon.
+
+### For local setup and deployment, see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
