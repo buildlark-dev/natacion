@@ -1,73 +1,72 @@
 name: CI
 
-# Corre en cada pull request hacia main y en lo que entre a main.
+# Runs on every pull request into main and on everything that lands on main.
 #
-# Lo que verifica es exactamente lo que se verificaba a mano antes de cada
-# commit: dominio, interfaz, análisis estático, build web, reglas de acceso y la
-# huella de los documentos normativos. La diferencia es que ahora nadie puede
-# olvidarse.
+# It verifies exactly what used to be verified by hand before each commit:
+# domain, UI, static analysis, web build, security rules, and the checksums of
+# the normative methodology documents. The difference is that now nobody can
+# forget.
 on:
   pull_request:
     branches: [main]
   push:
     branches: [main]
 
-# Si se empuja dos veces seguidas a la misma rama, la primera ejecución se
-# cancela: no sirve de nada verificar un commit que ya quedó atrás.
+# Two pushes in a row to the same branch cancel the first run: there is no point
+# verifying a commit that has already been superseded.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-# Solo lectura. Ningún trabajo de este flujo escribe en el repositorio ni
-# necesita secretos: las pruebas de reglas usan los emuladores con un
-# identificador ficticio.
+# Read-only. No job in this workflow writes to the repository or needs secrets:
+# the rules tests run against the emulators with a dummy project id.
 permissions:
   contents: read
 
 env:
-  VERSION_FLUTTER: 3.44.2
+  FLUTTER_VERSION: 3.44.2
 
 jobs:
-  dominio:
-    name: Dominio, interfaz y análisis
+  domain:
+    name: Domain, UI and analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.VERSION_FLUTTER }}
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
           cache: true
 
-      - name: Instalar dependencias
+      - name: Install dependencies
         run: flutter pub get
 
-      - name: Análisis estático
-        # El proyecto exige que salga limpio: es el principio VII de la
-        # constitución, simplicidad verificable.
+      - name: Static analysis
+        # The project requires this to come out clean: principle VII of the
+        # constitution, verifiable simplicity.
         run: flutter analyze
 
-      - name: Pruebas de dominio, datos e interfaz
+      - name: Domain, data and UI tests
         run: flutter test
 
-      - name: Frontera del dominio
-        # Redundante con `flutter test`, pero se nombra aparte porque es el
-        # principio II: `lib/dominio/` no puede importar Flutter ni Firebase.
-        # Si falla, conviene verlo sin buscar entre setecientas pruebas.
+      - name: Domain boundary
+        # Redundant with `flutter test`, but called out separately because it is
+        # principle II: `lib/dominio/` must not import Flutter or Firebase. When
+        # it breaks, you want to see it without digging through 700 tests.
         run: flutter test test/dominio/arquitectura_test.dart
 
-      - name: Huella de los documentos normativos
-        # Si un documento normativo cambió sin subir la versión del manifiesto,
-        # los planes aprobados quedan sellados con una versión que ya no
-        # describe lo que se les aplicó (FR-026).
+      - name: Normative document checksums
+        # If a normative document changed without bumping the manifest version,
+        # approved plans end up stamped with a version that no longer describes
+        # what was applied to them (FR-026).
         run: dart run tool/verificar_metodologia.dart
 
-      - name: Compilar para web
+      - name: Web build
         run: flutter build web --release
 
-  reglas:
-    name: Reglas de acceso de Firestore
+  rules:
+    name: Firestore security rules
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -79,23 +78,23 @@ jobs:
           cache-dependency-path: firebase/package-lock.json
 
       - uses: actions/setup-java@v4
-        # El emulador de Firestore corre sobre la JVM.
+        # The Firestore emulator runs on the JVM.
         with:
           distribution: temurin
           java-version: 21
 
-      - name: Instalar dependencias
+      - name: Install dependencies
         run: npm ci
         working-directory: firebase
 
-      - name: Instalar la CLI de Firebase
-        # Va pinneada y fuera de package.json a propósito: como dependencia de
-        # desarrollo añadía once avisos de seguridad al grafo del repositorio, y
-        # aquí solo se necesita para levantar los emuladores.
+      - name: Install the Firebase CLI
+        # Pinned and deliberately kept out of package.json: as a devDependency
+        # it added eleven security advisories to the repository's dependency
+        # graph, and here it is only needed to start the emulators.
         run: npm install -g firebase-tools@15.29.0
 
-      - name: Pruebas de reglas, con sus casos negativos
-        # Niegan por omisión: un plan aprobado o publicado es inmutable, y nadie
-        # lee datos de un nadador sin permiso. Es el principio III.
+      - name: Rules tests, with their negative cases
+        # Deny by default: an approved or published plan is immutable, and
+        # nobody reads a swimmer's data without permission. Principle III.
         run: npm test
         working-directory: firebase
