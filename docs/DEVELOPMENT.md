@@ -1,7 +1,7 @@
 # natacion_app
 
 Aplicación de planificación de natación construida sobre la metodología del
-entrenador, documentada en [`docs/metodologia/`](docs/metodologia/).
+entrenador, documentada en [`docs/metodologia/`](metodologia/).
 
 La app no interpreta la metodología: **la verifica**. Un plan que viole la regla
 de no invención, los volúmenes por categoría o las distribuciones ATR no se
@@ -123,10 +123,10 @@ ejercicio mal transcrito es una regla mal aplicada.
 
 Cuando el entrenador declara un error técnico, el generador elige el ejercicio
 correctivo por el **índice de términos** de
-[`assets/biblioteca/terminos_diagnostico.json`](assets/biblioteca/terminos_diagnostico.json):
+[`assets/biblioteca/terminos_diagnostico.json`](../assets/biblioteca/terminos_diagnostico.json):
 cada forma en que él nombra un error, y los ejercicios que le corresponden en su
 orden de prioridad. Las correspondencias las confirmó él una por una; el registro
-está en [`docs/metodologia/correspondencia_diagnostico.md`](docs/metodologia/correspondencia_diagnostico.md).
+está en [`docs/metodologia/correspondencia_diagnostico.md`](metodologia/correspondencia_diagnostico.md).
 
 Lo que el índice tolera y lo que no:
 
@@ -163,6 +163,6 @@ dart run tool/probar_diagnostico.dart --vocabulario
 
 ## Gobernanza
 
-El proyecto se rige por [`.specify/memory/constitution.md`](.specify/memory/constitution.md).
+El proyecto se rige por [`.specify/memory/constitution.md`](../.specify/memory/constitution.md).
 Toda feature sigue el flujo de Spec Kit: `/speckit-specify` → `/speckit-plan` →
 `/speckit-tasks` → `/speckit-implement`.
