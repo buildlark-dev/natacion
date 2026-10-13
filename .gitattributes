@@ -1,0 +1,32 @@
+# Normalización de fin de línea.
+#
+# El proyecto se trabaja desde más de una máquina, así que el repositorio guarda
+# LF y cada plataforma recibe lo suyo al clonar. Sin esto, los archivos que
+# Flutter regenera (los registros de plugins de Windows y macOS) aparecían como
+# modificados en cada `flutter pub get` sin que su contenido cambiara.
+* text=auto
+
+*.dart   text
+*.md     text
+*.json   text
+*.yaml   text
+*.yml    text
+*.html   text
+*.css    text
+*.js     text
+*.rules  text
+
+# Los scripts llevan el final de línea que su intérprete espera, sin importar
+# desde dónde se clone.
+*.sh     text eol=lf
+*.ps1    text eol=crlf
+
+# Binarios: que git no intente normalizarlos nunca.
+*.png    binary
+*.jpg    binary
+*.ico    binary
+*.ttf    binary
+*.otf    binary
+*.pdf    binary
+*.xlsx   binary
+*.docx   binary
