@@ -4,6 +4,25 @@ To set the project up, run the tests and understand its layout, see
 [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md). This document covers only the
 workflow.
 
+## This repository is public
+
+That is deliberate. It also means three things never get committed, and the pull
+request template asks about each one:
+
+- **Material somebody else owns.** Books, manuals, papers, datasets. Cite them
+  in prose — the way `docs/metodologia/fundamento_zonas.md` cites its sources —
+  instead of committing the file.
+- **Athlete data.** No names, birth dates, times, videos or identifiers, in code,
+  tests, fixtures, screenshots or commit messages. The reference plans that the
+  tests reproduce carry no swimmer names on purpose.
+- **Credentials.** API keys, gateway secrets and service-account files are
+  injected at runtime or build time.
+
+And the part that is easy to forget: **removing a file in a later commit does not
+remove it from the history.** Anyone can still fetch it. Taking something out for
+good means rewriting history and force-pushing, which breaks the references of
+every pull request that touched it. It is far cheaper to not commit it.
+
 ## A note on language
 
 The repository is bilingual on purpose, and the split is not arbitrary:
