@@ -48,6 +48,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  # Solo para `tool/verificar_metodologia.dart`, que comprueba que los
+  # documentos normativos no cambiaron sin subir la versión del manifiesto.
+  # No entra en la app: es una herramienta de desarrollo.
+  crypto: ^3.0.6
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
