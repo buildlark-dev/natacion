@@ -1,6 +1,6 @@
 # Swimming App
 
-[![CI](https://github.com/buildlark-dev/natacion/actions/workflows/ci.yml/badge.svg)](https://github.com/buildlark-dev/natacion/actions/workflows/ci.yml)
+[![CI](https://github.com/buildlark-dev/swimming_app/actions/workflows/ci.yml/badge.svg)](https://github.com/buildlark-dev/swimming_app/actions/workflows/ci.yml)
 
 A swimming training-plan app built on a coach's documented methodology, with Flutter + Firebase. The app does not interpret the methodology, it enforces it.
 
