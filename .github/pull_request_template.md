@@ -1,39 +1,38 @@
-## Qué cambia y por qué
+## What changes, and why
 
-<!-- Qué resuelve, en dos o tres frases. Si viene de una feature de Spec Kit,
-     enlaza su carpeta en `specs/`. -->
+<!-- What it solves, in two or three sentences. If it comes from a Spec Kit
+     feature, link its folder under `specs/`. -->
 
-## Cómo se verificó
+## How it was verified
 
-<!-- Marca lo que corriste. El CI corre todo esto igual, pero decirlo aquí
-     ayuda a quien revisa a saber qué mirar. -->
+<!-- Tick what you ran. CI runs all of it anyway, but saying so here tells the
+     reviewer what to look at. -->
 
 - [ ] `flutter test`
-- [ ] `flutter analyze` sale limpio
+- [ ] `flutter analyze` comes out clean
 - [ ] `npm --prefix firebase test`
 - [ ] `dart run tool/verificar_metodologia.dart`
-- [ ] Probado a mano en `flutter run -d chrome`
+- [ ] Tried by hand with `flutter run -d chrome`
 
-## Metodología
+## Methodology
 
-<!-- Borra esta sección si el cambio no toca el dominio. -->
+<!-- Delete this section if the change does not touch the domain. -->
 
-- [ ] No cambia ninguna regla de entrenamiento
-- [ ] Cambia una regla, y subí la versión en `docs/metodologia/metodologia.json`
-      con su huella y su nota
-- [ ] Toda cifra nueva que la app exige **se puede citar**, y la cita está en
+- [ ] Changes no training rule
+- [ ] Changes a rule, and I bumped the version in
+      `docs/metodologia/metodologia.json` with its checksum and its note
+- [ ] Every new figure the app enforces **can be cited**, and the citation is in
       `docs/metodologia/fundamento_zonas.md`
 
-## Datos de deportistas
+## Athlete data
 
-<!-- Borra esta sección si el cambio no toca datos de nadadores. -->
+<!-- Delete this section if the change does not touch swimmer data. -->
 
-- [ ] No añade ni expone datos de nadadores
-- [ ] Añade datos de nadadores, y respeta la puerta de consentimiento del
-      principio V de la constitución
-- [ ] No hay nombres, marcas, videos ni identificadores de nadadores en
-      registros, analítica ni pruebas
+- [ ] Adds no swimmer data and exposes none
+- [ ] Adds swimmer data, and respects the consent gate of principle V of the
+      constitution
+- [ ] No names, times, videos or swimmer identifiers in logs, analytics or tests
 
-## Pendiente
+## Left out
 
-<!-- Lo que este PR deja sin hacer a propósito, para que no se pierda. -->
+<!-- What this PR deliberately leaves undone, so it does not get lost. -->

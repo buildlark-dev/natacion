@@ -1,35 +1,56 @@
-# Cómo se trabaja en este repositorio
+# How work happens in this repository
 
-Para levantar el proyecto, correr las pruebas y entender su estructura:
-[`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md). Este documento es solo el flujo.
+To set the project up, run the tests and understand its layout, see
+[`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md). This document covers only the
+workflow.
 
-## Nada entra directo a `main`
+## A note on language
 
-Todo cambio va en una rama y entra por pull request, incluso los de una línea.
-`main` es la rama desde la que se despliega y la que sella la versión de
-metodología de los planes aprobados: no se escribe a mano sobre ella.
+The repository is bilingual on purpose, and the split is not arbitrary:
+
+| In English | In Spanish |
+|---|---|
+| Everything GitHub shows: commits, pull requests, README, this file, CI, templates | The UI and every message a user reads |
+| Branch names | The methodology documents under `docs/metodologia/` |
+| | Feature documents under `specs/` |
+| | Domain vocabulary in code: `Zona`, `FaseAtr`, `Microciclo` |
+
+The domain vocabulary stays in Spanish because it maps one to one onto the
+coach's normative document. `Zona` in the code *is* the «zona» of section 9.
+Translating it would insert a translation layer in the exact place this project
+is built to avoid interpretation, and a mistranslation would become a wrong
+training rule.
+
+The UI stays in Spanish because the swimmers are Colombian, and some of them are
+seven years old.
+
+## Nothing lands on `main` directly
+
+Every change goes on a branch and lands through a pull request, down to one-line
+fixes. `main` is what gets deployed and what stamps the methodology version onto
+approved plans: it is not written to by hand.
 
 ```bash
-git checkout -b <tipo>/<descripcion-corta>
+git checkout -b <type>/<short-description>
 ```
 
-| Prefijo | Para qué |
+| Prefix | For |
 |---|---|
-| `NNN-nombre-feature` | Una feature de Spec Kit, con su carpeta en `specs/` |
-| `fix/` | Corrección de un defecto |
-| `docs/` | Solo documentación |
-| `ci/` | Flujo de integración, herramientas, configuración del repositorio |
-| `chore/` | Mantenimiento que no cambia comportamiento |
+| `NNN-feature-name` | A Spec Kit feature, with its folder under `specs/` |
+| `fix/` | Fixing a defect |
+| `docs/` | Documentation only |
+| `ci/` | Continuous integration, tooling, repository configuration |
+| `chore/` | Maintenance that changes no behaviour |
 
-## El CI tiene que estar en verde
+## CI has to be green
 
-Cada pull request corre [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
-análisis estático, pruebas de dominio e interfaz, frontera del dominio, huella de
-los documentos normativos, build web y pruebas de reglas de acceso con sus casos
-negativos.
+Every pull request runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml):
+static analysis, domain and UI tests, the domain boundary, the normative
+document checksums, the web build, and the Firestore security rules with their
+negative cases.
 
-Antes de abrir el PR conviene correr lo mismo en local, que es más rápido que
-esperar al CI:
+Running the same thing locally before opening the PR is faster than waiting for
+CI:
 
 ```bash
 flutter analyze && flutter test && dart run tool/verificar_metodologia.dart
@@ -39,46 +60,48 @@ flutter analyze && flutter test && dart run tool/verificar_metodologia.dart
 npm --prefix firebase test
 ```
 
-Las pruebas de reglas necesitan la CLI de Firebase y Java 21, porque el emulador
-de Firestore corre sobre la JVM:
+The rules tests need the Firebase CLI and Java 21, because the Firestore
+emulator runs on the JVM:
 
 ```bash
 npm install -g firebase-tools@15.29.0
 ```
 
-## Las features siguen el flujo de Spec Kit
+## Features follow the Spec Kit flow
 
 `/speckit-specify` → `/speckit-plan` → `/speckit-tasks` → `/speckit-implement`,
-con `/speckit-clarify` cuando la especificación tiene huecos. Los documentos de
-cada feature viven en `specs/NNN-nombre/` y son parte del entregable: la
-especificación, el plan y las tareas se revisan igual que el código.
+with `/speckit-clarify` when the specification has gaps. Each feature's documents
+live in `specs/NNN-name/` and are part of the deliverable: the specification, the
+plan and the tasks get reviewed like code.
 
-## Reglas que no se negocian
+## Rules that are not up for negotiation
 
-Vienen de [`.specify/memory/constitution.md`](.specify/memory/constitution.md) y
-el pull request pregunta por ellas:
+They come from [`.specify/memory/constitution.md`](.specify/memory/constitution.md),
+and the pull request template asks about them:
 
-- **La metodología del entrenador es la norma.** La app no la interpreta: la
-  verifica. Si una cifra la exige la app, tiene que poder citarse.
-- **El dominio es Dart puro.** `lib/dominio/` no importa Flutter ni Firebase, y
-  hay una prueba que lo vigila.
-- **Las reglas que llegan al nadador se prueban**, con sus casos negativos.
-- **El criterio del entrenador no se delega.** Lo generado nace borrador, va
-  marcado como generado y no llega a un nadador sin su firma.
-- **Datos de deportistas**: el consentimiento verificable del acudiente es una
-  puerta de publicación. Sin nombres, marcas, videos ni identificadores en
-  registros ni analítica.
-- **Ni una credencial en el repositorio.** Ninguna clave de API viaja al
-  cliente: las llamadas a un modelo pasan por un servidor.
+- **The coach's methodology is the norm.** The app does not interpret it, it
+  verifies it. If the app enforces a figure, that figure must be citable.
+- **The domain is pure Dart.** `lib/dominio/` imports neither Flutter nor
+  Firebase, and a test watches for it.
+- **Rules that reach a swimmer get tested**, with their negative cases.
+- **The coach's judgement is not delegated.** Generated work is born a draft,
+  carries a generated marker, and reaches no swimmer without his signature.
+- **Athlete data**: verifiable guardian consent is a publication gate. No names,
+  times, videos or identifiers in logs or analytics.
+- **Not one credential in the repository.** No API key ever travels to the
+  client: model calls go through a server.
 
-## Mensajes de commit
+## Commit messages
 
-En español, en imperativo, con el prefijo del tipo de cambio:
+In English, imperative mood, prefixed with the type of change:
 
 ```text
-fix: corregir el reparto de zonas cuando la sesión no es múltiplo de la piscina
+fix: correct the zone split when a session is not a multiple of the pool length
 ```
 
-El cuerpo explica **por qué**, no qué: el qué ya está en el diff. Si el cambio
-sale de una decisión del entrenador o de una fuente publicada, el cuerpo la
-nombra.
+The body explains **why**, not what: the what is already in the diff. When the
+change comes from a decision by the coach or from a published source, the body
+names it.
+
+Commits made before 2026-10-13 are in Spanish. They are not being rewritten:
+history that has already been pushed stays as it is.

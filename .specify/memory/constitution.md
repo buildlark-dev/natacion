@@ -234,8 +234,23 @@ flujo del entrenador.
 - **Exportabilidad:** Firestore es NoSQL y las consultas de progreso histórico son su punto
   débil. Por eso el esquema DEBE estar documentado y ser exportable a JSON o formato
   tabular desde el inicio, de modo que migrar a una base relacional siga siendo posible.
-- **Idiomas:** el código, el esquema de datos y los nombres técnicos van en inglés. La
-  interfaz, los mensajes al usuario y **todos los documentos entregables** van en español.
+- **Idiomas.** El reparto no es arbitrario y cada parte tiene su razón:
+  - **En inglés, todo lo que GitHub muestra:** mensajes de commit, pull requests, `README`,
+    `CONTRIBUTING`, `docs/DEVELOPMENT.md`, configuración de integración continua,
+    plantillas y nombres de rama. Es la cara pública del proyecto.
+  - **En español, la interfaz y todo mensaje que un usuario lee.** Los nadadores son
+    colombianos y algunos tienen siete años. No es una preferencia de estilo: traducirla
+    rompe el producto para quien lo usa.
+  - **En español, los documentos de metodología y los documentos de feature** de `specs/`.
+    Citan el documento normativo del entrenador, y traducirlos rompería la trazabilidad
+    con él.
+  - **En español, el vocabulario de dominio en el código:** `Zona`, `FaseAtr`,
+    `Microciclo`, `CriterioTransferencia`. Mapean uno a uno con el documento normativo:
+    `Zona` en el código **es** la «zona» de la sección 9. Traducirlo metería una capa de
+    traducción justo donde este proyecto está construido para no interpretar nada, y un
+    error de traducción se volvería una regla de entrenamiento equivocada.
+  - El esquema de datos conserva las claves con que ya hay planes guardados. Cambiarlas no
+    es un cambio de idioma: es una migración, y se trata como tal.
 - **Sin credenciales en el repositorio:** claves de API, secretos de pasarela y archivos de
   configuración sensibles se inyectan en tiempo de ejecución o de build.
 - **Uso a pie de piscina.** La señal en las piscinas suele ser mala, así que funcionar sin
@@ -272,6 +287,9 @@ flujo del entrenador.
   de metodología versionado dentro del repositorio, subir su versión y actualizar las
   pruebas afectadas.
 - Los entregables para el entrenador (especificaciones, planes, informes) van en español.
+- Lo que GitHub muestra va en inglés: mensajes de commit, pull requests y documentación de
+  la raíz. Los commits anteriores al 2026-10-13 están en español y no se reescriben: el
+  historial ya empujado se queda como está.
 
 ## Governance
 
@@ -298,4 +316,4 @@ Revisión de cumplimiento: en cada `/speckit-plan` y antes de cerrar cada featur
 verifica el cumplimiento de los ocho principios. La complejidad no justificada se elimina
 o se documenta.
 
-**Version**: 1.1.0 | **Ratified**: 2026-09-25 | **Last Amended**: 2026-09-29
+**Version**: 1.2.0 | **Ratified**: 2026-09-25 | **Last Amended**: 2026-10-13
