@@ -42,7 +42,7 @@ implementar y probar por separado.
 
 - [X] T004 Activar la persistencia de lectura de Firestore en `lib/datos/firestore/configuracion.dart`. Hoy está en `persistenceEnabled: false` para los emuladores; debe quedar activada también ahí, porque si no el escenario C1 del quickstart no se puede verificar en local (decisión D1)
 - [X] T005 [P] Escribir en `test/datos/persistencia_lectura_test.dart` la prueba de que la configuración declara la persistencia activada, para que nadie la desactive sin que falle algo
-- [ ] T006 Implementar la selección de perfil activo de nadador en `lib/ui/nadador/perfil_activo.dart`, eligiendo entre los perfiles que `RepositorioNadadores` ya guarda desde la feature 001. **Sin autenticación**: es la decisión D4, y las cuentas son la feature 004
+- [X] T006 Implementar la selección de perfil activo de nadador en `lib/ui/nadador/perfil_activo.dart`, eligiendo entre los perfiles que `RepositorioNadadores` ya guarda desde la feature 001. **Sin autenticación**: es la decisión D4, y las cuentas son la feature 004
 - [X] T007 Añadir a `lib/dominio/repositorios/repositorios.dart` las interfaces `RepositorioRegistros` y `BandejaDeSalida` con las firmas de `data-model.md`. **Ninguna firma menciona tipos de Firestore**
 - [X] T008 Añadir la colección `registros` a `firebase/firestore.rules`, **denegando por omisión** y permitiendo solo el rol de entrenador, como el resto de colecciones. La regla por nadador es de la feature 004 (desviación declarada en `plan.md`)
 - [X] T009 Añadir a `firebase/test/reglas.test.js` los casos negativos de la colección nueva: sin rol no se lee y no se escribe. **Casos negativos, no solo el feliz** (principio III)
@@ -67,19 +67,19 @@ dispositivo en modo avión y comprobar que la sesión del día aparece completa 
 > Escribir estas pruebas **primero** y comprobar que fallan antes de implementar.
 
 - [X] T012 [P] [US1] Escribir en `test/dominio/calculo/sesion_del_dia_test.dart` las pruebas de qué sesión corresponde a una fecha: la de hoy si la hay, la siguiente si no, y nada si el plan terminó
-- [ ] T013 [P] [US1] Escribir en `test/datos/planes_del_nadador_test.dart` la prueba de que solo se devuelven planes en estado `publicado` asignados al nadador, y de que un `borrador` o un `aprobado` **no aparecen** (FR-001)
-- [ ] T014 [P] [US1] Escribir en `test/ui/nadador/sesion_del_dia_test.dart` el recorrido de lectura **sin conexión**, con el repositorio simulando que la red no responde
+- [X] T013 [P] [US1] Escribir en `test/datos/planes_del_nadador_test.dart` la prueba de que solo se devuelven planes en estado `publicado` asignados al nadador, y de que un `borrador` o un `aprobado` **no aparecen** (FR-001)
+- [X] T014 [P] [US1] Escribir en `test/ui/nadador/sesion_del_dia_test.dart` el recorrido de lectura **sin conexión**, con el repositorio simulando que la red no responde
 
 ### Implementation for User Story 1
 
 - [X] T015 [US1] Implementar en `lib/dominio/calculo/sesion_del_dia.dart` la selección de la sesión que corresponde a una fecha, devolviendo también cuál es la siguiente y cuándo, para que no haya pantalla vacía (FR-002)
-- [ ] T016 [US1] Ampliar `lib/datos/firestore/repositorios_firestore.dart` con la consulta de planes publicados asignados a un nadador (FR-001)
-- [ ] T017 [US1] Implementar `lib/ui/nadador/pantalla_sesion_del_dia.dart`: objetivo técnico, objetivo fisiológico y las tres partes con sus series (FR-003)
-- [ ] T018 [US1] Mostrar las series **con la notación del entrenador y los nombres exactos de la Biblioteca**, sin abreviar, reescribir ni corregir (FR-004). Reutilizar el renderizador de la feature 002, no escribir otro
-- [ ] T019 [US1] Añadir la vista del plan completo en `lib/ui/nadador/pantalla_mi_plan.dart`, para cuando el nadador quiere ver más allá de hoy
-- [ ] T020 [US1] Mostrar **cuándo se sincronizó por última vez**, para que el nadador sepa si lo que lee está al día. Sale de la decisión D1 y la especificación no lo pedía: la lectura sin conexión solo cubre lo ya descargado
-- [ ] T021 [US1] Manejar los casos límite de pantalla: sin plan asignado, plan sin sesiones, y sesión sin series. **Ninguno debe dar error**, los tres dicen lo que pasa
-- [ ] T022 [US1] Añadir la navegación del nadador a `lib/main.dart`, separada de la del entrenador
+- [X] T016 [US1] Ampliar `lib/datos/firestore/repositorios_firestore.dart` con la consulta de planes publicados asignados a un nadador (FR-001)
+- [X] T017 [US1] Implementar `lib/ui/nadador/pantalla_sesion_del_dia.dart`: objetivo técnico, objetivo fisiológico y las tres partes con sus series (FR-003)
+- [X] T018 [US1] Mostrar las series **con la notación del entrenador y los nombres exactos de la Biblioteca**, sin abreviar, reescribir ni corregir (FR-004). Reutilizar el renderizador de la feature 002, no escribir otro
+- [X] T019 [US1] Añadir la vista del plan completo en `lib/ui/nadador/pantalla_mi_plan.dart`, para cuando el nadador quiere ver más allá de hoy
+- [X] T020 [US1] Mostrar **cuándo se sincronizó por última vez**, para que el nadador sepa si lo que lee está al día. Sale de la decisión D1 y la especificación no lo pedía: la lectura sin conexión solo cubre lo ya descargado
+- [X] T021 [US1] Manejar los casos límite de pantalla: sin plan asignado, plan sin sesiones, y sesión sin series. **Ninguno debe dar error**, los tres dicen lo que pasa
+- [X] T022 [US1] Añadir la navegación del nadador a `lib/main.dart`, separada de la del entrenador
 
 **Checkpoint**: el nadador ve su plan sin señal. **Es el MVP**: entregado solo, el plan deja de vivir en una hoja del entrenador.
 
@@ -102,9 +102,9 @@ construye dos veces.
 
 - [X] T023 [P] [US2] Escribir en `test/dominio/entidades/registro_sesion_test.dart` las pruebas de las invariantes: **RPE entero de 0 a 10**, fuera de rango no construye (escenario R1); **RPE ausente es válido** (R2); `realizada: false` con observaciones es válido (R3)
 - [X] T024 [P] [US2] Escribir en el mismo archivo la prueba de que el identificador es **determinista**: mismo `(nadadorId, planId, sesionId, versionDePlan)` da el mismo `id` (decisión D2, FR-020)
-- [ ] T025 [P] [US2] Escribir en `test/dominio/entidades/plan_inmutable_test.dart` la prueba de que **registrar respuestas no cambia el plan**: serializar el plan aprobado antes y después y comparar (SC-007, escenario C4)
+- [X] T025 [P] [US2] Escribir en `test/dominio/entidades/plan_inmutable_test.dart` la prueba de que **registrar respuestas no cambia el plan**: serializar el plan aprobado antes y después y comparar (SC-007, escenario C4)
 - [X] T026 [P] [US2] Escribir en `test/dominio/entidades/registro_sesion_test.dart` la prueba de que las observaciones se guardan **tal cual**: mayúsculas, acentos, saltos de línea y texto largo (R4)
-- [ ] T027 [P] [US2] Escribir en `test/ui/nadador/formulario_registro_test.dart` la prueba de que un nadador que **no anota nada** completa el recorrido sin un solo bloqueo (FR-010, escenario C7)
+- [X] T027 [P] [US2] Escribir en `test/ui/nadador/formulario_registro_test.dart` la prueba de que un nadador que **no anota nada** completa el recorrido sin un solo bloqueo (FR-010, escenario C7)
 
 ### Implementation for User Story 2
 
@@ -112,12 +112,12 @@ construye dos veces.
 - [X] T029 [P] [US2] Crear en el mismo archivo `ReporteDeMolestia` con `descripcion` y `zonaDelCuerpo`, los dos de texto libre. **No se ofrece lista cerrada** de zonas del cuerpo
 - [X] T030 [US2] Ampliar `lib/datos/serializacion.dart` con el registro y el reporte de molestia, y ampliar `test/datos/serializacion_test.dart` con su viaje de ida y vuelta
 - [X] T031 [US2] Implementar `lib/datos/local/repositorio_registros_local.dart`: guardar **primero en local**, que es lo que permite que escribir nunca falle por falta de red
-- [ ] T032 [US2] Implementar `lib/ui/nadador/formulario_registro.dart`: marcar como realizada, deslizador de RPE 0-10 y campo de observaciones. **Solo `realizada` es obligatorio**
-- [ ] T033 [US2] Añadir al formulario el campo de molestia, **visiblemente separado** de las observaciones generales (FR-009). La app no sugiere nada, no clasifica gravedad y no cambia el plan (principio IV)
-- [ ] T034 [US2] Mostrar en la pantalla del entrenador, sobre cada sesión, lo que el nadador respondió (FR-013). **Junto al plan que lo originó**, no en otra pantalla: un registro que nadie lee no es control
-- [ ] T035 [US2] Separar visualmente en esa pantalla la **carga externa** (metros, series, pausas, ritmos) de la **carga interna** (realizada, RPE, observaciones). **Nunca combinadas en un mismo indicador** (FR-014, principio VIII)
-- [ ] T036 [US2] Señalar los reportes de molestia de forma distinguible y hacerlos localizables **sin abrir las sesiones una por una** (FR-015, SC-006, escenario C5)
-- [ ] T037 [US2] Registrar en cada registro la **versión de plan** bajo la que el nadador entrenó, para que un plan corregido no haga parecer que respondió a series que nunca hizo (FR-012, escenario V10)
+- [X] T032 [US2] Implementar `lib/ui/nadador/formulario_registro.dart`: marcar como realizada, deslizador de RPE 0-10 y campo de observaciones. **Solo `realizada` es obligatorio**
+- [X] T033 [US2] Añadir al formulario el campo de molestia, **visiblemente separado** de las observaciones generales (FR-009). La app no sugiere nada, no clasifica gravedad y no cambia el plan (principio IV)
+- [X] T034 [US2] Mostrar en la pantalla del entrenador, sobre cada sesión, lo que el nadador respondió (FR-013). **Junto al plan que lo originó**, no en otra pantalla: un registro que nadie lee no es control
+- [X] T035 [US2] Separar visualmente en esa pantalla la **carga externa** (metros, series, pausas, ritmos) de la **carga interna** (realizada, RPE, observaciones). **Nunca combinadas en un mismo indicador** (FR-014, principio VIII)
+- [X] T036 [US2] Señalar los reportes de molestia de forma distinguible y hacerlos localizables **sin abrir las sesiones una por una** (FR-015, SC-006, escenario C5)
+- [X] T037 [US2] Registrar en cada registro la **versión de plan** bajo la que el nadador entrenó, para que un plan corregido no haga parecer que respondió a series que nunca hizo (FR-012, escenario V10)
 
 **Checkpoint**: el ciclo de control está cerrado. El nadador responde y el entrenador lo lee.
 
@@ -157,9 +157,9 @@ en [contracts/sincronizacion.md](contracts/sincronizacion.md).
 - [X] T050 [US3] Implementar `lib/datos/local/bandeja_salida_local.dart`, que persiste lo pendiente sobre el almacén de T010
 - [X] T051 [US3] Implementar `lib/datos/red/estado_de_red.dart` para detectar que la red vuelve, detrás de una interfaz del dominio para que la bandeja no la conozca
 - [X] T052 [US3] Implementar `lib/datos/firestore/repositorio_registros.dart` como destino del envío, con el identificador determinista como id del documento
-- [ ] T053 [US3] Conectar los tres disparadores de envío: al guardar, al volver la red y al abrir la app
-- [ ] T054 [US3] Implementar `lib/ui/nadador/aviso_sincronizacion.dart` con el texto **«Guardado el progreso, se enviará cuando tengas acceso a internet»** (FR-017). Se muestra con pendientes y desaparece sin ellos
-- [ ] T055 [US3] Comprobar que al nadador **nunca** se le muestra un error de red, un código de estado, un contador de reintentos ni un botón de «reintentar». El reintento es trabajo de la app
+- [X] T053 [US3] Conectar los tres disparadores de envío: al guardar, al volver la red y al abrir la app
+- [X] T054 [US3] Implementar `lib/ui/nadador/aviso_sincronizacion.dart` con el texto **«Guardado el progreso, se enviará cuando tengas acceso a internet»** (FR-017). Se muestra con pendientes y desaparece sin ellos
+- [X] T055 [US3] Comprobar que al nadador **nunca** se le muestra un error de red, un código de estado, un contador de reintentos ni un botón de «reintentar». El reintento es trabajo de la app
 - [X] T056 [US3] Guardar en cada registro las **dos** marcas de tiempo: `registradoEn` del dispositivo y `recibidoEn` del servidor (decisión D3). Si difieren de forma absurda se muestra; **no se corrige** (regla R3)
 
 **Checkpoint**: las ocho garantías del contrato se cumplen. La feature funciona donde se usa.
@@ -178,12 +178,12 @@ una copia para archivo o impresión, **no el producto**».
 
 ### Tests for User Story 4
 
-- [ ] T057 [P] [US4] Escribir en `test/datos/exportacion_test.dart` la prueba de que la descarga del nadador incluye sus registros junto al plan, y de que su contenido coincide con el del plan en pantalla
+- [X] T057 [P] [US4] Escribir en `test/datos/exportacion_test.dart` la prueba de que la descarga del nadador incluye sus registros junto al plan, y de que su contenido coincide con el del plan en pantalla
 
 ### Implementation for User Story 4
 
-- [ ] T058 [US4] Ampliar `lib/datos/exportacion.dart` con la variante para el nadador: el plan con sus sesiones más los registros propios (decisión D5). **Reutilizar el formato existente**, no inventar uno nuevo
-- [ ] T059 [US4] Añadir la acción de descarga a la pantalla del nadador
+- [X] T058 [US4] Ampliar `lib/datos/exportacion.dart` con la variante para el nadador: el plan con sus sesiones más los registros propios (decisión D5). **Reutilizar el formato existente**, no inventar uno nuevo
+- [X] T059 [US4] Añadir la acción de descarga a la pantalla del nadador
 
 **Checkpoint**: las cuatro historias funcionan.
 
@@ -198,7 +198,7 @@ sesiones más adherencia como recuento, sin gráficas.
 - [X] T061 [P] Escribir la prueba de la adherencia: cuatro de seis sesiones realizadas dan «4 de 6», por semana y en el plan (FR-005b, escenario V8)
 - [X] T062 [P] Escribir la prueba de que **el recuento no cambia al variar el RPE ni los metros** (SC-011). Parece trivial y no lo es: impide que alguien «mejore» el indicador más adelante sin notar que rompe el principio VIII
 - [X] T063 Implementar `lib/dominio/calculo/progreso_nadador.dart` en Dart puro: historial y adherencia. **Cuenta sesiones y nada más** (decisión D6, FR-005c)
-- [ ] T064 Implementar `lib/ui/nadador/pantalla_mi_progreso.dart`, que **funciona sin conexión** como todo lo demás que el nadador lee (FR-005)
+- [X] T064 Implementar `lib/ui/nadador/pantalla_mi_progreso.dart`, que **funciona sin conexión** como todo lo demás que el nadador lee (FR-005)
 
 ---
 
