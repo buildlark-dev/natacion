@@ -93,6 +93,13 @@ class PantallaInicio extends StatefulWidget {
 class _PantallaInicioState extends State<PantallaInicio> {
   late final Future<RecursosIniciales> _recursos = _cargar();
 
+  /// De todo lo que se carga aquí, **solo la biblioteca puede tumbar el
+  /// arranque**. Es deliberado: sin ella no se puede comprobar la regla de no
+  /// invención, así que no hay app que mostrar. Todo lo demás degrada: la
+  /// versión de metodología se marca como desconocida, el índice de términos
+  /// queda vacío y Firestore, si no está, deja la app trabajando en local.
+  /// Si algún día otro recurso empieza a propagar, el mensaje de error de
+  /// abajo pasa a mentir.
   Future<RecursosIniciales> _cargar() async {
     final biblioteca = await CargadorBiblioteca().cargar();
     final version = await CargadorVersionMetodologia().cargar();
