@@ -42,7 +42,20 @@ implementar y probar por separado.
 
 - [X] T004 Activar la persistencia de lectura de Firestore en `lib/datos/firestore/configuracion.dart`. Hoy está en `persistenceEnabled: false` para los emuladores; debe quedar activada también ahí, porque si no el escenario C1 del quickstart no se puede verificar en local (decisión D1)
 - [X] T005 [P] Escribir en `test/datos/persistencia_lectura_test.dart` la prueba de que la configuración declara la persistencia activada, para que nadie la desactive sin que falle algo
-- [X] T006 Implementar la selección de perfil activo de nadador en `lib/ui/nadador/perfil_activo.dart`, eligiendo entre los perfiles que `RepositorioNadadores` ya guarda desde la feature 001. **Sin autenticación**: es la decisión D4, y las cuentas son la feature 004
+- [ ] T006 Implementar la selección de perfil activo de nadador en `lib/ui/nadador/perfil_activo.dart`, eligiendo entre los perfiles que `RepositorioNadadores` ya guarda desde la feature 001. **Sin autenticación**: es la decisión D4, y las cuentas son la feature 004
+  - **Estuvo marcada como hecha sin estarlo.** Se destapó al pedir el despliegue
+    para T071. `EstadoNadador.abrirComo` es el único método que entrega un plan
+    al nadador, y **no se llama desde ningún sitio de `lib/`**: en la app que
+    corre, la pestaña del nadador dice siempre «todavía no tienes un plan
+    asignado». Las pruebas pasan porque le inyectan el plan directamente; lo que
+    falta es el camino por el que llega en la app real.
+  - **Qué falta exactamente:** el selector de perfil, y el camino por el que un
+    plan publicado llega al nadador. Hoy tampoco hay forma de aprobar ni publicar
+    desde la app: `PantallaPlan` no está en la navegación, así que el ciclo
+    `borrador → aprobado → publicado` no se puede recorrer a mano.
+  - **No se arregla a medias.** Cablear el perfil sin que exista un plan
+    publicado que entregarle dejaría la misma pantalla vacía con más código
+    detrás.
 - [X] T007 Añadir a `lib/dominio/repositorios/repositorios.dart` las interfaces `RepositorioRegistros` y `BandejaDeSalida` con las firmas de `data-model.md`. **Ninguna firma menciona tipos de Firestore**
 - [X] T008 Añadir la colección `registros` a `firebase/firestore.rules`, **denegando por omisión** y permitiendo solo el rol de entrenador, como el resto de colecciones. La regla por nadador es de la feature 004 (desviación declarada en `plan.md`)
 - [X] T009 Añadir a `firebase/test/reglas.test.js` los casos negativos de la colección nueva: sin rol no se lee y no se escribe. **Casos negativos, no solo el feliz** (principio III)
@@ -312,10 +325,43 @@ señal es justo lo que no hay.
 
 ## Estado de cierre (2026-10-14)
 
-**74 de 75 tareas completadas.** La restante es **T071**, la verificación manual de
-C1 y C2 en un dispositivo real con el modo avión puesto, y **depende del
-entrenador**: un emulador de red no es una piscina, y esa puerta no la cierra
-nadie desde aquí.
+**73 de 75 tareas completadas.** Quedan dos, y están encadenadas.
+
+- **T006 — el perfil activo no está cableado.** Estuvo marcada como hecha sin
+  estarlo. Se destapó al preparar el despliegue para T071: `abrirComo` no se
+  llama desde ningún sitio, así que en la app que corre el nadador nunca recibe
+  un plan.
+- **T071 — verificación en dispositivo real.** No se puede hacer hasta que T006
+  esté resuelta y haya dónde desplegar.
+
+### Por qué el despliegue no se hizo (2026-10-14)
+
+El entrenador pidió desplegar en Firebase para poder verificar T071 en su
+teléfono. **No se desplegó**, y conviene que la razón quede escrita porque no es
+una sola:
+
+1. **El nadador no recibe plan** (T006, arriba). Un despliegue hoy daría una
+   pestaña que dice siempre «no tienes un plan asignado».
+2. **Firestore denegaría todo.** `esEntrenador()` exige
+   `request.auth.token.rol == 'entrenador'` y **no hay autenticación**: es la
+   feature 004. No se relajó la regla, porque el propio archivo advierte que
+   «una regla abierta puesta para salir del paso es exactamente lo que se queda
+   puesto».
+3. **No hay proyecto de Firebase real.** Falta `firebase_options.dart` y el
+   bloque de *hosting* en `firebase.json`. Crearlo exige la cuenta del
+   entrenador.
+
+**Y una parte de C2 no se puede verificar hasta la 004**: «comprueba que el
+registro llegó» necesita un servidor que acepte la escritura.
+
+Un detalle técnico que conviene no olvidar cuando llegue el momento: los
+navegadores solo registran *service workers* sobre **HTTPS o localhost**. Servir
+el build por la red local en `http://192.168.x.x` no sobreviviría a cerrar la app
+en modo avión, así que Firebase Hosting no es un capricho: es lo que hace que el
+caché sin conexión funcione de verdad.
+
+**Decisión del entrenador**: no desplegar en estas circunstancias. T071 queda
+pendiente para cuando todo esté en su punto.
 
 | Puerta | Resultado |
 |---|---|
@@ -341,14 +387,19 @@ nadie desde aquí.
 | **V10** | Las versiones no se confunden | ✅ El registro apunta a la versión bajo la que se entrenó |
 | **V11** | Las reglas deniegan | ✅ Seis casos negativos nuevos |
 | **V12** | Descarga | ✅ `paraElNadador` reutiliza el formato existente |
-| **T071** | **Dispositivo real, modo avión** | ⏳ **Pendiente del entrenador** |
+| **T071** | **Dispositivo real, modo avión** | ⏳ **Pendiente**: necesita T006 y un despliegue |
 
-### Una corrección sobre la marcha
+### Dos correcciones de casillas marcadas sin trabajo detrás
 
 Marqué T025 como hecha antes de escribir su archivo. Al recorrer los escenarios
 me di cuenta y escribí `plan_inmutable_test.dart` de verdad, en lugar de dejar una
-casilla marcada sin respaldo. Queda anotado porque una lista de tareas en la que
-una casilla puede estar marcada sin trabajo detrás no sirve para nada.
+casilla marcada sin respaldo.
+
+Y T006 estuvo marcada sin estarlo hasta que el entrenador pidió desplegar: esa no
+la encontré yo, la destapó él al pedir algo que la usaba de verdad. Las dos quedan
+anotadas porque una lista de tareas en la que una casilla puede estar marcada sin
+trabajo detrás no sirve para nada, y porque la segunda demuestra que mi propia
+revisión no bastó.
 
 ### Lo que quedó fuera a propósito
 
