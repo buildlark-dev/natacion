@@ -160,3 +160,32 @@ sería exactamente ese indicador prohibido. Contar sesiones es aburrido a propó
 **Lo que se prueba**: que el recuento no cambia al variar el RPE ni los metros (SC-011). Es
 una prueba que parece trivial y no lo es: impide que alguien «mejore» el indicador más
 adelante sin darse cuenta de que está rompiendo un principio.
+
+---
+
+## D7. Dónde se guarda lo local
+
+**Decisión**: `shared_preferences`, guardando cada registro y cada entrada de la bandeja
+como un documento JSON bajo su clave.
+
+**Criterio de T001**: que funcione en **web y móvil**, y que no arrastre un esquema que
+mantener ni migraciones que escribir (principio VII).
+
+| Candidata | Web | Esquema / generación de código | Veredicto |
+|---|---|---|---|
+| **`shared_preferences` 2.5.6** | Sí, sobre `localStorage` | Ninguno | **Elegida** |
+| `hive_ce` 2.21.0 | Sí, sobre IndexedDB | Cajas y adaptadores; generación de código para tipos | Rechazada |
+| `localstore` 1.4.0 | Sí | Ninguno | Rechazada: menos usada y con menos respaldo que la elegida, sin ventaja que lo compense |
+| `drift` 2.35.2 | Sí, con configuración extra | SQL, generación de código **y migraciones** | Rechazada: es exactamente lo que el criterio excluye |
+| `sqflite` 2.4.4 | **No**, sin paquetes adicionales | SQL y migraciones | Rechazada: falla el criterio de plataforma |
+
+**Razón de la elegida**: es lo más pequeño que cumple. Los datos de esta feature son
+diminutos —un puñado de registros por nadador, cada uno un JSON de pocas líneas— y no
+necesitan consultas: se leen por clave. Meter una base de datos con esquema para eso sería
+la complejidad que el principio VII pide eliminar.
+
+**Su límite, dicho ahora y no cuando duela**: en web, `localStorage` ronda los 5 MB. Para
+registros de sesión sobra con mucho. **Cuándo revisar esta decisión**: si alguna vez se
+guardan localmente videos, fotos o el historial completo de varios años de varios
+nadadores. Entonces `hive_ce` es la sucesora natural, y el cambio queda contenido porque
+`AlmacenLocal` es una interfaz del dominio.

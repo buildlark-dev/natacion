@@ -28,9 +28,9 @@ implementar y probar por separado.
 
 **Purpose**: dejar el terreno listo. Nada de esto se ve en la app.
 
-- [ ] T001 Elegir la dependencia de persistencia local comparando al menos tres opciones que funcionen **en web y en móvil**, y registrar la decisión con sus alternativas rechazadas en `specs/003-consumo-del-nadador/research.md` como D7. Criterio: que no arrastre un esquema que mantener ni migraciones que escribir (principio VII)
-- [ ] T002 Añadir la dependencia elegida a `pubspec.yaml` y comprobar que `flutter build web --release` sigue compilando
-- [ ] T003 [P] Crear las carpetas nuevas con un archivo `library;` de marcador: `lib/dominio/sincronizacion/`, `lib/datos/local/`, `lib/datos/red/`, `lib/ui/nadador/`
+- [X] T001 Elegir la dependencia de persistencia local comparando al menos tres opciones que funcionen **en web y en móvil**, y registrar la decisión con sus alternativas rechazadas en `specs/003-consumo-del-nadador/research.md` como D7. Criterio: que no arrastre un esquema que mantener ni migraciones que escribir (principio VII)
+- [X] T002 Añadir la dependencia elegida a `pubspec.yaml` y comprobar que `flutter build web --release` sigue compilando
+- [X] T003 [P] Crear las carpetas nuevas con un archivo `library;` de marcador: `lib/dominio/sincronizacion/`, `lib/datos/local/`, `lib/datos/red/`, `lib/ui/nadador/`
 
 ---
 
@@ -40,13 +40,13 @@ implementar y probar por separado.
 
 **⚠️ CRITICAL**: ninguna historia puede empezar hasta que esta fase esté completa.
 
-- [ ] T004 Activar la persistencia de lectura de Firestore en `lib/datos/firestore/configuracion.dart`. Hoy está en `persistenceEnabled: false` para los emuladores; debe quedar activada también ahí, porque si no el escenario C1 del quickstart no se puede verificar en local (decisión D1)
+- [X] T004 Activar la persistencia de lectura de Firestore en `lib/datos/firestore/configuracion.dart`. Hoy está en `persistenceEnabled: false` para los emuladores; debe quedar activada también ahí, porque si no el escenario C1 del quickstart no se puede verificar en local (decisión D1)
 - [ ] T005 [P] Escribir en `test/datos/persistencia_lectura_test.dart` la prueba de que la configuración declara la persistencia activada, para que nadie la desactive sin que falle algo
 - [ ] T006 Implementar la selección de perfil activo de nadador en `lib/ui/nadador/perfil_activo.dart`, eligiendo entre los perfiles que `RepositorioNadadores` ya guarda desde la feature 001. **Sin autenticación**: es la decisión D4, y las cuentas son la feature 004
-- [ ] T007 Añadir a `lib/dominio/repositorios/repositorios.dart` las interfaces `RepositorioRegistros` y `BandejaDeSalida` con las firmas de `data-model.md`. **Ninguna firma menciona tipos de Firestore**
+- [X] T007 Añadir a `lib/dominio/repositorios/repositorios.dart` las interfaces `RepositorioRegistros` y `BandejaDeSalida` con las firmas de `data-model.md`. **Ninguna firma menciona tipos de Firestore**
 - [ ] T008 Añadir la colección `registros` a `firebase/firestore.rules`, **denegando por omisión** y permitiendo solo el rol de entrenador, como el resto de colecciones. La regla por nadador es de la feature 004 (desviación declarada en `plan.md`)
 - [ ] T009 Añadir a `firebase/test/reglas.test.js` los casos negativos de la colección nueva: sin rol no se lee y no se escribe. **Casos negativos, no solo el feliz** (principio III)
-- [ ] T010 [P] Crear `lib/datos/local/almacen_local.dart` con la interfaz de guardado en el dispositivo y su implementación sobre la dependencia elegida en T001
+- [X] T010 [P] Crear `lib/datos/local/almacen_local.dart` con la interfaz de guardado en el dispositivo y su implementación sobre la dependencia elegida en T001
 - [ ] T011 [P] Escribir en `test/datos/almacen_local_test.dart` las pruebas de que lo guardado sobrevive a una reapertura del almacén
 
 **Checkpoint**: la base está lista. Las historias pueden empezar.
@@ -108,8 +108,8 @@ construye dos veces.
 
 ### Implementation for User Story 2
 
-- [ ] T028 [P] [US2] Crear `lib/dominio/entidades/registro_sesion.dart` con `RegistroDeSesion`: `id` determinista, `nadadorId`, `planId`, `sesionId`, `versionDePlan`, `realizada`, `registradoEn`, `rpePercibido` (nullable, **0 a 10**), `observaciones` y `molestia` (nullable). **Sin metros, series ni zonas**: eso es carga externa y vive en el plan
-- [ ] T029 [P] [US2] Crear en el mismo archivo `ReporteDeMolestia` con `descripcion` y `zonaDelCuerpo`, los dos de texto libre. **No se ofrece lista cerrada** de zonas del cuerpo
+- [X] T028 [P] [US2] Crear `lib/dominio/entidades/registro_sesion.dart` con `RegistroDeSesion`: `id` determinista, `nadadorId`, `planId`, `sesionId`, `versionDePlan`, `realizada`, `registradoEn`, `rpePercibido` (nullable, **0 a 10**), `observaciones` y `molestia` (nullable). **Sin metros, series ni zonas**: eso es carga externa y vive en el plan
+- [X] T029 [P] [US2] Crear en el mismo archivo `ReporteDeMolestia` con `descripcion` y `zonaDelCuerpo`, los dos de texto libre. **No se ofrece lista cerrada** de zonas del cuerpo
 - [ ] T030 [US2] Ampliar `lib/datos/serializacion.dart` con el registro y el reporte de molestia, y ampliar `test/datos/serializacion_test.dart` con su viaje de ida y vuelta
 - [ ] T031 [US2] Implementar `lib/datos/local/repositorio_registros_local.dart`: guardar **primero en local**, que es lo que permite que escribir nunca falle por falta de red
 - [ ] T032 [US2] Implementar `lib/ui/nadador/formulario_registro.dart`: marcar como realizada, deslizador de RPE 0-10 y campo de observaciones. **Solo `realizada` es obligatorio**
@@ -139,21 +139,21 @@ en [contracts/sincronizacion.md](contracts/sincronizacion.md).
 > Las ocho garantías del contrato, en Dart puro, con red y reloj simulados. Esa es la razón
 > por la que no se delegó en la cola interna de Firestore (decisión D1).
 
-- [ ] T038 [P] [US3] Escribir en `test/dominio/sincronizacion/bandeja_salida_test.dart` la garantía **S1**: guardar sin red da éxito, deja el registro en local y en estado `pendiente`
-- [ ] T039 [P] [US3] Escribir la garantía **S2**: vuelve la red y el pendiente se envía solo, sin intervención
-- [ ] T040 [P] [US3] Escribir la garantía **S3**: lo pendiente sobrevive a cerrar y reabrir (FR-021)
-- [ ] T041 [P] [US3] Escribir la garantía **S4**: tres fallos seguidos y luego éxito dejan **un solo documento** en destino y tres intentos contados
-- [ ] T042 [P] [US3] Escribir la garantía **S5**: enviar dos veces el mismo registro no duplica (FR-020, escenario C6)
-- [ ] T043 [P] [US3] Escribir la garantía **S6**: de tres pendientes llegan dos, y el estado resultante es dos `enviado` y uno `pendiente`, sin estados intermedios raros
-- [ ] T044 [P] [US3] Escribir la garantía **S7**: con red disponible el registro llega directo y el nadador **nunca ve el aviso**
-- [ ] T045 [P] [US3] Escribir la garantía **S8**: un fallo al escribir **en local** sí se reporta, porque ahí el dato sí se perdería
-- [ ] T046 [P] [US3] Escribir en el mismo archivo la prueba de que **no existe estado terminal de fallo**: un registro con cuarenta intentos sigue en `pendiente`, nunca descartado (FR-019)
+- [X] T038 [P] [US3] Escribir en `test/dominio/sincronizacion/bandeja_salida_test.dart` la garantía **S1**: guardar sin red da éxito, deja el registro en local y en estado `pendiente`
+- [X] T039 [P] [US3] Escribir la garantía **S2**: vuelve la red y el pendiente se envía solo, sin intervención
+- [X] T040 [P] [US3] Escribir la garantía **S3**: lo pendiente sobrevive a cerrar y reabrir (FR-021)
+- [X] T041 [P] [US3] Escribir la garantía **S4**: tres fallos seguidos y luego éxito dejan **un solo documento** en destino y tres intentos contados
+- [X] T042 [P] [US3] Escribir la garantía **S5**: enviar dos veces el mismo registro no duplica (FR-020, escenario C6)
+- [X] T043 [P] [US3] Escribir la garantía **S6**: de tres pendientes llegan dos, y el estado resultante es dos `enviado` y uno `pendiente`, sin estados intermedios raros
+- [X] T044 [P] [US3] Escribir la garantía **S7**: con red disponible el registro llega directo y el nadador **nunca ve el aviso**
+- [X] T045 [P] [US3] Escribir la garantía **S8**: un fallo al escribir **en local** sí se reporta, porque ahí el dato sí se perdería
+- [X] T046 [P] [US3] Escribir en el mismo archivo la prueba de que **no existe estado terminal de fallo**: un registro con cuarenta intentos sigue en `pendiente`, nunca descartado (FR-019)
 
 ### Implementation for User Story 3
 
-- [ ] T047 [P] [US3] Crear `lib/dominio/entidades/envio_pendiente.dart` con `EnvioPendiente` (`registroId`, `estado`, `intentos`, `ultimoIntento`, `ultimoError`) y `EstadoDeEnvio` con **solo tres valores**: `pendiente`, `enviando`, `enviado`. **Sin `fallido`**: sería la forma en que los datos se pierden en silencio
-- [ ] T048 [US3] Implementar `lib/dominio/sincronizacion/bandeja_salida.dart` en **Dart puro**, con la máquina de estados y la política de reintentos. No sabe qué hay debajo: ni Firestore, ni cómo se detecta la red, ni dónde se guarda
-- [ ] T049 [US3] Implementar los reintentos **espaciados de forma creciente**, nunca en bucle apretado: el teléfono es de alguien que está nadando y tiene batería limitada
+- [X] T047 [P] [US3] Crear `lib/dominio/entidades/envio_pendiente.dart` con `EnvioPendiente` (`registroId`, `estado`, `intentos`, `ultimoIntento`, `ultimoError`) y `EstadoDeEnvio` con **solo tres valores**: `pendiente`, `enviando`, `enviado`. **Sin `fallido`**: sería la forma en que los datos se pierden en silencio
+- [X] T048 [US3] Implementar `lib/dominio/sincronizacion/bandeja_salida.dart` en **Dart puro**, con la máquina de estados y la política de reintentos. No sabe qué hay debajo: ni Firestore, ni cómo se detecta la red, ni dónde se guarda
+- [X] T049 [US3] Implementar los reintentos **espaciados de forma creciente**, nunca en bucle apretado: el teléfono es de alguien que está nadando y tiene batería limitada
 - [ ] T050 [US3] Implementar `lib/datos/local/bandeja_salida_local.dart`, que persiste lo pendiente sobre el almacén de T010
 - [ ] T051 [US3] Implementar `lib/datos/red/estado_de_red.dart` para detectar que la red vuelve, detrás de una interfaz del dominio para que la bandeja no la conozca
 - [ ] T052 [US3] Implementar `lib/datos/firestore/repositorio_registros.dart` como destino del envío, con el identificador determinista como id del documento
@@ -197,7 +197,7 @@ sesiones más adherencia como recuento, sin gráficas.
 - [ ] T060 [P] Escribir en `test/dominio/calculo/progreso_nadador_test.dart` la prueba del historial: las sesiones del plan con su registro si lo hay, **de la más reciente a la más antigua** (FR-005a)
 - [ ] T061 [P] Escribir la prueba de la adherencia: cuatro de seis sesiones realizadas dan «4 de 6», por semana y en el plan (FR-005b, escenario V8)
 - [ ] T062 [P] Escribir la prueba de que **el recuento no cambia al variar el RPE ni los metros** (SC-011). Parece trivial y no lo es: impide que alguien «mejore» el indicador más adelante sin notar que rompe el principio VIII
-- [ ] T063 Implementar `lib/dominio/calculo/progreso_nadador.dart` en Dart puro: historial y adherencia. **Cuenta sesiones y nada más** (decisión D6, FR-005c)
+- [X] T063 Implementar `lib/dominio/calculo/progreso_nadador.dart` en Dart puro: historial y adherencia. **Cuenta sesiones y nada más** (decisión D6, FR-005c)
 - [ ] T064 Implementar `lib/ui/nadador/pantalla_mi_progreso.dart`, que **funciona sin conexión** como todo lo demás que el nadador lee (FR-005)
 
 ---

@@ -41,8 +41,21 @@ class ConfiguracionDatos {
 
       if (usarEmuladores) {
         firestore.useFirestoreEmulator(hostEmulador, puertoFirestore);
-        firestore.settings = const Settings(persistenceEnabled: false);
       }
+
+      // La persistencia va activada **también contra los emuladores**, y no es
+      // un descuido: el escenario C1 del quickstart —abrir la app en modo avión
+      // y ver la sesión del día— no se puede verificar en local si la caché
+      // está desactivada. Verificar sin conexión con la caché apagada sería
+      // verificar otra cosa.
+      //
+      // Decisión D1 de `specs/003-consumo-del-nadador/research.md`: la lectura
+      // se apoya en la caché de Firestore; la escritura, en una bandeja de
+      // salida propia.
+      firestore.settings = const Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+      );
 
       return firestore;
     } on FirebaseException {

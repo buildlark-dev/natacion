@@ -7,7 +7,9 @@
 library;
 
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/entidades/envio_pendiente.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
+import 'package:natacion_app/dominio/entidades/registro_sesion.dart';
 import 'package:natacion_app/dominio/entidades/nadador.dart';
 import 'package:natacion_app/dominio/entidades/sesion.dart';
 import 'package:natacion_app/dominio/metodologia/categorias.dart';
@@ -62,4 +64,58 @@ abstract class RepositorioNadadores {
 
 abstract class RepositorioBiblioteca {
   Future<Biblioteca> cargar();
+}
+
+/// Los registros que el nadador escribe sobre sus sesiones (feature 003).
+///
+/// `guardar` escribe **primero en local** y encola el envío después. Ese orden
+/// es la feature: si escribiera primero en el servidor, un nadador sin red
+/// perdería lo escrito, que es justo lo que FR-019 prohíbe.
+abstract class RepositorioRegistros {
+  Future<RegistroDeSesion?> obtener(String registroId);
+
+  Future<List<RegistroDeSesion>> obtenerDePlan(String nadadorId, String planId);
+
+  /// Guarda en el dispositivo. **No consulta la red y no puede fallar por su
+  /// causa** (garantía G1 del contrato de sincronización).
+  Future<void> guardar(RegistroDeSesion registro);
+
+  /// Exporta los registros de un nadador en formato legible (FR-024).
+  Future<Map<String, dynamic>> exportar(String nadadorId);
+
+  /// Borra todos los registros de un nadador (FR-024, principio V).
+  Future<void> eliminarDe(String nadadorId);
+}
+
+/// La bandeja de salida: lo que sostiene la promesa de que nada se pierde.
+///
+/// Contrato completo en
+/// `specs/003-consumo-del-nadador/contracts/sincronizacion.md`.
+abstract class BandejaDeSalida {
+  Future<void> encolar(String registroId);
+
+  Future<List<EnvioPendiente>> pendientes();
+
+  Future<EnvioPendiente?> estadoDe(String registroId);
+
+  Future<void> actualizar(EnvioPendiente envio);
+}
+
+/// Si hay red, para saber cuándo reintentar.
+///
+/// Es una interfaz del dominio para que la bandeja no conozca el mecanismo de
+/// detección (principio II).
+abstract class EstadoDeRed {
+  Future<bool> hayConexion();
+
+  /// Emite cada vez que la conectividad cambia.
+  Stream<bool> get cambios;
+}
+
+/// Envía un registro a su destino. Lo implementa la capa de datos.
+abstract class EnvioDeRegistros {
+  /// Devuelve la hora del servidor al aceptar el registro.
+  ///
+  /// Lanza si no se pudo enviar: la bandeja lo traduce a un reintento.
+  Future<DateTime> enviar(RegistroDeSesion registro);
 }
