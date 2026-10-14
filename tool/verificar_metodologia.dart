@@ -23,6 +23,44 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 
+/// Huella de un documento normativo.
+///
+/// Los documentos de texto se normalizan a saltos de línea LF **antes** de
+/// resumirlos. No es un detalle de estilo: sin esto, la misma versión de la
+/// metodología tiene dos huellas distintas según quién la tenga en el disco.
+///
+/// Git convierte los finales de línea al sacar los archivos del repositorio,
+/// así que un clon en Windows y uno en Linux ven bytes distintos para el mismo
+/// contenido. El CI corre en Linux y veía LF; el entrenador trabaja en Windows
+/// y veía CRLF. La puerta aprobaba en un sitio y fallaba en el otro, por una
+/// conversión que **no cambia ni una regla de entrenamiento**.
+///
+/// Lo que esta herramienta tiene que detectar es que cambió una regla. Un salto
+/// de línea distinto no lo es.
+///
+/// Los binarios —la biblioteca en `.docx`— se resumen tal cual: ahí cualquier
+/// byte distinto sí es un documento distinto, y normalizar lo corrompería.
+String huellaDe(File archivo) {
+  final bytes = archivo.readAsBytesSync();
+  final esTexto = archivo.path.toLowerCase().endsWith('.md');
+  return sha256.convert(esTexto ? sinRetornosDeCarro(bytes) : bytes).toString();
+}
+
+/// Quita los `\r` de un `\r\n`. Un `\r` suelto se conserva, porque entonces no
+/// es un final de línea de Windows sino contenido.
+List<int> sinRetornosDeCarro(List<int> bytes) {
+  const retorno = 13; // \r
+  const salto = 10; // \n
+
+  final salida = <int>[];
+  for (var i = 0; i < bytes.length; i++) {
+    final esCrLf =
+        bytes[i] == retorno && i + 1 < bytes.length && bytes[i + 1] == salto;
+    if (!esCrLf) salida.add(bytes[i]);
+  }
+  return salida;
+}
+
 void main() {
   final manifiesto = File('docs/metodologia/metodologia.json');
   if (!manifiesto.existsSync()) {
@@ -56,7 +94,7 @@ void main() {
       continue;
     }
 
-    final real = sha256.convert(archivo.readAsBytesSync()).toString();
+    final real = huellaDe(archivo);
 
     if (real == declarada) {
       stdout.writeln('OK     $ruta');
