@@ -204,17 +204,17 @@ sesiones más adherencia como recuento, sin gráficas.
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-- [ ] T065 Comprobar que `lib/dominio/` sigue sin importar Flutter ni Firebase: `flutter test test/dominio/arquitectura_test.dart`. Las carpetas nuevas `sincronizacion/` y las entidades nuevas entran en esa frontera (principio II)
-- [ ] T066 [P] Comprobar que **ni los registros ni la analítica contienen** nombres, marcas, videos ni identificadores de nadador (FR-023, principio V), con una prueba que recorra lo que se escribe
-- [ ] T067 [P] Implementar la exportación y el borrado de los registros de un nadador (FR-024), y probar que el modelo lo permite sin rediseño
-- [ ] T068 [P] Comprobar que acceder a lo que el nadador generó **no queda tras ningún muro de pago** (FR-026, principio VI)
-- [ ] T069 Recorrer los escenarios **C1 a C7** de `quickstart.md` y registrar el resultado de cada uno. Son los que no pueden fallar
-- [ ] T070 Recorrer los escenarios **V8 a V12** de `quickstart.md` y registrar el resultado
+- [X] T065 Comprobar que `lib/dominio/` sigue sin importar Flutter ni Firebase: `flutter test test/dominio/arquitectura_test.dart`. Las carpetas nuevas `sincronizacion/` y las entidades nuevas entran en esa frontera (principio II)
+- [X] T066 [P] Comprobar que **ni los registros ni la analítica contienen** nombres, marcas, videos ni identificadores de nadador (FR-023, principio V), con una prueba que recorra lo que se escribe
+- [X] T067 [P] Implementar la exportación y el borrado de los registros de un nadador (FR-024), y probar que el modelo lo permite sin rediseño
+- [X] T068 [P] Comprobar que acceder a lo que el nadador generó **no queda tras ningún muro de pago** (FR-026, principio VI)
+- [X] T069 Recorrer los escenarios **C1 a C7** de `quickstart.md` y registrar el resultado de cada uno. Son los que no pueden fallar
+- [X] T070 Recorrer los escenarios **V8 a V12** de `quickstart.md` y registrar el resultado
 - [ ] T071 **Verificación manual de C1 y C2 en un dispositivo real con el modo avión puesto.** El emulador de red no es lo mismo que una piscina, y esta puerta no se salta
-- [ ] T072 Comprobar que `flutter analyze` termina limpio y que `flutter build web --release` compila
-- [ ] T073 Comprobar que `npm --prefix firebase test` pasa, con los casos negativos nuevos
-- [ ] T074 [P] Actualizar `docs/DEVELOPMENT.md` con lo que el nadador puede hacer y cómo se prueba el funcionamiento sin conexión
-- [ ] T075 Registrar en este archivo el estado de cierre: qué se hizo, qué defectos aparecieron y qué queda pendiente del entrenador
+- [X] T072 Comprobar que `flutter analyze` termina limpio y que `flutter build web --release` compila
+- [X] T073 Comprobar que `npm --prefix firebase test` pasa, con los casos negativos nuevos
+- [X] T074 [P] Actualizar `docs/DEVELOPMENT.md` con lo que el nadador puede hacer y cómo se prueba el funcionamiento sin conexión
+- [X] T075 Registrar en este archivo el estado de cierre: qué se hizo, qué defectos aparecieron y qué queda pendiente del entrenador
 
 ---
 
@@ -307,3 +307,63 @@ señal es justo lo que no hay.
 - **Ningún nadador real participa en ninguna tarea de esta feature.** Perfiles de prueba o
   el entrenador como nadador, hasta que exista la feature 004: el grupo de Iniciación
   Avanzada son niños de 7 a 10 años y el consentimiento es puerta de publicación
+
+---
+
+## Estado de cierre (2026-10-14)
+
+**74 de 75 tareas completadas.** La restante es **T071**, la verificación manual de
+C1 y C2 en un dispositivo real con el modo avión puesto, y **depende del
+entrenador**: un emulador de red no es una piscina, y esa puerta no la cierra
+nadie desde aquí.
+
+| Puerta | Resultado |
+|---|---|
+| `flutter test` | **800 en verde** (eran 705) |
+| `npm --prefix firebase test` | **21 en verde**, 0 fallos (eran 15) |
+| `flutter analyze` | Sin incidencias |
+| `flutter build web --release` | Compila |
+| `dart run tool/verificar_metodologia.dart` | Las dos huellas coinciden |
+
+### Escenarios del quickstart
+
+| | Escenario | Cómo quedó |
+|---|---|---|
+| **C1** | La sesión del día, sin señal | ✅ Prueba de interfaz con la red caída, más los casos de sin plan y de día de descanso |
+| **C2** | Anotar sin conexión, y que llegue | ✅ Prueba de interfaz: el aviso aparece, el registro queda guardado y al volver la red se envía solo |
+| **C3** | El entrenador lo lee donde tiene que leerlo | ✅ `RespuestasDelNadador` lo muestra sobre la sesión, con carga externa e interna en columnas separadas |
+| **C4** | El plan no se mueve | ✅ `plan_inmutable_test.dart` compara el plan serializado antes y después |
+| **C5** | La molestia se ve | ✅ Se lista aparte y arriba; probado en dominio y en interfaz |
+| **C6** | Reenviar no duplica | ✅ Probado en la bandeja y en las reglas de acceso |
+| **C7** | Quien no anota, no se bloquea | ✅ Prueba de interfaz del recorrido completo sin registrar nada |
+| **V8** | Adherencia | ✅ Incluye la prueba de que el recuento **no cambia** al variar el RPE ni los metros |
+| **V9** | Las fechas no se fuerzan | ✅ La fecha de la sesión y la del registro son campos distintos |
+| **V10** | Las versiones no se confunden | ✅ El registro apunta a la versión bajo la que se entrenó |
+| **V11** | Las reglas deniegan | ✅ Seis casos negativos nuevos |
+| **V12** | Descarga | ✅ `paraElNadador` reutiliza el formato existente |
+| **T071** | **Dispositivo real, modo avión** | ⏳ **Pendiente del entrenador** |
+
+### Una corrección sobre la marcha
+
+Marqué T025 como hecha antes de escribir su archivo. Al recorrer los escenarios
+me di cuenta y escribí `plan_inmutable_test.dart` de verdad, en lugar de dejar una
+casilla marcada sin respaldo. Queda anotado porque una lista de tareas en la que
+una casilla puede estar marcada sin trabajo detrás no sirve para nada.
+
+### Lo que quedó fuera a propósito
+
+- **Cuentas, roles y consentimiento verificable**: es la feature 004, y es
+  **bloqueante para el uso real**. Ningún nadador real usa esta feature hasta
+  entonces: el grupo de Iniciación Avanzada son niños de 7 a 10 años.
+- Las reglas de acceso **no distinguen a un nadador de otro**, por lo mismo. Es la
+  desviación declarada en `plan.md`, con su contención y su fecha de caducidad.
+- Carga de video, comunidad, notificaciones y cobro.
+- Reajuste automático del plan a partir de lo que el nadador reporta: el
+  principio IV lo prohíbe.
+
+### Decisión tomada durante la implementación
+
+**D7, dónde se guarda lo local.** Se eligió `shared_preferences` frente a cuatro
+alternativas, con el criterio de T001: web y móvil, sin esquema ni migraciones. Su
+límite —unos 5 MB de `localStorage` en web— queda escrito junto con cuándo
+revisarlo, y el cambio queda contenido porque `AlmacenLocal` es una interfaz.
