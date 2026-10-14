@@ -7,6 +7,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:natacion_app/dominio/auditoria/auditoria.dart';
 import 'package:natacion_app/dominio/entidades/ciclo_vida_plan.dart';
+import 'package:natacion_app/dominio/entidades/nadador.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/metodologia/validacion_fase.dart';
 import 'package:natacion_app/ui/planes/dialogo_aprobacion.dart';
@@ -18,10 +19,21 @@ class PantallaPlan extends StatefulWidget {
     super.key,
     required this.plan,
     required this.versionMetodologia,
+    this.nadadores = const [],
+    this.alEntregar,
   });
 
   final Plan plan;
   final String versionMetodologia;
+
+  /// Perfiles a los que se puede asignar el plan.
+  final List<Nadador> nadadores;
+
+  /// Qué hacer con el plan publicado y asignado.
+  ///
+  /// Es el puente que faltaba: sin él, lo aprobado se quedaba en la pantalla
+  /// del entrenador y el nadador nunca recibía nada (tarea T006).
+  final void Function(Plan publicado)? alEntregar;
 
   @override
   State<PantallaPlan> createState() => _PantallaPlanState();
@@ -68,6 +80,47 @@ class _PantallaPlanState extends State<PantallaPlan> {
     }
   }
 
+  /// Publica el plan y se lo asigna a los nadadores que el entrenador elija.
+  ///
+  /// Las dos cosas van juntas a propósito: un plan publicado que no es de nadie
+  /// no se lo encuentra nadie, y asignar sin publicar no lo haría visible. La
+  /// firma del entrenador es este paso, no el anterior.
+  Future<void> _entregar() async {
+    final elegidos = await showDialog<List<String>>(
+      context: context,
+      builder: (_) => _DialogoEntrega(
+        nadadores: widget.nadadores,
+        yaAsignados: _plan.nadadoresIds,
+      ),
+    );
+    if (elegidos == null) return;
+
+    final resultado = _ciclo.publicar(_plan.copiarCon(nadadoresIds: elegidos));
+
+    if (!mounted) return;
+
+    switch (resultado) {
+      case TransicionHecha(:final plan):
+        setState(() => _plan = plan);
+        widget.alEntregar?.call(plan);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              elegidos.isEmpty
+                  ? 'Plan publicado. Todavía no es de nadie: asígnalo para que '
+                      'alguien lo vea.'
+                  : 'Entregado a ${elegidos.length} nadador'
+                      '${elegidos.length == 1 ? '' : 'es'}. Ya lo ven en su app.',
+            ),
+          ),
+        );
+      case TransicionRechazada(:final impedimentos):
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(impedimentos.first.toString())),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final resultado = _auditoria.evaluar(_plan);
@@ -86,13 +139,21 @@ class _PantallaPlanState extends State<PantallaPlan> {
           ),
         ],
       ),
-      floatingActionButton: _plan.estado == EstadoPlan.borrador
-          ? FloatingActionButton.extended(
-              onPressed: _aprobar,
-              icon: const Icon(Icons.verified_outlined),
-              label: const Text('Aprobar'),
-            )
-          : null,
+      floatingActionButton: switch (_plan.estado) {
+        EstadoPlan.borrador => FloatingActionButton.extended(
+            onPressed: _aprobar,
+            icon: const Icon(Icons.verified_outlined),
+            label: const Text('Aprobar'),
+          ),
+        // Un plan aprobado todavía no es de nadie. Publicarlo y asignarlo es lo
+        // que lo convierte en el entrenamiento de alguien.
+        EstadoPlan.aprobado => FloatingActionButton.extended(
+            onPressed: _entregar,
+            icon: const Icon(Icons.send_outlined),
+            label: const Text('Entregar al nadador'),
+          ),
+        EstadoPlan.publicado => null,
+      },
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -280,6 +341,85 @@ class _Aviso extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A quién se le entrega el plan.
+///
+/// Permite entregar a nadie —publicar sin asignar— porque es un estado
+/// legítimo: un plan publicado que todavía no es de nadie. Lo que no hace es
+/// esconder esa consecuencia: el aviso lo dice.
+class _DialogoEntrega extends StatefulWidget {
+  const _DialogoEntrega({required this.nadadores, required this.yaAsignados});
+
+  final List<Nadador> nadadores;
+  final List<String> yaAsignados;
+
+  @override
+  State<_DialogoEntrega> createState() => _DialogoEntregaState();
+}
+
+class _DialogoEntregaState extends State<_DialogoEntrega> {
+  late final Set<String> _elegidos = widget.yaAsignados.toSet();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Entregar el plan'),
+      content: SizedBox(
+        width: 400,
+        child: widget.nadadores.isEmpty
+            ? const Text(
+                'Todavía no hay perfiles de nadador. Crea uno en la pestaña '
+                'Nadadores y vuelve aquí.',
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Al publicarlo queda bloqueado contra edición. Quien lo '
+                    'reciba lo verá en su app, también sin conexión.',
+                  ),
+                  const SizedBox(height: 12),
+                  Flexible(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        for (final nadador in widget.nadadores)
+                          CheckboxListTile(
+                            value: _elegidos.contains(nadador.id),
+                            title: Text(nadador.nombre),
+                            subtitle: Text(
+                              nadador.categoria?.nombre ?? 'Sin categoría',
+                            ),
+                            onChanged: (marcado) => setState(() {
+                              final id = nadador.id;
+                              if (id == null) return;
+                              if (marcado ?? false) {
+                                _elegidos.add(id);
+                              } else {
+                                _elegidos.remove(id);
+                              }
+                            }),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(_elegidos.toList()),
+          child: const Text('Publicar y entregar'),
+        ),
+      ],
     );
   }
 }

@@ -42,7 +42,7 @@ implementar y probar por separado.
 
 - [X] T004 Activar la persistencia de lectura de Firestore en `lib/datos/firestore/configuracion.dart`. Hoy está en `persistenceEnabled: false` para los emuladores; debe quedar activada también ahí, porque si no el escenario C1 del quickstart no se puede verificar en local (decisión D1)
 - [X] T005 [P] Escribir en `test/datos/persistencia_lectura_test.dart` la prueba de que la configuración declara la persistencia activada, para que nadie la desactive sin que falle algo
-- [ ] T006 Implementar la selección de perfil activo de nadador en `lib/ui/nadador/perfil_activo.dart`, eligiendo entre los perfiles que `RepositorioNadadores` ya guarda desde la feature 001. **Sin autenticación**: es la decisión D4, y las cuentas son la feature 004
+- [X] T006 Implementar la selección de perfil activo de nadador en `lib/ui/nadador/perfil_activo.dart`, eligiendo entre los perfiles que `RepositorioNadadores` ya guarda desde la feature 001. **Sin autenticación**: es la decisión D4, y las cuentas son la feature 004
   - **Estuvo marcada como hecha sin estarlo.** Se destapó al pedir el despliegue
     para T071. `EstadoNadador.abrirComo` es el único método que entrega un plan
     al nadador, y **no se llama desde ningún sitio de `lib/`**: en la app que
@@ -53,9 +53,14 @@ implementar y probar por separado.
     plan publicado llega al nadador. Hoy tampoco hay forma de aprobar ni publicar
     desde la app: `PantallaPlan` no está en la navegación, así que el ciclo
     `borrador → aprobado → publicado` no se puede recorrer a mano.
-  - **No se arregla a medias.** Cablear el perfil sin que exista un plan
-    publicado que entregarle dejaría la misma pantalla vacía con más código
-    detrás.
+  - **Resuelta el 2026-10-14.** No se arregló a medias: hacía falta construir el
+    camino entero, porque cablear el perfil sin un plan publicado que entregarle
+    habría dejado la misma pantalla vacía con más código detrás.
+  - Lo que se construyó: el editor conserva el plan y no solo sus sesiones;
+    `PantallaPlan` gana publicar y asignar en un solo paso —«Entregar al
+    nadador»—; y la pestaña del nadador trae un selector de perfil que carga su
+    plan publicado y sus registros. `planDe` decide cuál le corresponde, con diez
+    pruebas que fijan que un borrador o un aprobado **no** son suyos.
 - [X] T007 Añadir a `lib/dominio/repositorios/repositorios.dart` las interfaces `RepositorioRegistros` y `BandejaDeSalida` con las firmas de `data-model.md`. **Ninguna firma menciona tipos de Firestore**
 - [X] T008 Añadir la colección `registros` a `firebase/firestore.rules`, **denegando por omisión** y permitiendo solo el rol de entrenador, como el resto de colecciones. La regla por nadador es de la feature 004 (desviación declarada en `plan.md`)
 - [X] T009 Añadir a `firebase/test/reglas.test.js` los casos negativos de la colección nueva: sin rol no se lee y no se escribe. **Casos negativos, no solo el feliz** (principio III)
@@ -325,14 +330,11 @@ señal es justo lo que no hay.
 
 ## Estado de cierre (2026-10-14)
 
-**73 de 75 tareas completadas.** Quedan dos, y están encadenadas.
+**74 de 75 tareas completadas.** Queda **T071**, la verificación en un
+dispositivo real, y depende de que haya dónde desplegar.
 
-- **T006 — el perfil activo no está cableado.** Estuvo marcada como hecha sin
-  estarlo. Se destapó al preparar el despliegue para T071: `abrirComo` no se
-  llama desde ningún sitio, así que en la app que corre el nadador nunca recibe
-  un plan.
-- **T071 — verificación en dispositivo real.** No se puede hacer hasta que T006
-  esté resuelta y haya dónde desplegar.
+T006 estuvo marcada como hecha sin estarlo y se resolvió el 2026-10-14: ahora el
+camino entrenador → nadador existe de verdad dentro de la app.
 
 ### Por qué el despliegue no se hizo (2026-10-14)
 
@@ -365,7 +367,7 @@ pendiente para cuando todo esté en su punto.
 
 | Puerta | Resultado |
 |---|---|
-| `flutter test` | **800 en verde** (eran 705) |
+| `flutter test` | **810 en verde** (eran 705) |
 | `npm --prefix firebase test` | **21 en verde**, 0 fallos (eran 15) |
 | `flutter analyze` | Sin incidencias |
 | `flutter build web --release` | Compila |

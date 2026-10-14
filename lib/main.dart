@@ -7,10 +7,14 @@ import 'package:natacion_app/datos/local/almacen_local.dart';
 import 'package:natacion_app/datos/local/repositorios_locales.dart';
 import 'package:natacion_app/datos/recursos/biblioteca_empaquetada.dart';
 import 'package:natacion_app/datos/red/estado_de_red.dart';
+import 'package:natacion_app/dominio/entidades/nadador.dart';
+import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/entidades/registro_sesion.dart';
 import 'package:natacion_app/dominio/sincronizacion/bandeja_salida.dart';
 import 'package:natacion_app/ui/nadador/estado_nadador.dart';
 import 'package:natacion_app/ui/nadador/pantalla_mi_progreso.dart';
+import 'package:natacion_app/ui/nadador/perfil_activo.dart';
+import 'package:natacion_app/ui/planes/pantalla_plan.dart';
 import 'package:natacion_app/ui/nadador/pantalla_sesion_del_dia.dart';
 import 'package:natacion_app/datos/recursos/version_metodologia.dart';
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
@@ -182,6 +186,52 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
   final AlmacenLocal _almacen = AlmacenPreferencias();
 
+  /// Los planes de la sesión. En memoria: la persistencia en Firestore llega
+  /// con la autenticación de la feature 004.
+  final List<Plan> _planes = [];
+
+  late final RegistrosLocales _registros = RegistrosLocales(_almacen);
+
+  /// Publica y asigna: es el puente entre el entrenador y el nadador.
+  void _entregar(Plan publicado) {
+    setState(() {
+      _planes
+        ..removeWhere((p) => p.id == publicado.id)
+        ..add(publicado);
+    });
+  }
+
+  /// Carga el perfil elegido con su plan publicado y sus registros.
+  Future<void> _abrirComoNadador(Nadador nadador) async {
+    final plan = planDe(nadador, _planes);
+    final registros = plan == null
+        ? <RegistroDeSesion>[]
+        : await _registros.obtenerDePlan(nadador.id ?? '', plan.id ?? '');
+
+    _nadador.abrirComo(nadador, plan: plan, registros: registros);
+    await _nadador.sincronizar();
+  }
+
+  /// Abre el plan que se está revisando para aprobarlo y entregarlo.
+  Future<void> _revisarPlan() async {
+    final plan = _editor.planRevisado;
+    if (plan == null) return;
+
+    final nadadores = await _nadadores.listar();
+    if (!mounted) return;
+
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute(
+        builder: (_) => PantallaPlan(
+          plan: plan,
+          versionMetodologia: widget.recursos.versionMetodologia,
+          nadadores: nadadores,
+          alEntregar: _entregar,
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _editor.dispose();
@@ -204,7 +254,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       ),
       ChangeNotifierProvider<EstadoEditor>.value(
         value: _editor,
-        child: const PantallaEditor(),
+        child: PantallaEditor(alRevisarPlan: _revisarPlan),
       ),
       PantallaPerfiles(repositorio: _nadadores),
       // El recorrido del nadador va en su propia pestaña y sobre su propio
@@ -213,7 +263,17 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       // pantallas haría que cada cambio para uno arriesgara al otro.
       ChangeNotifierProvider<EstadoNadador>.value(
         value: _nadador,
-        child: const PantallaSesionDelDia(),
+        child: PantallaSesionDelDia(
+          selector: FutureBuilder<List<Nadador>>(
+            future: _nadadores.listar(),
+            builder: (context, instantanea) => SelectorDePerfil(
+              estado: _nadador,
+              nadadores: instantanea.data ?? const [],
+              planes: _planes,
+              alElegir: _abrirComoNadador,
+            ),
+          ),
+        ),
       ),
       ChangeNotifierProvider<EstadoNadador>.value(
         value: _nadador,

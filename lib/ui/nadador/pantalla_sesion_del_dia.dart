@@ -16,7 +16,14 @@ import 'package:natacion_app/ui/nadador/formulario_registro.dart';
 import 'package:provider/provider.dart';
 
 class PantallaSesionDelDia extends StatelessWidget {
-  const PantallaSesionDelDia({super.key});
+  const PantallaSesionDelDia({super.key, this.selector});
+
+  /// Quién está usando la app como nadador.
+  ///
+  /// Se inyecta en lugar de construirse aquí para que esta pantalla no sepa de
+  /// dónde salen los perfiles. Nulo en las pruebas, que abren el estado
+  /// directamente.
+  final Widget? selector;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +42,10 @@ class PantallaSesionDelDia extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (selector != null) ...[
+            selector!,
+            const SizedBox(height: 12),
+          ],
           AvisoSincronizacion(estado: estado),
           const SizedBox(height: 8),
           _Hoy(estado: estado),
