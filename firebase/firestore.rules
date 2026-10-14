@@ -63,6 +63,25 @@ service cloud.firestore {
       allow read, write: if esEntrenador();
     }
 
+    // --- Registros del nadador (feature 003) ----------------------------
+    //
+    // La respuesta del nadador a una sesion: si la cumplio, su RPE y sus
+    // observaciones. Es una coleccion aparte del plan a proposito: un plan
+    // aprobado es inmutable y lo que el nadador escribe no lo toca.
+    //
+    // LIMITACION CONOCIDA, declarada en specs/003-consumo-del-nadador/plan.md:
+    // estas reglas NO distinguen a un nadador de otro, porque no hay identidad
+    // de nadador hasta la feature 004. Escribir una regla que compare contra un
+    // identificador que cualquiera puede declarar daria una falsa sensacion de
+    // proteccion, asi que por ahora solo escribe el entrenador y se deniega al
+    // resto, como en todas las demas colecciones.
+    //
+    // La regla por nadador se anade en la 004. Cada registro ya lleva su
+    // nadadorId, asi que entonces no habra que migrar datos.
+    match /registros/{registroId} {
+      allow read, write: if esEntrenador();
+    }
+
     // --- Propuestas de ejercicio y glosario -----------------------------
 
     match /propuestasEjercicio/{propuestaId} {

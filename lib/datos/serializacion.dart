@@ -10,7 +10,9 @@
 library;
 
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/entidades/envio_pendiente.dart';
 import 'package:natacion_app/dominio/entidades/nadador.dart';
+import 'package:natacion_app/dominio/entidades/registro_sesion.dart';
 import 'package:natacion_app/dominio/entidades/parte.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/entidades/serie.dart';
@@ -350,3 +352,80 @@ Nadador nadadorDesdeJson(Map<String, dynamic> json, {String? id}) {
             .cast<String>(),
   );
 }
+
+// ---------------------------------------------------------------------------
+// Registros del nadador (feature 003)
+// ---------------------------------------------------------------------------
+
+/// Serializa un registro de sesión.
+///
+/// **No incluye ningún dato personal**: ni nombre, ni edad, ni marcas. Solo
+/// identificadores opacos y la respuesta del nadador (FR-023, principio V).
+Map<String, dynamic> registroAJson(RegistroDeSesion registro) =>
+    <String, dynamic>{
+      'id': registro.id,
+      'nadadorId': registro.nadadorId,
+      'planId': registro.planId,
+      'sesionId': registro.sesionId,
+      'versionDePlan': registro.versionDePlan,
+      'realizada': registro.realizada,
+      'registradoEn': registro.registradoEn.toIso8601String(),
+      if (registro.recibidoEn != null)
+        'recibidoEn': registro.recibidoEn!.toIso8601String(),
+      if (registro.rpePercibido != null) 'rpePercibido': registro.rpePercibido,
+      if (registro.observaciones.isNotEmpty)
+        'observaciones': registro.observaciones,
+      if (registro.tieneMolestia)
+        'molestia': <String, dynamic>{
+          'descripcion': registro.molestia!.descripcion,
+          'zonaDelCuerpo': registro.molestia!.zonaDelCuerpo,
+        },
+    };
+
+RegistroDeSesion registroDesdeJson(Map<String, dynamic> json) {
+  final molestia = json['molestia'] as Map<String, dynamic>?;
+
+  return RegistroDeSesion(
+    nadadorId: json['nadadorId'] as String? ?? '',
+    planId: json['planId'] as String? ?? '',
+    sesionId: json['sesionId'] as String? ?? '',
+    versionDePlan: json['versionDePlan'] as String? ?? '',
+    realizada: json['realizada'] as bool? ?? false,
+    registradoEn:
+        DateTime.tryParse(json['registradoEn'] as String? ?? '') ?? DateTime(2026),
+    recibidoEn: DateTime.tryParse(json['recibidoEn'] as String? ?? ''),
+    rpePercibido: json['rpePercibido'] as int?,
+    observaciones: json['observaciones'] as String? ?? '',
+    molestia: molestia == null
+        ? null
+        : ReporteDeMolestia(
+            descripcion: molestia['descripcion'] as String? ?? '',
+            zonaDelCuerpo: molestia['zonaDelCuerpo'] as String? ?? '',
+          ),
+  );
+}
+
+/// Serializa una entrada de la bandeja de salida.
+///
+/// Solo vive en el dispositivo: no tiene sentido fuera de él.
+Map<String, dynamic> envioAJson(EnvioPendiente envio) => <String, dynamic>{
+      'registroId': envio.registroId,
+      'estado': envio.estado.name,
+      'intentos': envio.intentos,
+      if (envio.ultimoIntento != null)
+        'ultimoIntento': envio.ultimoIntento!.toIso8601String(),
+      if (envio.ultimoError != null) 'ultimoError': envio.ultimoError,
+    };
+
+EnvioPendiente envioDesdeJson(Map<String, dynamic> json) => EnvioPendiente(
+      registroId: json['registroId'] as String? ?? '',
+      estado: EstadoDeEnvio.values.firstWhere(
+        (e) => e.name == json['estado'],
+        // Ante un estado desconocido se vuelve a pendiente, nunca a enviado:
+        // dar por enviado lo que no se sabe sería perder el dato en silencio.
+        orElse: () => EstadoDeEnvio.pendiente,
+      ),
+      intentos: json['intentos'] as int? ?? 0,
+      ultimoIntento: DateTime.tryParse(json['ultimoIntento'] as String? ?? ''),
+      ultimoError: json['ultimoError'] as String?,
+    );
