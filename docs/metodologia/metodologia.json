@@ -47,6 +47,7 @@
     }
   ],
   "nota": "Si una huella deja de coincidir, un documento normativo cambio sin subir la version. El flujo de desarrollo de la constitucion exige subir la version y actualizar las pruebas afectadas.",
+  "nota_huellas": "Las huellas de los documentos de texto (.md) se calculan sobre el contenido normalizado a saltos de linea LF, no sobre los bytes en disco. Git convierte los finales de linea al sacar los archivos del repositorio, asi que un clon en Windows y uno en Linux ven bytes distintos para el mismo contenido: sin normalizar, la misma version de la metodologia tendria dos huellas segun quien la tenga. Lo que hay que detectar es que cambio una regla de entrenamiento, y un salto de linea distinto no lo es. Los binarios, como la biblioteca en .docx, se resumen tal cual: ahi cualquier byte distinto si es un documento distinto. Lo comprueba test/herramientas/huella_metodologia_test.dart.",
   "habilidades": {
     "ruta": "docs/metodologia/habilidades_por_categoria.md",
     "papel": "Origen de cada criterio de la tabla 11.1, marcado como derivado del documento normativo, implicito en una regla existente, o propuesto por la app y aprobado por el entrenador."
