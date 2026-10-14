@@ -15,7 +15,12 @@ import 'package:natacion_app/ui/editor/panel_avisos.dart';
 import 'package:provider/provider.dart';
 
 class PantallaEditor extends StatelessWidget {
-  const PantallaEditor({super.key});
+  const PantallaEditor({super.key, this.alRevisarPlan});
+
+  /// Abre el plan completo para auditarlo, aprobarlo y entregarlo.
+  ///
+  /// Nulo cuando no hay a dónde ir, como en las pruebas de esta pantalla.
+  final VoidCallback? alRevisarPlan;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +46,17 @@ class PantallaEditor extends StatelessWidget {
               ),
             ),
           ),
+          // Sin esto, lo revisado se quedaba en el editor: no había por dónde
+          // aprobarlo, publicarlo ni entregárselo a nadie (tarea T006).
+          if (estado.revisandoGenerado && alRevisarPlan != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: FilledButton.icon(
+                onPressed: alRevisarPlan,
+                icon: const Icon(Icons.fact_check_outlined),
+                label: const Text('Revisar y entregar'),
+              ),
+            ),
         ],
       ),
       body: LayoutBuilder(

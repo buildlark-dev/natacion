@@ -196,11 +196,34 @@ class EstadoEditor extends ChangeNotifier {
   /// Verdadero cuando lo que se está editando vino de una generación.
   bool get revisandoGenerado => _sesionesDelPlan.isNotEmpty;
 
+  Plan? _planGenerado;
+
+  /// El plan que se está revisando, con lo editado ya aplicado.
+  ///
+  /// Hace falta conservarlo entero —y no solo sus sesiones— porque aprobarlo y
+  /// publicarlo son transiciones **del plan**: necesitan su categoría, su fase,
+  /// su estilo objetivo y su estado. Sin esto, lo generado se quedaba en el
+  /// editor y no había forma de entregárselo a nadie.
+  Plan? get planRevisado {
+    final plan = _planGenerado;
+    if (plan == null) return null;
+
+    // Las sesiones se toman del editor, con la abierta al día: lo que el
+    // entrenador corrigió a mano prevalece.
+    final sesiones = List<Sesion>.from(_sesionesDelPlan);
+    if (_indiceAbierta < sesiones.length) {
+      sesiones[_indiceAbierta] = _sesion;
+    }
+
+    return plan.copiarCon(sesiones: sesiones);
+  }
+
   /// Abre un microciclo generado para revisarlo.
   ///
   /// El editor pasa de ser la forma de crear a ser la forma de revisar, que es
   /// lo que la feature 002 persigue.
   void abrirGenerado(Plan plan) {
+    _planGenerado = plan;
     _sesionesDelPlan = List<Sesion>.from(plan.sesiones);
     _indiceAbierta = 0;
     _categoria = plan.categoria;

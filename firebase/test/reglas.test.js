@@ -211,3 +211,63 @@ test('el entrenador gestiona nadadores', async () => {
     comoEntrenador().collection('nadadores').doc('n1').set({ nombre: 'Ana' }),
   );
 });
+
+// ---------------------------------------------------------------------------
+// Registros del nadador (feature 003)
+//
+// Lo que se prueba es lo que hay: sin identidad de nadador, la regla solo puede
+// distinguir entrenador de no-entrenador. Las reglas por nadador llegan con la
+// feature 004, y entonces se anaden sus casos aqui.
+// ---------------------------------------------------------------------------
+
+const unRegistro = {
+  nadadorId: 'n1',
+  planId: 'p1',
+  sesionId: 's1',
+  versionDePlan: '3.5.0',
+  realizada: true,
+  registradoEn: '2026-10-14T07:30:00.000',
+  rpePercibido: 7,
+};
+
+test('sin autenticar no se leen registros del nadador', async () => {
+  await assertFails(sinAutenticar().collection('registros').doc('r1').get());
+});
+
+test('sin autenticar no se escriben registros del nadador', async () => {
+  await assertFails(
+    sinAutenticar().collection('registros').doc('r1').set(unRegistro),
+  );
+});
+
+test('sin autenticar no se borra un registro', async () => {
+  await assertFails(sinAutenticar().collection('registros').doc('r1').delete());
+});
+
+test('sin autenticar no se listan los registros de nadie', async () => {
+  await assertFails(sinAutenticar().collection('registros').get());
+});
+
+test('el entrenador escribe y lee registros', async () => {
+  await assertSucceeds(
+    comoEntrenador().collection('registros').doc('r1').set(unRegistro),
+  );
+  await assertSucceeds(comoEntrenador().collection('registros').doc('r1').get());
+});
+
+test('reenviar el mismo registro lo sobrescribe, no lo duplica', async () => {
+  // El identificador del documento es el identificador determinista del
+  // registro: dos envios escriben el mismo documento (FR-020, decision D2).
+  const db = comoEntrenador();
+  const id = 'n1|p1|s1|3.5.0';
+
+  await assertSucceeds(db.collection('registros').doc(id).set(unRegistro));
+  await assertSucceeds(
+    db.collection('registros').doc(id).set({ ...unRegistro, rpePercibido: 9 }),
+  );
+
+  const leido = await db.collection('registros').doc(id).get();
+  if (leido.data().rpePercibido !== 9) {
+    throw new Error('El reenvio no sobrescribio el registro');
+  }
+});

@@ -33,6 +33,48 @@ cannot be approved.
 - **Plan lifecycle**: `borrador` → `aprobado` → `publicado`. Approving stamps the
   methodology version; an approved plan is immutable.
 - **Swimmer profiles** and plan assignment.
+- **The swimmer consumes the plan**: they open the app at the poolside, see
+  today's session, mark it done, record their RPE and observations, and report
+  discomfort in a field of its own. The coach reads all of it next to the
+  session that produced it, with external load and internal load side by side
+  and never merged into one number.
+- **It works with no signal.** Reading the plan, today's session and your own
+  progress never waits for the network. Writing offline is kept on the device,
+  the app says so, and it goes out on its own when the connection returns.
+
+## Working offline
+
+The split is deliberate, and documented in
+[`specs/003-consumo-del-nadador/research.md`](../specs/003-consumo-del-nadador/research.md):
+
+| | Mechanism |
+|---|---|
+| **Reading** plans and sessions | Firestore's cache. Reimplementing a read cache would be wasted work |
+| **Writing** the swimmer's records | An **outbox of our own**, in the domain |
+
+Writing is not delegated to Firestore's offline queue for three reasons: it could
+not be tested without testing Firebase, it gives no control over the idempotency
+FR-020 needs, and it would make "pending" a reflection of a database detail
+instead of a domain concept.
+
+One thing worth knowing rather than discovering later: **offline reading only
+covers what was downloaded at least once.** A swimmer who never opened the app
+with a connection has nothing to read. The promise the feature keeps is that
+once the plan has been obtained, consulting it never needs the network again —
+which is why the UI shows when it last synced.
+
+To verify it:
+
+```bash
+flutter test test/dominio/sincronizacion/bandeja_salida_test.dart
+```
+
+Those are the eight guarantees of the synchronisation contract, in pure Dart with
+the network and the clock faked. The swimmer's journey with the network down is
+in `test/ui/nadador/`.
+
+**Neither replaces checking it by hand on a real device in flight mode.** A
+network emulator is not a swimming pool.
 
 ## Requirements
 
