@@ -1,17 +1,13 @@
 {
-  "version": "3.5.0",
-  "fecha": "2026-10-08",
+  "version": "3.6.0",
+  "fecha": "2026-10-14",
   "descripcion": "Version vigente de la metodologia del entrenador. La app estampa esta version en cada plan aprobado (FR-026).",
   "cambiosDeEstaVersion": [
-    "Zona Max renombrada a Resistencia intensiva: Swimming Canada define esa banda como ~ritmo 400 en esfuerzos largos con descanso medio-bajo, no como trabajo intervalico de VO2 max. La abreviatura Max se conserva, porque es lo que el entrenador escribe y lo que hay guardado en los planes.",
-    "Siete zonas en lugar de seis: Velocidad y Explosivo se separan, porque la fuente las distingue por sistema energetico (hidratos frente a fosfagenos).",
-    "Los ritmos de competencia dejan de tratarse como zonas. Swimming Canada: «Race-Specific training is not a training zone». RP1 a RP15 reciben una regla de clasificacion por defecto, calculada sobre la velocidad critica y sobreescribible por serie.",
-    "Velocidad critica redefinida como el limite inferior del dominio severo, sostenible del orden de 15 a 40 minutos. La definicion anterior es la que Scott (2024), citado en esa misma fila, llama «imprecise and misleading».",
-    "La distribucion del ATR se audita en tres zonas contra el envolvente publicado del modelo de cada fase. La tabla de porcentajes por zona de la 3.4 se retira: no tenia respaldo, y la fuente citada (Issurin) no da distribucion de intensidades.",
-    "Las duraciones de bloque avisan y no suspenden: los rangos de Issurin se conservan como referencia de origen, con la constancia de que la literatura de natacion usa fases mas largas.",
-    "Cada zona lleva un segundo anclaje en porcentaje de velocidad critica, ademas del de %FCmax. La frecuencia cardiaca orienta; el ritmo contra velocidad critica clasifica y audita."
+    "La seccion 11 gana la subseccion 11.1, Habilidades por categoria: que hace ya el nadador en el agua para pertenecer a cada una de las cinco categorias. Hasta ahora la seccion 11 definia las categorias solo por volumen, frecuencia y uso de ATR, y no decia que determina que alguien pertenezca a una.",
+    "Queda escrito que la categoria NO es la edad. Un nino y un adulto pueden estar en la misma categoria. La seccion 5 ya pedia categoria y edad como datos distintos; ahora el documento lo afirma en lugar de solo permitirlo.",
+    "La regla de discrepancia de la seccion 11 pasa de ser una instruccion a ser auditable: con la tabla 11.1 hay contra que contrastar. Se nombran dos casos que el sistema debe detectar, el nadador de Precompetitivo en adelante sin velocidad critica medida y el que no tiene prueba objetivo ni fecha de competencia."
   ],
-  "nota_version": "Es una revision metodologica, no una correccion: cambia el numero de zonas, el nombre de una, la unidad en que se audita la distribucion y la definicion de la velocidad critica. Por eso 3.5 y no 3.4.2. Los planes aprobados antes siguen sellados con 3.4 o 3.4.1 y su contenido no se reescribe (FR-026).",
+  "nota_version": "Es una ampliacion del dominio normativo, no una correccion de redaccion: la seccion 11 pasa a decir que determina una categoria, cosa que antes no decia, y con ello una regla que ya existia (reportar la discrepancia antes de planificar) se vuelve comprobable. Por eso 3.6 y no 3.5.1. No cambia ningun volumen, ninguna frecuencia, ninguna zona ni ninguna distribucion: los planes sellados con 3.5.0 siguen describiendo exactamente lo que se les aplico (FR-026).",
   "nota_nombre_archivo": "El nombre del archivo conserva V3.4 a proposito. La version de referencia es la de este manifiesto, no la del nombre: renombrarlo alteraria la trazabilidad de los planes ya aprobados (decision D4 de research.md).",
   "fundamento": {
     "ruta": "docs/metodologia/fundamento_zonas.md",
@@ -42,7 +38,7 @@
     {
       "ruta": "docs/metodologia/PROMPT_MAESTRO_V3.4.md",
       "papel": "Fuente normativa. La seccion 19 es la Biblioteca Oficial de ejercicios.",
-      "sha256": "63863da4cdce507c9949b8d8dd46cc279253a50b54d7c15e700dd21f8e8d33c1"
+      "sha256": "1e47faa3941408b6a6fac466381a76ea509bf54d28158b61ab6cb74cfa23dead"
     },
     {
       "ruta": "docs/metodologia/Biblioteca de ejercicios.docx",
@@ -50,5 +46,9 @@
       "sha256": "25cab1c211147321a325df486cb107c87a6505fca274372e3ca5d62366d86f6b"
     }
   ],
-  "nota": "Si una huella deja de coincidir, un documento normativo cambio sin subir la version. El flujo de desarrollo de la constitucion exige subir la version y actualizar las pruebas afectadas."
+  "nota": "Si una huella deja de coincidir, un documento normativo cambio sin subir la version. El flujo de desarrollo de la constitucion exige subir la version y actualizar las pruebas afectadas.",
+  "habilidades": {
+    "ruta": "docs/metodologia/habilidades_por_categoria.md",
+    "papel": "Origen de cada criterio de la tabla 11.1, marcado como derivado del documento normativo, implicito en una regla existente, o propuesto por la app y aprobado por el entrenador."
+  }
 }

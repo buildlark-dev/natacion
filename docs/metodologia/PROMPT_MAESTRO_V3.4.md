@@ -249,7 +249,21 @@ Los rangos de control son **metros por sesión**. En los encabezados de entrega,
 
 **Regla de afinación (taper):** en la fase de Realización y en semanas de competencia, el volumen por sesión puede descender por debajo del rango de la categoría como parte de la puesta a punto. Este descenso debe ser deliberado, progresivo y justificado en la entrega; nunca producto de un error de suma.
 
-Si los datos del nadador no encajan con su categoría nominal (p. ej., volumen disponible insuficiente), reportar la discrepancia y preguntar antes de planificar.
+### 11.1 Habilidades por categoría
+
+**La categoría no es la edad.** Un niño y un adulto pueden estar en la misma categoría, y la edad no la determina ni la sugiere. Lo que la determina es lo que el nadador ya hace en el agua. La declara el entrenador: el sistema no clasifica a nadie.
+
+| Categoría | Lo que el nadador ya hace |
+|---|---|
+| Iniciación | Adaptado al medio y con confianza en el agua. Nada Libre y Espalda; Pecho y Mariposa todavía no se le exigen. Completa la sesión aunque sea con pausas entre series. No se le prescribe por zonas: no tiene velocidad crítica medida, y no tiene prueba objetivo ni calendario de competencia. |
+| Tecnificación | Nada Libre y Espalda de forma continua y está construyendo Pecho y Mariposa. Ejecuta ejercicios de la Biblioteca Oficial a partir de una consigna y corrige con ella. El trabajo gira alrededor del perfeccionamiento técnico, no de una marca. Sigue sin zonas, sin prueba objetivo y sin ATR. |
+| Precompetitivo | Nada los cuatro estilos de forma continua y reglamentaria. Tiene prueba objetivo, estilo objetivo y fecha de competencia. Sostiene series con intervalo y ritmo, que es la condición para prescribirle por zonas. Puede hacer esfuerzos máximos de 200 y 400 m de su estilo, que es como se mide la velocidad crítica (sección 9). |
+| Competitivo | Todo lo de Precompetitivo, sostenido cinco días por semana. Compite en un calendario, no en una competencia suelta. Reporta su carga interna —RPE y observaciones— con regularidad. |
+| Alto Rendimiento | Entrena dos veces al día: diez sesiones semanales no caben de otra forma. Su temporada admite afinación deliberada. La planificación se construye por fases, con confirmación del entrenador entre cada una (sección 18). |
+
+*Trazabilidad de cada criterio, con su origen marcado: `docs/metodologia/habilidades_por_categoria.md`.*
+
+**Auditoría de discrepancia.** Si los datos del nadador no encajan con su categoría nominal —volumen disponible insuficiente, o una habilidad de esta tabla que no se cumple— reportar la discrepancia y preguntar antes de planificar. Dos casos que el sistema debe detectar: un nadador declarado de Precompetitivo en adelante **sin velocidad crítica medida** no puede recibir prescripción por zonas, y uno **sin prueba objetivo ni fecha de competencia** no tiene a qué apuntar el modelo ATR. La discrepancia avisa y pregunta; no impide planificar.
 
 ## 12. MODELO ATR
 
