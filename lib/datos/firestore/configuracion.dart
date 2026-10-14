@@ -15,10 +15,36 @@ const String proyectoLocal = 'demo-natacion';
 const String hostEmulador = 'localhost';
 const int puertoFirestore = 8080;
 
+/// Cómo se arranca Firebase. Se inyecta para poder comprobar en pruebas que un
+/// arranque fallido deja la app en pie; en producción es siempre la de verdad.
+typedef IniciarFirebase = Future<FirebaseApp> Function({
+  String? name,
+  FirebaseOptions? options,
+});
+
 class ConfiguracionDatos {
-  const ConfiguracionDatos({required this.usarEmuladores});
+  const ConfiguracionDatos({
+    required this.usarEmuladores,
+    this.iniciar = Firebase.initializeApp,
+  });
 
   final bool usarEmuladores;
+
+  final IniciarFirebase iniciar;
+
+  /// Opciones con las que se arranca Firebase.
+  ///
+  /// Contra emuladores, un proyecto ficticio. Sin emuladores, ninguna: la
+  /// configuración la pone la plataforma, y si no la hay, no hay proyecto al
+  /// que conectarse y [conectar] devuelve `null`.
+  FirebaseOptions? get opciones => usarEmuladores
+      ? const FirebaseOptions(
+          apiKey: 'emulador-local',
+          appId: 'emulador-local',
+          messagingSenderId: 'emulador-local',
+          projectId: proyectoLocal,
+        )
+      : null;
 
   /// Inicializa Firebase y, si procede, redirige a los emuladores.
   ///
@@ -26,16 +52,7 @@ class ConfiguracionDatos {
   /// explicarlo, no caerse.
   Future<FirebaseFirestore?> conectar() async {
     try {
-      await Firebase.initializeApp(
-        options: usarEmuladores
-            ? const FirebaseOptions(
-                apiKey: 'emulador-local',
-                appId: 'emulador-local',
-                messagingSenderId: 'emulador-local',
-                projectId: proyectoLocal,
-              )
-            : null,
-      );
+      await iniciar(options: opciones);
 
       final firestore = FirebaseFirestore.instance;
 
@@ -58,9 +75,15 @@ class ConfiguracionDatos {
       );
 
       return firestore;
-    } on FirebaseException {
-      return null;
-    } on Exception {
+    } catch (_) {
+      // Se atrapa cualquier fallo, no solo las excepciones. En web, arrancar
+      // sin opciones revienta con un `AssertionError`, que es un `Error` y no
+      // una `Exception`: atrapar solo excepciones dejaba caer la app entera en
+      // el arranque documentado `flutter run -d chrome`.
+      //
+      // Aquí no hay nada que distinguir: con Firestore o sin él, lo único que
+      // cambia es que no hay destino remoto. Quedarse sin conexión no es un
+      // error de programa, es el martes a pie de piscina.
       return null;
     }
   }
