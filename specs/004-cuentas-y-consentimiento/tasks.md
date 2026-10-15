@@ -67,15 +67,15 @@ nadador de verdad.
 - [X] T008 [P] Escribir en `test/dominio/cuentas/cuenta_test.dart` las invariantes de `data-model.md`: una cuenta de entrenador **nunca** tiene `nadadorId`; una cuenta de nadador sin `nadadorId` es válida y puede entrar, pero no tiene plan ni registros
 - [X] T009 Implementar la tabla de permisos en `lib/dominio/cuentas/permisos.dart`, en Dart puro: quién aprueba, quién publica, quién lee los registros de quién, quién los escribe
 - [X] T010 [P] Escribir en `test/dominio/cuentas/permisos_test.dart` la **lista de casos compartida** con las pruebas de reglas (garantía A10). Es la lista que luego recorren las dos suites; si una regla cambia y el dominio no, una de las dos falla
-- [ ] T011 Declarar la interfaz `Identidad` en `lib/dominio/repositorios/repositorios.dart` según [contracts/cuentas_y_roles.md](contracts/cuentas_y_roles.md): `actual()`, `cambios` y `cerrarSesion()`. **Ninguna firma menciona Firebase**
-- [ ] T012 Implementar `Identidad` en `lib/datos/auth/sesion_firebase.dart`. Es el **único archivo del proyecto** que puede importar `firebase_auth`
-- [ ] T013 [P] Ampliar la prueba de frontera de arquitectura para que falle si `lib/dominio/` importa `firebase_auth`, igual que ya falla con `cloud_firestore` y con Flutter
-- [ ] T014 Implementar en `firebase/functions/src/roles.ts` el disparador que asigna el claim `rol: 'nadador'` al crearse una cuenta. **Toda cuenta nace como nadador** (garantía A2)
-- [ ] T015 Implementar en `firebase/functions/src/roles.ts` la operación administrativa `asignarRol(uid, rol)`, **no llamable desde la app**, que es la única vía para conceder `entrenador`
-- [ ] T016 Resolver el arranque del primer entrenador y **documentarlo** en `docs/DEVELOPMENT.md`: nadie puede concederse el claim a sí mismo, así que hace falta un procedimiento explícito. Registrarlo como decisión D7 en `research.md`
-- [ ] T017 [P] Escribir en `firebase/functions/test/roles.test.js` las pruebas sobre el emulador: una cuenta nueva trae `rol: 'nadador'`; escribir `rol: 'entrenador'` en el propio documento de usuario **no** cambia el token (garantía A1)
-- [ ] T018 Particionar `lib/datos/local/almacen_local.dart` **por cuenta**, de modo que dos cuentas en el mismo dispositivo no compartan ni una clave, tampoco en la bandeja de salida
-- [ ] T019 [P] Escribir en `test/datos/local/particion_por_cuenta_test.dart` la garantía A9: dos cuentas escriben sin red en el mismo dispositivo y cada bandeja contiene lo suyo y nada más
+- [X] T011 Declarar la interfaz `Identidad` en `lib/dominio/repositorios/repositorios.dart` según [contracts/cuentas_y_roles.md](contracts/cuentas_y_roles.md): `actual()`, `cambios` y `cerrarSesion()`. **Ninguna firma menciona Firebase**
+- [X] T012 Implementar `Identidad` en `lib/datos/auth/sesion_firebase.dart`. Es el **único archivo del proyecto** que puede importar `firebase_auth`
+- [X] T013 [P] Ampliar la prueba de frontera de arquitectura para que falle si `lib/dominio/` importa `firebase_auth`, igual que ya falla con `cloud_firestore` y con Flutter
+- [X] T014 Implementar en `firebase/functions/src/roles.ts` el disparador que asigna el claim `rol: 'nadador'` al crearse una cuenta. **Toda cuenta nace como nadador** (garantía A2)
+- [X] T015 Implementar en `firebase/functions/src/roles.ts` la operación administrativa `asignarRol(uid, rol)`, **no llamable desde la app**, que es la única vía para conceder `entrenador`
+- [X] T016 Resolver el arranque del primer entrenador y **documentarlo** en `docs/DEVELOPMENT.md`: nadie puede concederse el claim a sí mismo, así que hace falta un procedimiento explícito. Registrarlo como decisión D7 en `research.md`
+- [X] T017 [P] Escribir en `firebase/functions/test/roles.test.js` las pruebas sobre el emulador: una cuenta nueva trae `rol: 'nadador'`; escribir `rol: 'entrenador'` en el propio documento de usuario **no** cambia el token (garantía A1)
+- [X] T018 Particionar `lib/datos/local/almacen_local.dart` **por cuenta**, de modo que dos cuentas en el mismo dispositivo no compartan ni una clave, tampoco en la bandeja de salida
+- [X] T019 [P] Escribir en `test/datos/local/particion_por_cuenta_test.dart` la garantía A9: dos cuentas escriben sin red en el mismo dispositivo y cada bandeja contiene lo suyo y nada más
 
 **Checkpoint**: hay identidad, hay roles y el almacenamiento local no mezcla personas.
 

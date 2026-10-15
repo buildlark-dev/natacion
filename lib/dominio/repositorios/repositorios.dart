@@ -7,6 +7,7 @@
 library;
 
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
+import 'package:natacion_app/dominio/cuentas/cuenta.dart';
 import 'package:natacion_app/dominio/entidades/envio_pendiente.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/entidades/registro_sesion.dart';
@@ -118,4 +119,26 @@ abstract class EnvioDeRegistros {
   ///
   /// Lanza si no se pudo enviar: la bandeja lo traduce a un reintento.
   Future<DateTime> enviar(RegistroDeSesion registro);
+}
+
+/// Quién está usando la app (feature 004).
+///
+/// El dominio no sabe que existe Firebase: habla de [Cuenta] y de `Rol`. La
+/// implementación vive en `lib/datos/auth/sesion_firebase.dart`, que es el
+/// único archivo del proyecto que puede importar `firebase_auth`, y la prueba
+/// de frontera lo vigila.
+///
+/// Contrato: `specs/004-cuentas-y-consentimiento/contracts/cuentas_y_roles.md`.
+abstract class Identidad {
+  /// La cuenta activa, o `null` si no hay sesión iniciada.
+  Future<Cuenta?> actual();
+
+  /// Emite cada vez que la sesión cambia: entra, sale o caduca.
+  Stream<Cuenta?> get cambios;
+
+  /// Cierra la sesión y **no deja en el dispositivo datos del nadador
+  /// anterior** (garantía A7): ni la caché de lectura ni lo guardado en local.
+  ///
+  /// No es una cortesía. El grupo son hermanos que comparten teléfono.
+  Future<void> cerrarSesion();
 }
