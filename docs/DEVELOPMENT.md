@@ -116,6 +116,32 @@ flutter run -d chrome --dart-define=USAR_EMULADORES=true
 existing in the cloud, so there is no risk of carelessly writing into a real
 project. The flag defaults to false on purpose.
 
+That one command starts all of them: Firestore on 8080, Authentication on 9099,
+Functions on 5001, and the emulator UI on 4000. Accounts and the consent gate
+need all three — Authentication because the rules read the role from the token,
+and Functions because the server is what signs that role and dates a consent.
+
+Server dependencies install separately, since the functions have their own
+package:
+
+```bash
+npm --prefix firebase/functions install
+```
+
+### The first coach
+
+Nobody can grant themselves the coach role. Every account is created as a
+swimmer, and `entrenador` is only ever set by an administrative call that the
+app cannot make. To promote the first one, with the emulators running:
+
+```bash
+npm --prefix firebase/functions run asignar-rol -- <uid> entrenador
+```
+
+Against a real project the same script needs credentials that are never stored
+in this repository. This is deliberate friction: the role that approves and
+publishes training for minors should not be a checkbox on a sign-up form.
+
 ## Tests
 
 Domain, UI and the architecture boundary:
@@ -134,6 +160,12 @@ Firestore security rules, with their negative cases:
 
 ```bash
 npm --prefix firebase test
+```
+
+The server, against the Authentication and Firestore emulators:
+
+```bash
+npm --prefix firebase/functions test
 ```
 
 Normative document checksums — fails if one changed without bumping the

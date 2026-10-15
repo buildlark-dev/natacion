@@ -48,12 +48,12 @@ nadador de verdad.
 
 **Purpose**: dejar el terreno listo. Nada de esto se ve en la app.
 
-- [ ] T001 Añadir `firebase_auth` a `pubspec.yaml` y comprobar que `flutter build web --release` sigue compilando y que `flutter analyze` sigue limpio
-- [ ] T002 [P] Crear las carpetas nuevas del dominio con un archivo `library;` de marcador: `lib/dominio/cuentas/`, `lib/dominio/consentimiento/`, `lib/datos/auth/`, `lib/ui/acceso/`, `lib/ui/consentimiento/`
-- [ ] T003 Crear el esqueleto del servidor en `firebase/functions/` con `package.json`, `tsconfig.json` y `src/index.ts` vacío, fijando las versiones de `firebase-admin` y `firebase-functions`. Decisión D3: Cloud Functions de 2ª generación en TypeScript
-- [ ] T004 Añadir los emuladores de **Auth** y **Functions** a `firebase/firebase.json`, junto al de Firestore que ya está. Sin ellos no se puede probar ni una sola garantía de esta feature
-- [ ] T005 [P] Añadir al CI de `.github/workflows/ci.yml` la ejecución de las pruebas de las funciones, en el mismo trabajo que ya corre las de reglas. Una superficie de servidor sin pruebas en CI es una superficie que se rompe sin avisar
-- [ ] T006 [P] Documentar en `docs/DEVELOPMENT.md`, **en inglés**, cómo levantar los tres emuladores y cómo correr las pruebas de funciones
+- [X] T001 Añadir `firebase_auth` a `pubspec.yaml` y comprobar que `flutter build web --release` sigue compilando y que `flutter analyze` sigue limpio
+- [X] T002 [P] Crear las carpetas nuevas del dominio con un archivo `library;` de marcador: `lib/dominio/cuentas/`, `lib/dominio/consentimiento/`, `lib/datos/auth/`, `lib/ui/acceso/`, `lib/ui/consentimiento/`
+- [X] T003 Crear el esqueleto del servidor en `firebase/functions/` con `package.json`, `tsconfig.json` y `src/index.ts` vacío, fijando las versiones de `firebase-admin` y `firebase-functions`. Decisión D3: Cloud Functions de 2ª generación en TypeScript
+- [X] T004 Añadir los emuladores de **Auth** y **Functions** a `firebase/firebase.json`, junto al de Firestore que ya está. Sin ellos no se puede probar ni una sola garantía de esta feature
+- [X] T005 [P] Añadir al CI de `.github/workflows/ci.yml` la ejecución de las pruebas de las funciones, en el mismo trabajo que ya corre las de reglas. Una superficie de servidor sin pruebas en CI es una superficie que se rompe sin avisar
+- [X] T006 [P] Documentar en `docs/DEVELOPMENT.md`, **en inglés**, cómo levantar los tres emuladores y cómo correr las pruebas de funciones
 
 ---
 
@@ -63,10 +63,10 @@ nadador de verdad.
 
 **⚠️ CRITICAL**: ninguna historia puede empezar hasta que esta fase esté completa.
 
-- [ ] T007 Crear `Rol` y `Cuenta` en `lib/dominio/cuentas/cuenta.dart`, en Dart puro. `Rol` es una enumeración cerrada de dos valores —`entrenador` y `nadador`— y **no un `String`**, para que añadir un rol obligue a revisar dónde se decide
-- [ ] T008 [P] Escribir en `test/dominio/cuentas/cuenta_test.dart` las invariantes de `data-model.md`: una cuenta de entrenador **nunca** tiene `nadadorId`; una cuenta de nadador sin `nadadorId` es válida y puede entrar, pero no tiene plan ni registros
-- [ ] T009 Implementar la tabla de permisos en `lib/dominio/cuentas/permisos.dart`, en Dart puro: quién aprueba, quién publica, quién lee los registros de quién, quién los escribe
-- [ ] T010 [P] Escribir en `test/dominio/cuentas/permisos_test.dart` la **lista de casos compartida** con las pruebas de reglas (garantía A10). Es la lista que luego recorren las dos suites; si una regla cambia y el dominio no, una de las dos falla
+- [X] T007 Crear `Rol` y `Cuenta` en `lib/dominio/cuentas/cuenta.dart`, en Dart puro. `Rol` es una enumeración cerrada de dos valores —`entrenador` y `nadador`— y **no un `String`**, para que añadir un rol obligue a revisar dónde se decide
+- [X] T008 [P] Escribir en `test/dominio/cuentas/cuenta_test.dart` las invariantes de `data-model.md`: una cuenta de entrenador **nunca** tiene `nadadorId`; una cuenta de nadador sin `nadadorId` es válida y puede entrar, pero no tiene plan ni registros
+- [X] T009 Implementar la tabla de permisos en `lib/dominio/cuentas/permisos.dart`, en Dart puro: quién aprueba, quién publica, quién lee los registros de quién, quién los escribe
+- [X] T010 [P] Escribir en `test/dominio/cuentas/permisos_test.dart` la **lista de casos compartida** con las pruebas de reglas (garantía A10). Es la lista que luego recorren las dos suites; si una regla cambia y el dominio no, una de las dos falla
 - [ ] T011 Declarar la interfaz `Identidad` en `lib/dominio/repositorios/repositorios.dart` según [contracts/cuentas_y_roles.md](contracts/cuentas_y_roles.md): `actual()`, `cambios` y `cerrarSesion()`. **Ninguna firma menciona Firebase**
 - [ ] T012 Implementar `Identidad` en `lib/datos/auth/sesion_firebase.dart`. Es el **único archivo del proyecto** que puede importar `firebase_auth`
 - [ ] T013 [P] Ampliar la prueba de frontera de arquitectura para que falle si `lib/dominio/` importa `firebase_auth`, igual que ya falla con `cloud_firestore` y con Flutter
