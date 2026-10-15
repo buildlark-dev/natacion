@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:natacion_app/datos/memoria/repositorios_memoria.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:natacion_app/datos/auth/sesion_firebase.dart';
 import 'package:natacion_app/datos/firestore/configuracion.dart';
+import 'package:natacion_app/dominio/cuentas/cuenta.dart';
+import 'package:natacion_app/ui/acceso/estado_sesion.dart';
+import 'package:natacion_app/ui/acceso/pantalla_acceso.dart';
 import 'package:natacion_app/datos/firestore/envio_registros.dart';
 import 'package:natacion_app/datos/local/almacen_local.dart';
 import 'package:natacion_app/datos/local/repositorios_locales.dart';
@@ -47,6 +51,7 @@ class RecursosIniciales {
     required this.indiceTerminos,
     required this.red,
     required this.transporte,
+    this.identidad,
   });
 
   final Biblioteca biblioteca;
@@ -62,6 +67,12 @@ class RecursosIniciales {
 
   /// Quién lleva los registros del nadador a su destino.
   final EnvioDeRegistros transporte;
+
+  /// Quién está usando la app (feature 004).
+  ///
+  /// Nula cuando no hay servidor con el que hablar. Entonces la app entra en
+  /// **modo local**: ver [PantallaPrincipal.modoLocal].
+  final Identidad? identidad;
 }
 
 class AppNatacion extends StatelessWidget {
@@ -121,6 +132,11 @@ class _PantallaInicioState extends State<PantallaInicio> {
       // pie de piscina la segunda es la que importa.
       red: RedPorSondeo(sondear: () async => datos != null),
       transporte: _TransporteSiHayFirestore(datos),
+      // Sin Firestore no hay con quién autenticarse. La app arranca igual y
+      // entra en modo local, que es lo que permite seguir desarrollando sin
+      // levantar los emuladores.
+      identidad:
+          datos == null ? null : SesionFirebase.porOmision(firestore: datos),
     );
   }
 
@@ -152,17 +168,98 @@ class _PantallaInicioState extends State<PantallaInicio> {
           );
         }
 
-        return PantallaPrincipal(recursos: instantanea.data!);
+        return _Acceso(recursos: instantanea.data!);
       },
+    );
+  }
+}
+
+/// Decide qué se enseña según haya sesión o no.
+///
+/// Sin servidor no hay con quién autenticarse, y la app entra en **modo
+/// local**. No es un atajo: es el modo en que se desarrolla sin levantar los
+/// emuladores, y en él no hay nada que proteger porque no hay dónde guardar
+/// nada. Va rotulado para que nadie lo confunda con la app de verdad.
+class _Acceso extends StatelessWidget {
+  const _Acceso({required this.recursos});
+
+  final RecursosIniciales recursos;
+
+  @override
+  Widget build(BuildContext context) {
+    final identidad = recursos.identidad;
+
+    if (identidad == null) {
+      return PantallaPrincipal(recursos: recursos, modoLocal: true);
+    }
+
+    return ChangeNotifierProvider<SesionActiva>(
+      create: (_) => SesionActiva(identidad: identidad),
+      child: Consumer<SesionActiva>(
+        builder: (context, sesion, _) {
+          switch (sesion.estado) {
+            case EstadoDeSesion.comprobando:
+              // No se enseña la pantalla de acceso mientras no se sepa quién
+              // eres: haría parpadear a quien ya tiene sesión cada vez que
+              // abre la app al borde de la piscina.
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+
+            case EstadoDeSesion.fuera:
+              return PantallaAcceso(
+                alEnviar: ({
+                  required String correo,
+                  required String clave,
+                  required ModoDeAcceso modo,
+                }) async {
+                  try {
+                    if (modo == ModoDeAcceso.crear) {
+                      await identidad.crearCuenta(correo: correo, clave: clave);
+                    } else {
+                      await identidad.entrar(correo: correo, clave: clave);
+                    }
+                    return null;
+                  } on FalloDeAcceso catch (e) {
+                    return e.mensaje;
+                  }
+                },
+              );
+
+            case EstadoDeSesion.dentro:
+              return PantallaPrincipal(
+                // La clave fuerza a reconstruir el estado entero al cambiar de
+                // cuenta. Sin esto, el editor, la bandeja y el recorrido del
+                // nadador sobrevivirían al cambio y el segundo hermano vería
+                // lo del primero.
+                key: ValueKey(sesion.cuenta!.id),
+                recursos: recursos,
+                cuenta: sesion.cuenta,
+              );
+          }
+        },
+      ),
     );
   }
 }
 
 /// Navegación entre el editor de sesión y los perfiles de nadador.
 class PantallaPrincipal extends StatefulWidget {
-  const PantallaPrincipal({super.key, required this.recursos});
+  const PantallaPrincipal({
+    super.key,
+    required this.recursos,
+    this.cuenta,
+    this.modoLocal = false,
+  });
 
   final RecursosIniciales recursos;
+
+  /// Quién tiene la sesión abierta. Nula en [modoLocal].
+  final Cuenta? cuenta;
+
+  /// Sin servidor: no hay cuentas, no hay consentimiento y no hay dónde
+  /// guardar nada. Es el modo de desarrollo, y va rotulado.
+  final bool modoLocal;
 
   @override
   State<PantallaPrincipal> createState() => _PantallaPrincipalState();
@@ -191,7 +288,10 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     ),
   );
 
-  final AlmacenLocal _almacen = AlmacenPreferencias();
+  /// Particionado por cuenta: dos hermanos con el mismo teléfono no comparten
+  /// ni una clave, tampoco en la bandeja de salida (garantía A9).
+  late final AlmacenLocal _almacen =
+      AlmacenPreferencias(cuentaId: widget.cuenta?.id);
 
   /// Los planes de la sesión. En memoria: la persistencia en Firestore llega
   /// con la autenticación de la feature 004.
@@ -251,6 +351,21 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     setState(() => _indice = 1);
   }
 
+  /// Qué pestañas le tocan a quien está dentro.
+  ///
+  /// No es una comodidad: un nadador no tiene nada que hacer en el editor, y
+  /// las reglas de acceso le denegarían todo lo que intentara desde ahí. Lo
+  /// que decide es `Permisos`, no una condición escrita en esta pantalla.
+  ///
+  /// En modo local se ven todas, porque no hay rol que consultar y es el modo
+  /// con el que se desarrolla.
+  bool _leToca(_Pestana pestana) {
+    if (widget.modoLocal) return true;
+    final cuenta = widget.cuenta;
+    if (cuenta == null) return false;
+    return pestana.esDelEntrenador ? cuenta.esEntrenador : cuenta.esNadador;
+  }
+
   @override
   Widget build(BuildContext context) {
     final pantallas = <Widget>[
@@ -288,38 +403,170 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
       ),
     ];
 
+    // Pestaña y pantalla van emparejadas para que filtrar por rol no pueda
+    // desalinear los índices. Hacerlo con dos listas paralelas y un índice
+    // compartido es la forma clásica de acabar enseñando el editor al pulsar
+    // «Mi progreso».
+    final visibles = <(_Pestana, Widget)>[
+      for (var i = 0; i < _Pestana.values.length; i++)
+        if (_leToca(_Pestana.values[i])) (_Pestana.values[i], pantallas[i]),
+    ];
+
+    if (visibles.isEmpty) {
+      return const Scaffold(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Text(
+              'Tu cuenta todavía no tiene nada asignado.\n'
+              'Cuando tu entrenador te inscriba, aparecerá aquí.',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    }
+
+    final indice = _indice.clamp(0, visibles.length - 1);
+
     return Scaffold(
-      body: pantallas[_indice],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _indice,
-        onDestinationSelected: (indice) => setState(() => _indice = indice),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.auto_awesome_outlined),
-            selectedIcon: Icon(Icons.auto_awesome),
-            label: 'Generar',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.edit_note_outlined),
-            selectedIcon: Icon(Icons.edit_note),
-            label: 'Editor',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.groups_outlined),
-            selectedIcon: Icon(Icons.groups),
-            label: 'Nadadores',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.pool_outlined),
-            selectedIcon: Icon(Icons.pool),
-            label: 'Mi sesión',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.timeline_outlined),
-            selectedIcon: Icon(Icons.timeline),
-            label: 'Mi progreso',
-          ),
+      body: Column(
+        children: [
+          _BarraDeSesion(cuenta: widget.cuenta, modoLocal: widget.modoLocal),
+          Expanded(child: visibles[indice].$2),
         ],
+      ),
+      bottomNavigationBar: visibles.length < 2
+          ? null
+          : NavigationBar(
+              selectedIndex: indice,
+              onDestinationSelected: (i) => setState(() => _indice = i),
+              destinations: [
+                for (final (pestana, _) in visibles)
+                  NavigationDestination(
+                    icon: Icon(pestana.icono),
+                    selectedIcon: Icon(pestana.iconoActivo),
+                    label: pestana.etiqueta,
+                  ),
+              ],
+            ),
+    );
+  }
+}
+
+/// Las pestañas de la app, y de quién es cada una.
+enum _Pestana {
+  generar(
+    etiqueta: 'Generar',
+    icono: Icons.auto_awesome_outlined,
+    iconoActivo: Icons.auto_awesome,
+    esDelEntrenador: true,
+  ),
+  editor(
+    etiqueta: 'Editor',
+    icono: Icons.edit_note_outlined,
+    iconoActivo: Icons.edit_note,
+    esDelEntrenador: true,
+  ),
+  nadadores(
+    etiqueta: 'Nadadores',
+    icono: Icons.groups_outlined,
+    iconoActivo: Icons.groups,
+    esDelEntrenador: true,
+  ),
+  miSesion(
+    etiqueta: 'Mi sesión',
+    icono: Icons.pool_outlined,
+    iconoActivo: Icons.pool,
+    esDelEntrenador: false,
+  ),
+  miProgreso(
+    etiqueta: 'Mi progreso',
+    icono: Icons.timeline_outlined,
+    iconoActivo: Icons.timeline,
+    esDelEntrenador: false,
+  );
+
+  const _Pestana({
+    required this.etiqueta,
+    required this.icono,
+    required this.iconoActivo,
+    required this.esDelEntrenador,
+  });
+
+  final String etiqueta;
+  final IconData icono;
+  final IconData iconoActivo;
+  final bool esDelEntrenador;
+}
+
+/// Quién está dentro, y por dónde se sale.
+///
+/// En modo local, en cambio, avisa de que no hay servidor. No es decoración:
+/// sin servidor no hay consentimiento registrado, y el principio V exige que
+/// en ese caso la app se use solo con datos de prueba.
+class _BarraDeSesion extends StatelessWidget {
+  const _BarraDeSesion({required this.cuenta, required this.modoLocal});
+
+  final Cuenta? cuenta;
+  final bool modoLocal;
+
+  @override
+  Widget build(BuildContext context) {
+    final esquema = Theme.of(context).colorScheme;
+
+    if (modoLocal) {
+      return Material(
+        color: esquema.errorContainer,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Row(
+            children: [
+              Icon(Icons.cloud_off_outlined, color: esquema.onErrorContainer),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Modo local, sin servidor: no hay cuentas ni consentimiento '
+                  'registrado, y nada se guarda al cerrar. Solo datos de '
+                  'prueba.',
+                  key: const Key('aviso-modo-local'),
+                  style: TextStyle(color: esquema.onErrorContainer),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final dentro = cuenta;
+    if (dentro == null) return const SizedBox.shrink();
+
+    return Material(
+      color: esquema.surfaceContainerHighest,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: Row(
+          children: [
+            Icon(
+              dentro.esEntrenador ? Icons.sports : Icons.person_outline,
+              size: 18,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                dentro.esEntrenador ? 'Entrenador' : 'Nadador',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            TextButton.icon(
+              key: const Key('boton-cerrar-sesion'),
+              onPressed: () => context.read<SesionActiva>().cerrarSesion(),
+              icon: const Icon(Icons.logout, size: 18),
+              label: const Text('Salir'),
+            ),
+          ],
+        ),
       ),
     );
   }

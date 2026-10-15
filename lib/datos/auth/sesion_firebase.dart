@@ -37,6 +37,22 @@ class SesionFirebase implements Identidad {
     this.almacenLocal,
   });
 
+  /// La de verdad, con la instancia que Firebase ya tiene montada.
+  ///
+  /// Existe para que quien la construya **no tenga que nombrar
+  /// `FirebaseAuth`**: si `main.dart` lo importara, la frontera dejaría de ser
+  /// un archivo y pasaría a ser dos, y de dos se pasa a cinco sin que nadie lo
+  /// decida.
+  factory SesionFirebase.porOmision({
+    required FirebaseFirestore firestore,
+    AlmacenLocal? almacenLocal,
+  }) =>
+      SesionFirebase(
+        auth: fb.FirebaseAuth.instance,
+        firestore: firestore,
+        almacenLocal: almacenLocal,
+      );
+
   final fb.FirebaseAuth auth;
   final FirebaseFirestore firestore;
 
@@ -49,6 +65,52 @@ class SesionFirebase implements Identidad {
   @override
   Stream<Cuenta?> get cambios =>
       auth.idTokenChanges().asyncMap(_cuentaDe);
+
+  @override
+  Future<void> entrar({required String correo, required String clave}) async {
+    try {
+      await auth.signInWithEmailAndPassword(email: correo, password: clave);
+    } on fb.FirebaseAuthException catch (e) {
+      throw FalloDeAcceso(_mensajeDe(e));
+    }
+  }
+
+  @override
+  Future<void> crearCuenta({
+    required String correo,
+    required String clave,
+  }) async {
+    try {
+      await auth.createUserWithEmailAndPassword(email: correo, password: clave);
+    } on fb.FirebaseAuthException catch (e) {
+      throw FalloDeAcceso(_mensajeDe(e));
+    }
+  }
+
+  /// Traduce el error del proveedor a algo que una persona pueda leer.
+  ///
+  /// Sin decir **cuál** de las dos cosas falló cuando son credenciales: «ese
+  /// correo no existe» le confirma a quien prueba correos cuáles sí existen.
+  String _mensajeDe(fb.FirebaseAuthException error) {
+    switch (error.code) {
+      case 'invalid-credential':
+      case 'wrong-password':
+      case 'user-not-found':
+        return 'El correo o la contraseña no coinciden.';
+      case 'email-already-in-use':
+        return 'Ya hay una cuenta con ese correo. Entra en lugar de crearla.';
+      case 'invalid-email':
+        return 'Ese correo no tiene buena forma.';
+      case 'weak-password':
+        return 'Esa contraseña es muy corta. Usa al menos ocho caracteres.';
+      case 'too-many-requests':
+        return 'Demasiados intentos seguidos. Espera un momento.';
+      case 'network-request-failed':
+        return 'No hay conexión para entrar. Inténtalo cuando vuelva.';
+      default:
+        return 'No se pudo entrar (${error.code}).';
+    }
+  }
 
   @override
   Future<void> cerrarSesion() async {
@@ -84,8 +146,34 @@ class SesionFirebase implements Identidad {
   Future<Cuenta?> _cuentaDe(fb.User? usuario) async {
     if (usuario == null) return null;
 
-    final token = await usuario.getIdTokenResult();
-    final rol = Rol.porClave(token.claims?[claveDelRol] as String?);
+    var rol = Rol.porClave(
+      (await usuario.getIdTokenResult()).claims?[claveDelRol] as String?,
+    );
+
+    // Una cuenta recién creada puede tener todavía un token sin el rol: el
+    // disparador que lo asigna corre después de que la cuenta exista. Se
+    // refresca **una vez** antes de concluir que no hay sesión, que es lo que
+    // cierra esa ventana sin pagar Identity Platform para una app de un solo
+    // entrenador.
+    //
+    // Una sola vez y no en bucle: si tras refrescar sigue sin rol, lo que hay
+    // es un token que no se entiende, y eso no se arregla insistiendo.
+    if (rol == null) {
+      try {
+        rol = Rol.porClave(
+          (await usuario.getIdTokenResult(true)).claims?[claveDelRol]
+              as String?,
+        );
+      } on Exception {
+        // Refrescar necesita red. A pie de piscina no la hay, y quedarse sin
+        // rol aquí significaría echar de la app a alguien que ya tenía su
+        // entrenamiento descargado (garantía A8). Se sigue con lo que trajera
+        // el token guardado, que para una cuenta que ya entró alguna vez lleva
+        // el rol dentro.
+        rol = null;
+      }
+    }
+
     if (rol == null) return null;
 
     return Cuenta(

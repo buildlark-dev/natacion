@@ -121,6 +121,19 @@ abstract class EnvioDeRegistros {
   Future<DateTime> enviar(RegistroDeSesion registro);
 }
 
+/// No se pudo entrar, con un mensaje que se le puede enseñar a alguien.
+///
+/// Es del dominio y no del proveedor a propósito: la pantalla de acceso no
+/// tiene por qué saber qué códigos de error devuelve Firebase.
+class FalloDeAcceso implements Exception {
+  const FalloDeAcceso(this.mensaje);
+
+  final String mensaje;
+
+  @override
+  String toString() => mensaje;
+}
+
 /// Quién está usando la app (feature 004).
 ///
 /// El dominio no sabe que existe Firebase: habla de [Cuenta] y de `Rol`. La
@@ -132,6 +145,15 @@ abstract class EnvioDeRegistros {
 abstract class Identidad {
   /// La cuenta activa, o `null` si no hay sesión iniciada.
   Future<Cuenta?> actual();
+
+  /// Entra con una cuenta que ya existe.
+  ///
+  /// Lanza [FalloDeAcceso] con un mensaje que se le puede enseñar a alguien.
+  Future<void> entrar({required String correo, required String clave});
+
+  /// Crea una cuenta. **Nace siempre como nadador** (garantía A2): el rol de
+  /// entrenador no se concede por registrarse.
+  Future<void> crearCuenta({required String correo, required String clave});
 
   /// Emite cada vez que la sesión cambia: entra, sale o caduca.
   Stream<Cuenta?> get cambios;

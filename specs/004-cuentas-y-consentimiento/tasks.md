@@ -101,14 +101,14 @@ quickstart).
 
 - [X] T024 [US3] Reescribir `firebase/firestore.rules` para que compare contra `request.auth.uid`: un nadador lee y escribe solo sus registros, y lee solo los planes `publicado` que le están asignados. Retirar el comentario de limitación conocida que la feature 003 dejó escrito
 - [X] T025 [US3] Añadir a `firebase/firestore.rules` la colección `usuarios/{uid}` con el vínculo cuenta ↔ `nadadorId`, legible por su dueño y por el entrenador de su comunidad, y **no escribible por el cliente**
-- [ ] T026 [US3] Crear `lib/ui/acceso/estado_sesion.dart`, que expone la cuenta activa a la interfaz y reacciona a `Identidad.cambios`
-- [ ] T027 [US3] Crear `lib/ui/acceso/pantalla_acceso.dart`: entrar con una cuenta propia. **Ningún campo de esta pantalla, ni ninguna prueba, contiene una credencial real**
-- [ ] T028 [US3] Hacer que `lib/main.dart` arranque según haya sesión o no, conservando la propiedad de que la app arranca aunque Firebase no esté configurado (la que se arregló en el PR #5)
-- [ ] T029 [US3] Implementar el cierre de sesión en `lib/datos/auth/sesion_firebase.dart`, limpiando **la caché de Firestore y el almacenamiento local** del nadador anterior (garantía A7)
-- [ ] T030 [P] [US3] Escribir en `test/ui/acceso/cierre_sesion_test.dart` la garantía A7: tras cerrar sesión no queda plan, registro ni perfil del anterior. Es el caso de los hermanos que comparten teléfono
-- [ ] T031 [US3] Hacer que la caducidad de sesión **no** impida leer el plan ya descargado ni anotar (garantía A8). Lo que queda retenido es el envío
-- [ ] T032 [P] [US3] Escribir en `test/ui/acceso/caducidad_test.dart` la garantía A8: con la sesión caducada y sin red, abrir la app, leer la sesión del día y anotar. Las tres funcionan
-- [ ] T033 [US3] Esconder de la interfaz del nadador todo lo que su rol no permite, apoyándose en `permisos.dart` y no en condiciones repartidas por las pantallas
+- [X] T026 [US3] Crear `lib/ui/acceso/estado_sesion.dart`, que expone la cuenta activa a la interfaz y reacciona a `Identidad.cambios`
+- [X] T027 [US3] Crear `lib/ui/acceso/pantalla_acceso.dart`: entrar con una cuenta propia. **Ningún campo de esta pantalla, ni ninguna prueba, contiene una credencial real**
+- [X] T028 [US3] Hacer que `lib/main.dart` arranque según haya sesión o no, conservando la propiedad de que la app arranca aunque Firebase no esté configurado (la que se arregló en el PR #5)
+- [X] T029 [US3] Implementar el cierre de sesión en `lib/datos/auth/sesion_firebase.dart`, limpiando **la caché de Firestore y el almacenamiento local** del nadador anterior (garantía A7)
+- [X] T030 [P] [US3] Escribir en `test/ui/acceso/cierre_sesion_test.dart` la garantía A7: tras cerrar sesión no queda plan, registro ni perfil del anterior. Es el caso de los hermanos que comparten teléfono
+- [X] T031 [US3] Hacer que la caducidad de sesión **no** impida leer el plan ya descargado ni anotar (garantía A8). Lo que queda retenido es el envío
+- [X] T032 [P] [US3] Escribir en `test/ui/acceso/caducidad_test.dart` la garantía A8: con la sesión caducada y sin red, abrir la app, leer la sesión del día y anotar. Las tres funcionan
+- [X] T033 [US3] Esconder de la interfaz del nadador todo lo que su rol no permite, apoyándose en `permisos.dart` y no en condiciones repartidas por las pantallas
 
 **Checkpoint**: hay cuentas y cada quien ve lo suyo. **Todavía no hay consentimiento, así que
 sigue sin poder usarse con un nadador real.**
