@@ -82,27 +82,73 @@ service cloud.firestore {
 
     // Lo que un nadador ve: solo lo publicado y asignado a el.
     //
-    // Las tres condiciones importan por separado. Un borrador no es de nadie
+    // Las dos condiciones importan por separado. Un borrador no es de nadie
     // todavia; un aprobado esta firmado pero no entregado —aprobar no es
     // entregar—; uno publicado sin asignar no es de este nadador.
-    function planEsDelNadador() {
-      return resource.data.estado == 'publicado'
-          && resource.data.get('nadadoresIds', []).hasAny([miNadadorId()]);
+    //
+    // La asignacion es un documento aparte, uno por nadador, y no una lista
+    // dentro del plan: ver la coleccion `asignaciones` mas abajo.
+    function leEstaAsignado(planId) {
+      return exists(/databases/$(database)/documents/asignaciones/$(planId + '|' + miNadadorId()));
+    }
+
+    function planEsDelNadador(planId) {
+      return resource.data.estado == 'publicado' && leEstaAsignado(planId);
+    }
+
+    // Entregar: pasar de aprobado a publicado.
+    //
+    // Es la UNICA escritura permitida sobre un plan inmutable, y solo porque
+    // **no toca su contenido**: cambia el estado y nada mas. La inmutabilidad
+    // de FR-025 es sobre lo que el entrenador firmo —sesiones, series, version
+    // de metodologia—, no sobre el hecho de haberlo entregado.
+    //
+    // Sin esto, publicar seria imposible: un plan aprobado no se puede
+    // escribir, asi que nunca podria llegar a publicado. No salio antes porque
+    // los planes vivian en memoria y nunca se guardaban.
+    function cambiaElEstado() {
+      return request.resource.data.estado != resource.data.estado;
+    }
+
+    // Firmar: borrador -> aprobado. Es el paso que el principio IV reserva al
+    // entrenador. Puede traer consigo la version de metodologia y la fecha,
+    // que es justo lo que el sello estampa.
+    function esLaAprobacion() {
+      return resource.data.estado == 'borrador'
+          && request.resource.data.estado == 'aprobado';
+    }
+
+    function esLaEntrega() {
+      return resource.data.estado == 'aprobado'
+          && request.resource.data.estado == 'publicado'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado']);
     }
 
     match /planes/{planId} {
       allow read: if esEntrenador()
                   || (esNadador()
                       && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid))
-                      && planEsDelNadador());
+                      && planEsDelNadador(planId));
 
       // Crear: solo el entrenador, y solo en estado borrador.
       allow create: if esEntrenador()
                     && request.resource.data.estado == 'borrador';
 
-      // Actualizar: solo el entrenador, y nunca sobre un plan ya aprobado o
-      // publicado. Un nadador no mueve un plan a ningun estado (principio IV).
-      allow update: if esEntrenador() && !planExistenteEsInmutable();
+      // Actualizar. El estado solo avanza por su camino y nunca se salta un
+      // paso: borrador -> aprobado -> publicado.
+      //
+      // Que un borrador pudiera saltar directo a publicado lo destapo una
+      // prueba al escribir esta regla. Habria dejado llegar a un nadador un
+      // plan que el entrenador nunca firmo, y la firma es exactamente lo que
+      // el principio IV no delega.
+      //
+      // Un nadador no mueve un plan a ningun estado, en ningun caso.
+      allow update: if esEntrenador()
+                    && (
+                      (!cambiaElEstado() && !planExistenteEsInmutable())
+                      || esLaAprobacion()
+                      || esLaEntrega()
+                    );
 
       allow delete: if esEntrenador() && !planExistenteEsInmutable();
 
@@ -115,10 +161,41 @@ service cloud.firestore {
         allow read: if esEntrenador()
                     || (esNadador()
                         && elPlan().estado == 'publicado'
-                        && elPlan().get('nadadoresIds', []).hasAny([miNadadorId()]));
+                        && leEstaAsignado(planId));
 
         allow write: if esEntrenador() && !estadoEsInmutable(elPlan().estado);
       }
+    }
+
+    // --- Asignaciones ----------------------------------------------------
+    //
+    // A quien se le entrego un plan. Una por nadador, con identificador
+    // determinista `planId|nadadorId`, de modo que entregar dos veces escribe
+    // el mismo documento y no duplica nada.
+    //
+    // **Aqui vive la puerta de publicacion** (FR-013). Y aqui es donde se
+    // puede vivir: con una asignacion por nadador, la regla comprueba SU
+    // consentimiento con un solo `get()`. Con la lista dentro del plan haria
+    // falta recorrerla, y el lenguaje de reglas no tiene bucles, asi que la
+    // puerta se habria quedado sin poder hacerse cumplir en el servidor.
+    match /asignaciones/{asignacionId} {
+      allow read: if esEntrenador()
+                  || (esNadador()
+                      && resource.data.nadadorId == miNadadorId());
+
+      allow create: if esEntrenador()
+                    && asignacionId == request.resource.data.planId + '|'
+                                     + request.resource.data.nadadorId
+                    && tieneConsentimientoVigente(request.resource.data.nadadorId);
+
+      // Reasignar no se edita: se borra y se vuelve a crear, que pasa otra vez
+      // por la puerta. Permitir un update dejaria cambiar el nadadorId de una
+      // asignacion ya concedida sin volver a comprobar su consentimiento.
+      allow update: if false;
+
+      // Retirar un plan es del entrenador. No borra los registros que el
+      // nadador ya envio: eso es suyo.
+      allow delete: if esEntrenador();
     }
 
     // --- Nadadores ------------------------------------------------------

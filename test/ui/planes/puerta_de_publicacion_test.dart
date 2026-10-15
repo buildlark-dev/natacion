@@ -79,7 +79,7 @@ void main() {
   Future<void> abrirEntrega(
     WidgetTester tester, {
     required Set<String> permitidos,
-    void Function(Plan)? alEntregar,
+    void Function(Plan, List<String>)? alEntregar,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -158,10 +158,14 @@ void main() {
 
   testWidgets('a quien sí tiene consentimiento se le entrega', (tester) async {
     Plan? entregado;
+    List<String>? entregadoA;
     await abrirEntrega(
       tester,
       permitidos: {'n1'},
-      alEntregar: (plan) => entregado = plan,
+      alEntregar: (plan, nadadores) {
+        entregado = plan;
+        entregadoA = nadadores;
+      },
     );
 
     await tester.tap(find.text(conConsentimiento.nombre));
@@ -171,6 +175,12 @@ void main() {
 
     expect(entregado, isNotNull);
     expect(entregado!.estado, EstadoPlan.publicado);
-    expect(entregado!.nadadoresIds, ['n1']);
+    expect(
+      entregadoA,
+      ['n1'],
+      reason: 'Publicar y asignar son dos cosas: el plan cambia de estado, y '
+          'cada entrega es una asignación propia que pasa por la puerta de '
+          'consentimiento de ese nadador',
+    );
   });
 }

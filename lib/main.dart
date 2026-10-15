@@ -11,6 +11,7 @@ import 'package:natacion_app/datos/local/almacen_local.dart';
 import 'package:natacion_app/datos/local/repositorios_locales.dart';
 import 'package:natacion_app/datos/recursos/biblioteca_empaquetada.dart';
 import 'package:natacion_app/datos/red/estado_de_red.dart';
+import 'package:natacion_app/dominio/entidades/asignacion.dart';
 import 'package:natacion_app/dominio/entidades/nadador.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/entidades/registro_sesion.dart';
@@ -299,18 +300,42 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
 
   late final RegistrosLocales _registros = RegistrosLocales(_almacen);
 
+  /// A quiénes se les ha entregado cada plan.
+  ///
+  /// Una asignación por nadador, no una lista dentro del plan: ver
+  /// `lib/dominio/entidades/asignacion.dart`.
+  final List<Asignacion> _asignaciones = [];
+
   /// Publica y asigna: es el puente entre el entrenador y el nadador.
-  void _entregar(Plan publicado) {
+  ///
+  /// **Dos cosas distintas y por eso dos parámetros.** El plan cambia de
+  /// estado; cada entrega es una asignación propia, que en el servidor pasa
+  /// por la puerta de consentimiento de ese nadador.
+  void _entregar(Plan publicado, List<String> nadadoresIds) {
     setState(() {
       _planes
         ..removeWhere((p) => p.id == publicado.id)
         ..add(publicado);
+
+      final planId = publicado.id;
+      if (planId == null) return;
+
+      _asignaciones
+        ..removeWhere((a) => a.planId == planId)
+        ..addAll([
+          for (final nadadorId in nadadoresIds)
+            Asignacion(
+              planId: planId,
+              nadadorId: nadadorId,
+              asignadaEn: DateTime.now(),
+            ),
+        ]);
     });
   }
 
   /// Carga el perfil elegido con su plan publicado y sus registros.
   Future<void> _abrirComoNadador(Nadador nadador) async {
-    final plan = planDe(nadador, _planes);
+    final plan = planDe(nadador, _planes, _asignaciones);
     final registros = plan == null
         ? <RegistroDeSesion>[]
         : await _registros.obtenerDePlan(nadador.id ?? '', plan.id ?? '');
@@ -392,6 +417,7 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
               estado: _nadador,
               nadadores: instantanea.data ?? const [],
               planes: _planes,
+              asignaciones: _asignaciones,
               alElegir: _abrirComoNadador,
             ),
           ),

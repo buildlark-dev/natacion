@@ -41,7 +41,6 @@ void main() {
         estado: EstadoPlan.values.firstWhere(
           (e) => e.name == json['estado'],
         ),
-        nadadoresIds: (json['asignadoA'] as List<dynamic>).cast<String>(),
         sesiones: const [],
       );
 
@@ -54,9 +53,16 @@ void main() {
       case 'publicarPlan':
         return Permisos.puedePublicar(cuenta);
       case 'leerPlan':
+        final plan = caso['plan'] as Map<String, dynamic>;
         return Permisos.puedeLeerPlan(
           cuenta,
-          planDe(caso['plan'] as Map<String, dynamic>),
+          planDe(plan),
+          leEstaAsignado: plan['asignado'] as bool? ?? false,
+        );
+      case 'asignar':
+        return Permisos.puedeAsignar(
+          cuenta,
+          tieneConsentimiento: caso['tieneConsentimiento'] as bool? ?? false,
         );
       case 'editarPlan':
         return Permisos.puedeEditarPlan(

@@ -49,15 +49,33 @@ abstract final class Permisos {
   /// Las tres condiciones importan por separado. Un plan en `borrador` no es de
   /// nadie todavía; uno `aprobado` está firmado pero no entregado; uno
   /// publicado sin asignar no es de este nadador.
-  static bool puedeLeerPlan(Cuenta? cuenta, Plan plan) {
+  ///
+  /// La asignación entra como dato y no se lee del plan: desde la feature 004
+  /// es un documento aparte, uno por nadador, y el plan ya no la lleva dentro.
+  static bool puedeLeerPlan(
+    Cuenta? cuenta,
+    Plan plan, {
+    bool leEstaAsignado = false,
+  }) {
     if (cuenta == null) return false;
     if (cuenta.esEntrenador) return true;
+    if (cuenta.nadadorId == null) return false;
 
-    final id = cuenta.nadadorId;
-    if (id == null) return false;
-
-    return plan.estado == EstadoPlan.publicado && plan.nadadoresIds.contains(id);
+    return plan.estado == EstadoPlan.publicado && leEstaAsignado;
   }
+
+  /// Entregar un plan a un nadador. Es la puerta de publicación (FR-013).
+  ///
+  /// Una asignación por nadador y no una lista: así cada entrega es una
+  /// escritura de una sola persona, y la regla del servidor comprueba **su**
+  /// consentimiento con un solo `get()`. Con una lista dentro del plan haría
+  /// falta un bucle que el lenguaje de reglas no tiene, y la puerta se
+  /// quedaría sin poder hacerse cumplir donde importa.
+  static bool puedeAsignar(
+    Cuenta? cuenta, {
+    required bool tieneConsentimiento,
+  }) =>
+      (cuenta?.esEntrenador ?? false) && tieneConsentimiento;
 
   /// Escribir un registro de sesión: **solo el nadador al que pertenece**.
   ///

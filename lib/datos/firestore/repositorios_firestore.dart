@@ -131,7 +131,6 @@ class RepositorioPlanesFirestore implements RepositorioPlanes {
       fechaFin: aprobado.fechaFin,
       faseAtr: aprobado.faseAtr,
       microciclos: aprobado.microciclos,
-      nadadoresIds: aprobado.nadadoresIds,
       // Una versión nueva de un plan generado sigue siendo generada (FR-026).
       origen: aprobado.origen,
       justificaciones: aprobado.justificaciones,

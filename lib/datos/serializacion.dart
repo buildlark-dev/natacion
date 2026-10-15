@@ -216,7 +216,6 @@ Map<String, dynamic> planAJson(Plan plan, {bool conSesiones = false}) =>
                 'objetivo': m.objetivo,
               })
           .toList(),
-      'nadadoresIds': plan.nadadoresIds,
       'estado': plan.estado.name,
       'origen': plan.origen.name,
       if (plan.versionMetodologia != null)
@@ -274,8 +273,6 @@ Plan planDesdeJson(
             .cast<Map<String, dynamic>>()
             .map((s) => sesionDesdeJson(s, biblioteca))
             .toList(),
-    nadadoresIds:
-        ((json['nadadoresIds'] as List<dynamic>?) ?? const []).cast<String>(),
     estado: EstadoPlan.values.firstWhere(
       (e) => e.name == json['estado'],
       orElse: () => EstadoPlan.borrador,

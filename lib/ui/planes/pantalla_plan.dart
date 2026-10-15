@@ -21,6 +21,7 @@ class PantallaPlan extends StatefulWidget {
     required this.versionMetodologia,
     this.nadadores = const [],
     this.conConsentimiento = const <String>{},
+    this.yaAsignados = const <String>[],
     this.alEntregar,
   });
 
@@ -38,11 +39,20 @@ class PantallaPlan extends StatefulWidget {
   /// en silencio, que es la peor forma de equivocarse en esto.
   final Set<String> conConsentimiento;
 
-  /// Qué hacer con el plan publicado y asignado.
+  /// A quiénes ya se les entregó este plan, para que la pantalla los muestre
+  /// marcados. Viene de las asignaciones, que desde la feature 004 son
+  /// documentos propios y no una lista dentro del plan.
+  final List<String> yaAsignados;
+
+  /// Qué hacer con el plan publicado y con a quiénes se entrega.
   ///
   /// Es el puente que faltaba: sin él, lo aprobado se quedaba en la pantalla
   /// del entrenador y el nadador nunca recibía nada (tarea T006).
-  final void Function(Plan publicado)? alEntregar;
+  ///
+  /// Recibe las dos cosas por separado porque son dos escrituras: el plan
+  /// cambia de estado, y cada entrega es una asignación que pasa por la puerta
+  /// de consentimiento de ese nadador.
+  final void Function(Plan publicado, List<String> nadadoresIds)? alEntregar;
 
   @override
   State<PantallaPlan> createState() => _PantallaPlanState();
@@ -99,7 +109,7 @@ class _PantallaPlanState extends State<PantallaPlan> {
       context: context,
       builder: (_) => _DialogoEntrega(
         nadadores: widget.nadadores,
-        yaAsignados: _plan.nadadoresIds,
+        yaAsignados: widget.yaAsignados,
         conConsentimiento: widget.conConsentimiento,
       ),
     );
@@ -123,14 +133,17 @@ class _PantallaPlanState extends State<PantallaPlan> {
       return;
     }
 
-    final resultado = _ciclo.publicar(_plan.copiarCon(nadadoresIds: elegidos));
+    // Publicar y asignar son **dos escrituras distintas**, y tienen que serlo:
+    // el plan cambia de estado y nada más, y cada entrega es un documento
+    // propio que pasa por la puerta de consentimiento de ese nadador.
+    final resultado = _ciclo.publicar(_plan);
 
     if (!mounted) return;
 
     switch (resultado) {
       case TransicionHecha(:final plan):
         setState(() => _plan = plan);
-        widget.alEntregar?.call(plan);
+        widget.alEntregar?.call(plan, elegidos);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(

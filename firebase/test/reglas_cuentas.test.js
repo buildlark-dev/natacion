@@ -115,6 +115,12 @@ async function conPlan(cambios = {}) {
 test('A4 — el nadador lee su plan publicado y asignado', async () => {
   await darDeAlta('u-n1', 'n1');
   await conPlan();
+  await sembrar(async (db) => {
+    await db
+      .collection('asignaciones')
+      .doc('p1|n1')
+      .set({ planId: 'p1', nadadorId: 'n1', asignadaEn: new Date() });
+  });
   await assertSucceeds(comoNadador('u-n1').collection('planes').doc('p1').get());
 });
 
@@ -405,4 +411,161 @@ test('un registro no se borra desde el cliente', async () => {
     comoNadador('u-n1').collection('registros').doc('r1').delete(),
   );
   await assertFails(comoEntrenador().collection('registros').doc('r1').delete());
+});
+
+// --- Asignaciones: la puerta de publicacion -------------------------------
+//
+// Una asignacion por nadador, con identificador determinista. Es lo que
+// permite que la regla compruebe SU consentimiento con un solo get(): con la
+// lista dentro del plan haria falta recorrerla, y el lenguaje de reglas no
+// tiene bucles.
+
+/** Entrega un plan a un nadador saltandose las reglas, para montar escenario. */
+async function conAsignacion(planId, nadadorId) {
+  await sembrar(async (db) => {
+    await db
+      .collection('asignaciones')
+      .doc(`${planId}|${nadadorId}`)
+      .set({ planId, nadadorId, asignadaEn: new Date() });
+  });
+}
+
+test('P5 — el entrenador asigna a quien tiene consentimiento vigente', async () => {
+  await darDeAlta('u-n1', 'n1', { conConsentimiento: true });
+  await conPlan();
+
+  await assertSucceeds(
+    comoEntrenador()
+      .collection('asignaciones')
+      .doc('p1|n1')
+      .set({ planId: 'p1', nadadorId: 'n1', asignadaEn: new Date() }),
+  );
+});
+
+test('P5 — sin consentimiento vigente, NO se le puede asignar', async () => {
+  await darDeAlta('u-n1', 'n1', { conConsentimiento: false });
+  await conPlan();
+
+  await assertFails(
+    comoEntrenador()
+      .collection('asignaciones')
+      .doc('p1|n1')
+      .set({ planId: 'p1', nadadorId: 'n1', asignadaEn: new Date() }),
+  );
+});
+
+test('P5 — revocado el consentimiento, deja de poder asignarsele', async () => {
+  await darDeAlta('u-n1', 'n1', { conConsentimiento: true });
+  await sembrar(async (db) => {
+    await db.collection('consentimientos').doc('n1').update({ vigente: false });
+  });
+
+  await assertFails(
+    comoEntrenador()
+      .collection('asignaciones')
+      .doc('p1|n1')
+      .set({ planId: 'p1', nadadorId: 'n1', asignadaEn: new Date() }),
+  );
+});
+
+test('el identificador tiene que coincidir con su contenido', async () => {
+  // Si no, se podria escribir una asignacion para n1 en el documento de n2 y
+  // la regla de lectura del plan —que busca por identificador— la encontraria.
+  await darDeAlta('u-n1', 'n1', { conConsentimiento: true });
+
+  await assertFails(
+    comoEntrenador()
+      .collection('asignaciones')
+      .doc('p1|n2')
+      .set({ planId: 'p1', nadadorId: 'n1', asignadaEn: new Date() }),
+  );
+});
+
+test('un nadador no se asigna un plan a si mismo', async () => {
+  await darDeAlta('u-n1', 'n1', { conConsentimiento: true });
+
+  await assertFails(
+    comoNadador('u-n1')
+      .collection('asignaciones')
+      .doc('p1|n1')
+      .set({ planId: 'p1', nadadorId: 'n1', asignadaEn: new Date() }),
+  );
+});
+
+test('una asignacion no se edita, para que no se salte la puerta', async () => {
+  // Permitir un update dejaria cambiar el nadadorId de una asignacion ya
+  // concedida sin volver a comprobar su consentimiento.
+  await darDeAlta('u-n1', 'n1', { conConsentimiento: true });
+  await conAsignacion('p1', 'n1');
+
+  await assertFails(
+    comoEntrenador()
+      .collection('asignaciones')
+      .doc('p1|n1')
+      .update({ nadadorId: 'n2' }),
+  );
+});
+
+test('el nadador lee su asignacion y no la de otro', async () => {
+  await darDeAlta('u-n1', 'n1');
+  await conAsignacion('p1', 'n1');
+  await conAsignacion('p1', 'n2');
+
+  await assertSucceeds(
+    comoNadador('u-n1').collection('asignaciones').doc('p1|n1').get(),
+  );
+  await assertFails(
+    comoNadador('u-n1').collection('asignaciones').doc('p1|n2').get(),
+  );
+});
+
+test('retirar un plan es del entrenador', async () => {
+  await darDeAlta('u-n1', 'n1', { conConsentimiento: true });
+  await conAsignacion('p1', 'n1');
+
+  await assertFails(
+    comoNadador('u-n1').collection('asignaciones').doc('p1|n1').delete(),
+  );
+  await assertSucceeds(
+    comoEntrenador().collection('asignaciones').doc('p1|n1').delete(),
+  );
+});
+
+// --- La entrega: el unico cambio admitido sobre un plan aprobado ----------
+
+test('el entrenador pasa un plan de aprobado a publicado', async () => {
+  await conPlan({ estado: 'aprobado' });
+
+  await assertSucceeds(
+    comoEntrenador().collection('planes').doc('p1').update({ estado: 'publicado' }),
+  );
+});
+
+test('la entrega no puede cambiar nada mas que el estado', async () => {
+  // La inmutabilidad de FR-025 es sobre lo que el entrenador firmo. Entregar
+  // no es tocarlo.
+  await conPlan({ estado: 'aprobado' });
+
+  await assertFails(
+    comoEntrenador()
+      .collection('planes')
+      .doc('p1')
+      .update({ estado: 'publicado', nombre: 'Otro nombre' }),
+  );
+});
+
+test('un publicado no vuelve a aprobado', async () => {
+  await conPlan({ estado: 'publicado' });
+
+  await assertFails(
+    comoEntrenador().collection('planes').doc('p1').update({ estado: 'aprobado' }),
+  );
+});
+
+test('un borrador no salta directo a publicado', async () => {
+  await conPlan({ estado: 'borrador' });
+
+  await assertFails(
+    comoEntrenador().collection('planes').doc('p1').update({ estado: 'publicado' }),
+  );
 });
