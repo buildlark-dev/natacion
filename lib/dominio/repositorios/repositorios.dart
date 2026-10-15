@@ -8,6 +8,7 @@ library;
 
 import 'package:natacion_app/dominio/biblioteca/biblioteca.dart';
 import 'package:natacion_app/dominio/cuentas/cuenta.dart';
+import 'package:natacion_app/dominio/entidades/asignacion.dart';
 import 'package:natacion_app/dominio/entidades/envio_pendiente.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/entidades/registro_sesion.dart';
@@ -65,6 +66,30 @@ abstract class RepositorioNadadores {
 
 abstract class RepositorioBiblioteca {
   Future<Biblioteca> cargar();
+}
+
+/// A quién se le entregó cada plan (feature 004).
+///
+/// Las asignaciones viven aparte del plan a propósito: un plan aprobado es
+/// inmutable, y las reglas de acceso comprueban el consentimiento de **un**
+/// nadador por escritura. Ver `lib/dominio/entidades/asignacion.dart`.
+abstract class RepositorioAsignaciones {
+  Future<List<Asignacion>> listar();
+
+  Future<List<Asignacion>> deNadador(String nadadorId);
+
+  Future<List<Asignacion>> dePlan(String planId);
+
+  /// Entrega el plan a un nadador.
+  ///
+  /// El servidor comprueba su consentimiento. Si no lo tiene, esto falla, y
+  /// falla a propósito: es la puerta de publicación (FR-013).
+  Future<void> asignar(Asignacion asignacion);
+
+  /// Retira un plan a un nadador.
+  ///
+  /// **No borra sus registros**: lo que el nadador ya envió es suyo.
+  Future<void> retirar(String planId, String nadadorId);
 }
 
 /// Los registros que el nadador escribe sobre sus sesiones (feature 003).

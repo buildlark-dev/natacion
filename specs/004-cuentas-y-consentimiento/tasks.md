@@ -208,13 +208,13 @@ comprobar que está igual, byte a byte (escenario V13).
 > se escribió entero en la feature 001 y `lib/main.dart` sencillamente nunca lo usó: tiene un
 > `List<Plan>` en memoria y un `RepositorioNadadoresMemoria`. Es, sobre todo, cableado.
 
-- [ ] T069 [US4] Sustituir en `lib/main.dart` el `List<Plan> _planes` en memoria por `RepositorioPlanesFirestore`, que ya existe y ya implementa todo el contrato
-- [ ] T070 [US4] Sustituir `RepositorioNadadoresMemoria` por `RepositorioNadadoresFirestore` en `lib/main.dart`, conservando el camino de perfiles de prueba para desarrollo
-- [ ] T071 [US4] Añadir `declaraSerMayorDeEdad` a `lib/dominio/entidades/nadador.dart` como `bool?`, donde `null` significa «todavía no lo declaró», que **no es lo mismo que menor**. Mantener `fechaNacimiento` opcional (minimización, FR-008)
-- [ ] T072 [US4] Serializar el campo nuevo en `lib/datos/serializacion.dart` sin romper los documentos ya guardados
-- [ ] T073 [P] [US4] Escribir en `test/datos/persistencia_plan_test.dart` que guardar y recuperar un plan aprobado **no altera un byte**, y que un borrador guardado sigue siendo borrador (FR-032, FR-033)
-- [ ] T074 [P] [US4] Escribir en `test/dominio/metodologia/categoria_sin_edad_test.dart` el criterio SC-016: la categoría de un nadador **no cambia** al añadirle, quitarle o cambiarle la fecha de nacimiento, ni se sugiere a partir de ella (sección 11.1 de la metodología 3.6.0)
-- [ ] T075 [US4] Comprobar que la lectura de los planes propios sigue funcionando **sin red**, apoyada en la caché de Firestore que la feature 003 dejó activada (FR-034)
+- [X] T069 [US4] Sustituir en `lib/main.dart` el `List<Plan> _planes` en memoria por `RepositorioPlanesFirestore`, que ya existe y ya implementa todo el contrato
+- [X] T070 [US4] Sustituir `RepositorioNadadoresMemoria` por `RepositorioNadadoresFirestore` en `lib/main.dart`, conservando el camino de perfiles de prueba para desarrollo
+- [X] T071 [US4] Añadir `declaraSerMayorDeEdad` a `lib/dominio/entidades/nadador.dart` como `bool?`, donde `null` significa «todavía no lo declaró», que **no es lo mismo que menor**. Mantener `fechaNacimiento` opcional (minimización, FR-008)
+- [X] T072 [US4] Serializar el campo nuevo en `lib/datos/serializacion.dart` sin romper los documentos ya guardados
+- [X] T073 [P] [US4] Escribir en `test/datos/persistencia_plan_test.dart` que guardar y recuperar un plan aprobado **no altera un byte**, y que un borrador guardado sigue siendo borrador (FR-032, FR-033)
+- [X] T074 [P] [US4] Escribir en `test/dominio/metodologia/categoria_sin_edad_test.dart` el criterio SC-016: la categoría de un nadador **no cambia** al añadirle, quitarle o cambiarle la fecha de nacimiento, ni se sugiere a partir de ella (sección 11.1 de la metodología 3.6.0)
+- [X] T075 [US4] Comprobar que la lectura de los planes propios sigue funcionando **sin red**, apoyada en la caché de Firestore que la feature 003 dejó activada (FR-034)
 
 **Checkpoint**: el trabajo del entrenador sobrevive. Con esto y la fase 5, la feature es
 desplegable.

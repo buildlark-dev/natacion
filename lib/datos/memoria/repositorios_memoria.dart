@@ -7,6 +7,7 @@ library;
 
 import 'package:natacion_app/datos/serializacion.dart';
 import 'package:natacion_app/dominio/entidades/nadador.dart';
+import 'package:natacion_app/dominio/entidades/asignacion.dart';
 import 'package:natacion_app/dominio/entidades/plan.dart';
 import 'package:natacion_app/dominio/entidades/sesion.dart';
 import 'package:natacion_app/dominio/metodologia/categorias.dart';
@@ -148,5 +149,37 @@ class RepositorioNadadoresMemoria implements RepositorioNadadores {
     final nadador = _nadadores[id];
     if (nadador == null) throw FalloDeDatos('No existe el nadador $id');
     return nadadorAJson(nadador);
+  }
+}
+
+/// Asignaciones en memoria, para el modo local y para las pruebas.
+///
+/// **No comprueba el consentimiento**, y no puede: sin servidor no hay
+/// consentimiento registrado. Por eso el modo local va rotulado y solo admite
+/// datos de prueba.
+class RepositorioAsignacionesMemoria implements RepositorioAsignaciones {
+  final _asignaciones = <String, Asignacion>{};
+
+  @override
+  Future<List<Asignacion>> listar() async => _asignaciones.values.toList();
+
+  @override
+  Future<List<Asignacion>> deNadador(String nadadorId) async =>
+      _asignaciones.values.where((a) => a.nadadorId == nadadorId).toList();
+
+  @override
+  Future<List<Asignacion>> dePlan(String planId) async =>
+      _asignaciones.values.where((a) => a.planId == planId).toList();
+
+  @override
+  Future<void> asignar(Asignacion asignacion) async {
+    _asignaciones[asignacion.id] = asignacion;
+  }
+
+  @override
+  Future<void> retirar(String planId, String nadadorId) async {
+    _asignaciones.remove(
+      Asignacion.idDeterminista(planId: planId, nadadorId: nadadorId),
+    );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:natacion_app/datos/memoria/repositorios_memoria.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +9,7 @@ import 'package:natacion_app/dominio/cuentas/cuenta.dart';
 import 'package:natacion_app/ui/acceso/estado_sesion.dart';
 import 'package:natacion_app/ui/acceso/pantalla_acceso.dart';
 import 'package:natacion_app/datos/firestore/envio_registros.dart';
+import 'package:natacion_app/datos/firestore/repositorios_firestore.dart';
 import 'package:natacion_app/datos/local/almacen_local.dart';
 import 'package:natacion_app/datos/local/repositorios_locales.dart';
 import 'package:natacion_app/datos/recursos/biblioteca_empaquetada.dart';
@@ -53,6 +56,7 @@ class RecursosIniciales {
     required this.red,
     required this.transporte,
     this.identidad,
+    this.firestore,
   });
 
   final Biblioteca biblioteca;
@@ -74,6 +78,12 @@ class RecursosIniciales {
   /// Nula cuando no hay servidor con el que hablar. Entonces la app entra en
   /// **modo local**: ver [PantallaPrincipal.modoLocal].
   final Identidad? identidad;
+
+  /// La base de datos, si la hay. Nula en modo local.
+  ///
+  /// Es lo que decide si el trabajo del entrenador sobrevive al cierre de la
+  /// app o se pierde al recargar.
+  final FirebaseFirestore? firestore;
 }
 
 class AppNatacion extends StatelessWidget {
@@ -138,6 +148,7 @@ class _PantallaInicioState extends State<PantallaInicio> {
       // levantar los emuladores.
       identidad:
           datos == null ? null : SesionFirebase.porOmision(firestore: datos),
+      firestore: datos,
     );
   }
 
@@ -269,7 +280,41 @@ class PantallaPrincipal extends StatefulWidget {
 class _PantallaPrincipalState extends State<PantallaPrincipal> {
   int _indice = 0;
 
-  final RepositorioNadadores _nadadores = RepositorioNadadoresMemoria();
+  @override
+  void initState() {
+    super.initState();
+    // Lo guardado está ahí antes de que nadie toque nada. Con la persistencia
+    // de Firestore activada, esta lectura responde **también sin red**: lo del
+    // entrenador se lee de la caché (FR-034).
+    unawaited(_recargar());
+  }
+
+  /// Los repositorios. Con servidor persisten; en modo local, no.
+  ///
+  /// Hasta la feature 004 `main.dart` usaba los de memoria **aunque los de
+  /// Firestore existieran desde la 001**: estaban escritos y nadie los
+  /// llamaba. El trabajo del entrenador se perdía al recargar.
+  late final FirebaseFirestore? _db = widget.recursos.firestore;
+
+  late final RepositorioSesiones _sesiones = _db == null
+      ? RepositorioSesionesMemoria()
+      : RepositorioSesionesFirestore(_db, widget.recursos.biblioteca);
+
+  late final RepositorioPlanes _repoPlanes = _db == null
+      ? RepositorioPlanesMemoria()
+      : RepositorioPlanesFirestore(
+          _db,
+          widget.recursos.biblioteca,
+          _sesiones,
+        );
+
+  late final RepositorioNadadores _nadadores = _db == null
+      ? RepositorioNadadoresMemoria()
+      : RepositorioNadadoresFirestore(_db);
+
+  late final RepositorioAsignaciones _repoAsignaciones = _db == null
+      ? RepositorioAsignacionesMemoria()
+      : RepositorioAsignacionesFirestore(_db);
 
   /// Un solo estado de editor para toda la app, para que lo generado en la
   /// primera pestaña aparezca en la segunda.
@@ -294,8 +339,8 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
   late final AlmacenLocal _almacen =
       AlmacenPreferencias(cuentaId: widget.cuenta?.id);
 
-  /// Los planes de la sesión. En memoria: la persistencia en Firestore llega
-  /// con la autenticación de la feature 004.
+  /// Lo que hay cargado ahora mismo, para pintar. **La fuente de verdad son
+  /// los repositorios**: esto es una copia que se recarga desde ellos.
   final List<Plan> _planes = [];
 
   late final RegistrosLocales _registros = RegistrosLocales(_almacen);
@@ -311,25 +356,56 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
   /// **Dos cosas distintas y por eso dos parámetros.** El plan cambia de
   /// estado; cada entrega es una asignación propia, que en el servidor pasa
   /// por la puerta de consentimiento de ese nadador.
-  void _entregar(Plan publicado, List<String> nadadoresIds) {
+  Future<void> _entregar(Plan publicado, List<String> nadadoresIds) async {
+    final planId = publicado.id;
+    if (planId == null) return;
+
+    await _repoPlanes.guardarAprobado(publicado, const {});
+
+    // Una escritura por nadador. Cada una pasa por la puerta: si alguno no
+    // tiene consentimiento vigente, el servidor la deniega y se dice cuál.
+    final sinPermiso = <String>[];
+    for (final nadadorId in nadadoresIds) {
+      try {
+        await _repoAsignaciones.asignar(
+          Asignacion(
+            planId: planId,
+            nadadorId: nadadorId,
+            asignadaEn: DateTime.now(),
+          ),
+        );
+      } on FalloDeDatos {
+        sinPermiso.add(nadadorId);
+      }
+    }
+
+    await _recargar();
+
+    if (!mounted || sinPermiso.isEmpty) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'No se pudo entregar a ${sinPermiso.length} nadador'
+          '${sinPermiso.length == 1 ? '' : 'es'}: les falta el consentimiento '
+          'del acudiente.',
+        ),
+      ),
+    );
+  }
+
+  /// Vuelve a leer de los repositorios lo que se pinta.
+  Future<void> _recargar() async {
+    final planes = await _repoPlanes.listar();
+    final asignaciones = await _repoAsignaciones.listar();
+
+    if (!mounted) return;
     setState(() {
       _planes
-        ..removeWhere((p) => p.id == publicado.id)
-        ..add(publicado);
-
-      final planId = publicado.id;
-      if (planId == null) return;
-
+        ..clear()
+        ..addAll(planes);
       _asignaciones
-        ..removeWhere((a) => a.planId == planId)
-        ..addAll([
-          for (final nadadorId in nadadoresIds)
-            Asignacion(
-              planId: planId,
-              nadadorId: nadadorId,
-              asignadaEn: DateTime.now(),
-            ),
-        ]);
+        ..clear()
+        ..addAll(asignaciones);
     });
   }
 
