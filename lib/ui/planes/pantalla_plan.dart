@@ -20,6 +20,7 @@ class PantallaPlan extends StatefulWidget {
     required this.plan,
     required this.versionMetodologia,
     this.nadadores = const [],
+    this.conConsentimiento = const <String>{},
     this.alEntregar,
   });
 
@@ -28,6 +29,14 @@ class PantallaPlan extends StatefulWidget {
 
   /// Perfiles a los que se puede asignar el plan.
   final List<Nadador> nadadores;
+
+  /// Quiénes tienen consentimiento vigente y por tanto pueden recibir un plan
+  /// (FR-013: el consentimiento es puerta de publicación).
+  ///
+  /// Vacío por omisión: **no se publica a nadie mientras no conste que puede**.
+  /// Si el valor por omisión fuera «todos», olvidar pasarlo abriría la puerta
+  /// en silencio, que es la peor forma de equivocarse en esto.
+  final Set<String> conConsentimiento;
 
   /// Qué hacer con el plan publicado y asignado.
   ///
@@ -91,9 +100,28 @@ class _PantallaPlanState extends State<PantallaPlan> {
       builder: (_) => _DialogoEntrega(
         nadadores: widget.nadadores,
         yaAsignados: _plan.nadadoresIds,
+        conConsentimiento: widget.conConsentimiento,
       ),
     );
     if (elegidos == null) return;
+
+    // Segunda comprobación, por si alguien llegó aquí con un identificador que
+    // la pantalla no ofreció. No sustituye a la del servidor: la acompaña.
+    final sinPermiso =
+        elegidos.where((id) => !widget.conConsentimiento.contains(id)).toList();
+    if (sinPermiso.isNotEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '${sinPermiso.length} nadador'
+            '${sinPermiso.length == 1 ? '' : 'es'} sin consentimiento del '
+            'acudiente. Pídelo antes de entregarle el plan.',
+          ),
+        ),
+      );
+      return;
+    }
 
     final resultado = _ciclo.publicar(_plan.copiarCon(nadadoresIds: elegidos));
 
@@ -351,10 +379,18 @@ class _Aviso extends StatelessWidget {
 /// legítimo: un plan publicado que todavía no es de nadie. Lo que no hace es
 /// esconder esa consecuencia: el aviso lo dice.
 class _DialogoEntrega extends StatefulWidget {
-  const _DialogoEntrega({required this.nadadores, required this.yaAsignados});
+  const _DialogoEntrega({
+    required this.nadadores,
+    required this.yaAsignados,
+    required this.conConsentimiento,
+  });
 
   final List<Nadador> nadadores;
   final List<String> yaAsignados;
+
+  /// Quiénes pueden recibir un plan. Sin consentimiento vigente no se le
+  /// publica un plan a alguien (FR-013), y el servidor lo deniega igual.
+  final Set<String> conConsentimiento;
 
   @override
   State<_DialogoEntrega> createState() => _DialogoEntregaState();
@@ -388,21 +424,40 @@ class _DialogoEntregaState extends State<_DialogoEntrega> {
                       shrinkWrap: true,
                       children: [
                         for (final nadador in widget.nadadores)
-                          CheckboxListTile(
-                            value: _elegidos.contains(nadador.id),
-                            title: Text(nadador.nombre),
-                            subtitle: Text(
-                              nadador.categoria?.nombre ?? 'Sin categoría',
-                            ),
-                            onChanged: (marcado) => setState(() {
-                              final id = nadador.id;
-                              if (id == null) return;
-                              if (marcado ?? false) {
-                                _elegidos.add(id);
-                              } else {
-                                _elegidos.remove(id);
-                              }
-                            }),
+                          Builder(
+                            builder: (context) {
+                              // La puerta de publicación, vista desde la
+                              // pantalla. Quien la hace cumplir es el
+                              // servidor; esto evita ofrecer una casilla que
+                              // va a rebotar, y dice **qué falta** en lugar de
+                              // dejar un error genérico después.
+                              final puede = widget.conConsentimiento
+                                  .contains(nadador.id);
+
+                              return CheckboxListTile(
+                                value: puede && _elegidos.contains(nadador.id),
+                                enabled: puede,
+                                title: Text(nadador.nombre),
+                                subtitle: Text(
+                                  puede
+                                      ? (nadador.categoria?.nombre ??
+                                          'Sin categoría')
+                                      : 'Sin consentimiento del acudiente: '
+                                          'pídelo antes de entregarle un plan',
+                                ),
+                                onChanged: !puede
+                                    ? null
+                                    : (marcado) => setState(() {
+                                          final id = nadador.id;
+                                          if (id == null) return;
+                                          if (marcado ?? false) {
+                                            _elegidos.add(id);
+                                          } else {
+                                            _elegidos.remove(id);
+                                          }
+                                        }),
+                              );
+                            },
                           ),
                       ],
                     ),

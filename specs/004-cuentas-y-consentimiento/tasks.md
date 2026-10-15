@@ -174,22 +174,22 @@ C3 del quickstart).
 
 ### Las pruebas de la puerta
 
-- [ ] T056 [P] [US1] Escribir en `firebase/test/reglas.test.js` la garantía P1: con la cuenta **correcta** del nadador y saltándose la app, escribir un registro sin consentimiento vigente se deniega. Se prueba así y no por la interfaz, porque una puerta probada solo a través de su propia pantalla no está probada
-- [ ] T057 [P] [US1] Escribir la garantía P6: con consentimiento vigente se envía; se revoca; el siguiente se deniega
-- [ ] T058 [P] [US1] Escribir la garantía P5: publicar un plan a un nadador sin consentimiento vigente se deniega en la regla
+- [X] T056 [P] [US1] Escribir en `firebase/test/reglas.test.js` la garantía P1: con la cuenta **correcta** del nadador y saltándose la app, escribir un registro sin consentimiento vigente se deniega. Se prueba así y no por la interfaz, porque una puerta probada solo a través de su propia pantalla no está probada
+- [X] T057 [P] [US1] Escribir la garantía P6: con consentimiento vigente se envía; se revoca; el siguiente se deniega
+- [X] T058 [P] [US1] Escribir la garantía P5: publicar un plan a un nadador sin consentimiento vigente se deniega en la regla
 
 ### Implementación
 
-- [ ] T059 [US1] Declarar `PuertaDeConsentimiento` en `lib/dominio/consentimiento/puerta.dart`, con una sola pregunta: `Future<bool> puedeSalir(String nadadorId)`
-- [ ] T060 [US1] Añadir la condición de la puerta a `firebase/firestore.rules` en `registros/{registroId}`, con `get()` del documento de consentimiento del nadador y `vigente == true` (decisión D1). Acepta el coste de una lectura por escritura, que a esta escala es irrelevante
-- [ ] T061 [US1] Inyectar la puerta en el `Sincronizador` de `lib/dominio/sincronizacion/bandeja_salida.dart`. **No se añade ningún estado a `EstadoDeEnvio`** (decisión D6): un registro retenido es un registro pendiente, y ya existe cómo representarlo
-- [ ] T062 [US1] Hacer que estar sin consentimiento **no incremente `intentos`** ni dispare la espera exponencial, igual que ya ocurre al estar sin conexión
-- [ ] T063 [P] [US1] Escribir en `test/dominio/sincronizacion/puerta_test.dart` la garantía P4, **en Dart puro con un doble de la puerta**: muchos ciclos del sincronizador con la puerta cerrada dejan `intentos` en cero
-- [ ] T064 [P] [US1] Escribir la garantía P3: se anota sin consentimiento, se otorga, y el registro llega **con su contenido intacto y sin intervención**
-- [ ] T065 [US1] Implementar `lib/datos/firestore/consentimientos.dart`, que implementa la puerta leyendo el documento del nadador y **funciona desde la caché sin red**, porque el nadador no puede quedarse sin poder anotar por no tener señal
-- [ ] T066 [US1] Impedir la publicación de un plan a un nadador sin consentimiento vigente en `lib/ui/planes/pantalla_plan.dart`, diciendo **exactamente qué falta** en lugar de un error genérico
-- [ ] T067 [US1] Mostrar al nadador sin consentimiento, sin bloquearlo, por qué lo suyo está esperando. Reutiliza `lib/ui/nadador/aviso_sincronizacion.dart`, que ya sabe decir que algo quedó guardado
-- [ ] T068 [P] [US1] Escribir en `test/ui/nadador/sin_consentimiento_test.dart` la garantía P2 y SC-002: recorrer la app entera con un nadador sin consentimiento y comprobar que **no hay un solo punto** que exija consentimiento para continuar
+- [X] T059 [US1] Declarar `PuertaDeConsentimiento` en `lib/dominio/consentimiento/puerta.dart`, con una sola pregunta: `Future<bool> puedeSalir(String nadadorId)`
+- [X] T060 [US1] Añadir la condición de la puerta a `firebase/firestore.rules` en `registros/{registroId}`, con `get()` del documento de consentimiento del nadador y `vigente == true` (decisión D1). Acepta el coste de una lectura por escritura, que a esta escala es irrelevante
+- [X] T061 [US1] Inyectar la puerta en el `Sincronizador` de `lib/dominio/sincronizacion/bandeja_salida.dart`. **No se añade ningún estado a `EstadoDeEnvio`** (decisión D6): un registro retenido es un registro pendiente, y ya existe cómo representarlo
+- [X] T062 [US1] Hacer que estar sin consentimiento **no incremente `intentos`** ni dispare la espera exponencial, igual que ya ocurre al estar sin conexión
+- [X] T063 [P] [US1] Escribir en `test/dominio/sincronizacion/puerta_test.dart` la garantía P4, **en Dart puro con un doble de la puerta**: muchos ciclos del sincronizador con la puerta cerrada dejan `intentos` en cero
+- [X] T064 [P] [US1] Escribir la garantía P3: se anota sin consentimiento, se otorga, y el registro llega **con su contenido intacto y sin intervención**
+- [X] T065 [US1] Implementar `lib/datos/firestore/consentimientos.dart`, que implementa la puerta leyendo el documento del nadador y **funciona desde la caché sin red**, porque el nadador no puede quedarse sin poder anotar por no tener señal
+- [X] T066 [US1] Impedir la publicación de un plan a un nadador sin consentimiento vigente en `lib/ui/planes/pantalla_plan.dart`, diciendo **exactamente qué falta** en lugar de un error genérico
+- [X] T067 [US1] Mostrar al nadador sin consentimiento, sin bloquearlo, por qué lo suyo está esperando. Reutiliza `lib/ui/nadador/aviso_sincronizacion.dart`, que ya sabe decir que algo quedó guardado
+- [X] T068 [P] [US1] Escribir en `test/ui/nadador/sin_consentimiento_test.dart` la garantía P2 y SC-002: recorrer la app entera con un nadador sin consentimiento y comprobar que **no hay un solo punto** que exija consentimiento para continuar
 
 **Checkpoint**: 🎯 **aquí la feature empieza a valer.** La puerta existe y la hace cumplir el
 servidor. A partir de este punto se puede desplegar sin incumplir el principio V.
