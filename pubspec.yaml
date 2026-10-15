@@ -80,6 +80,10 @@ flutter:
   assets:
     - docs/metodologia/metodologia.json
     - assets/biblioteca/
+    # El texto informativo del consentimiento va versionado: cada
+    # consentimiento consta bajo la version que su otorgante leyo, y cambiar
+    # el texto no reescribe lo que alguien ya acepto (FR-018).
+    - assets/consentimiento/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

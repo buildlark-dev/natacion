@@ -18,3 +18,4 @@ import { initializeApp } from 'firebase-admin/app';
 initializeApp();
 
 export { alCrearseUnaCuenta, asignarRol } from './roles';
+export { emitirSolicitud, canjear, revocar } from './consentimiento';

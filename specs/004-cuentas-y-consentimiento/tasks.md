@@ -125,37 +125,37 @@ registro responde a las cinco preguntas sin interpretar nada (SC-005).
 
 ### Entidades del dominio y sus pruebas
 
-- [ ] T034 [P] [US2] Crear `Consentimiento`, `Otorgante` y `Alcance` en `lib/dominio/consentimiento/consentimiento.dart`. `vigente` **se deriva** de `revocadoEn == null` y no es un campo que se escriba, para que no pueda contradecir a la fecha
-- [ ] T035 [P] [US2] Crear `SolicitudDeConsentimiento` en `lib/dominio/consentimiento/solicitud.dart`, con `resumenDelToken` y **sin ningún campo para el token en claro** (decisión D4)
-- [ ] T036 [P] [US2] Escribir en `test/dominio/consentimiento/consentimiento_test.dart` las invariantes de `data-model.md`: un consentimiento con `alcances` vacío **no se construye**; revocar no borra `otorgadoEn` ni `otorgadoPor`; `datosDeEntrenamiento` y `video` son alcances distintos y conceder uno no concede el otro
-- [ ] T037 [P] [US2] Escribir en `test/dominio/consentimiento/solicitud_test.dart` que `utilizable` exige las tres condiciones a la vez: no canjeada, no vencida, y token que coincide con el resumen
+- [X] T034 [P] [US2] Crear `Consentimiento`, `Otorgante` y `Alcance` en `lib/dominio/consentimiento/consentimiento.dart`. `vigente` **se deriva** de `revocadoEn == null` y no es un campo que se escriba, para que no pueda contradecir a la fecha
+- [X] T035 [P] [US2] Crear `SolicitudDeConsentimiento` en `lib/dominio/consentimiento/solicitud.dart`, con `resumenDelToken` y **sin ningún campo para el token en claro** (decisión D4)
+- [X] T036 [P] [US2] Escribir en `test/dominio/consentimiento/consentimiento_test.dart` las invariantes de `data-model.md`: un consentimiento con `alcances` vacío **no se construye**; revocar no borra `otorgadoEn` ni `otorgadoPor`; `datosDeEntrenamiento` y `video` son alcances distintos y conceder uno no concede el otro
+- [X] T037 [P] [US2] Escribir en `test/dominio/consentimiento/solicitud_test.dart` que `utilizable` exige las tres condiciones a la vez: no canjeada, no vencida, y token que coincide con el resumen
 
 ### El servidor
 
-- [ ] T038 [US2] Implementar `emitirSolicitud(nadadorId, canal, alcances)` en `firebase/functions/src/consentimiento.ts`, **llamable solo por el entrenador**: genera un token aleatorio criptográficamente seguro, guarda solo su resumen SHA-256, con fecha de servidor y vencimiento
-- [ ] T039 [US2] Definir el puerto `EnviadorDeAvisos` en `firebase/functions/src/consentimiento.ts`, de modo que la función **no sepa** si detrás hay correo o mensajería. Qué canal concreto se usa se decide al implementar y nada más depende de ello (research.md, «lo que no se resuelve aquí»)
-- [ ] T040 [US2] Implementar `canjear(token, declaracion)`, pública porque la abre el acudiente, que no tiene cuenta. Rechaza sin decir **cuál** de las tres condiciones falló: no existe, venció o ya se canjeó
-- [ ] T041 [US2] Exigir en el canje la declaración completa —nombre, documento, calidad, ser el representante legal y **que el menor fue oído**— y escribir el consentimiento con la **fecha del servidor** (FR-017, FR-021)
-- [ ] T042 [US2] Implementar el aviso de vuelta al mismo canal tras un canje (garantía C9). No impide un enlace mal dirigido; lo hace **descubrible por el acudiente**
-- [ ] T043 [US2] Implementar `revocar`, accesible **desde el canal del acudiente sin cuenta de entrenador** (garantía C10), registrando `revocadoEn` con fecha de servidor
-- [ ] T044 [US2] Añadir a `firebase/firestore.rules` las colecciones `consentimientos/{nadadorId}`, su subcolección `historial/` y `solicitudes/{solicitudId}`: **ninguna escritura del cliente**, solo lectura según la tabla de `data-model.md`
+- [X] T038 [US2] Implementar `emitirSolicitud(nadadorId, canal, alcances)` en `firebase/functions/src/consentimiento.ts`, **llamable solo por el entrenador**: genera un token aleatorio criptográficamente seguro, guarda solo su resumen SHA-256, con fecha de servidor y vencimiento
+- [X] T039 [US2] Definir el puerto `EnviadorDeAvisos` en `firebase/functions/src/consentimiento.ts`, de modo que la función **no sepa** si detrás hay correo o mensajería. Qué canal concreto se usa se decide al implementar y nada más depende de ello (research.md, «lo que no se resuelve aquí»)
+- [X] T040 [US2] Implementar `canjear(token, declaracion)`, pública porque la abre el acudiente, que no tiene cuenta. Rechaza sin decir **cuál** de las tres condiciones falló: no existe, venció o ya se canjeó
+- [X] T041 [US2] Exigir en el canje la declaración completa —nombre, documento, calidad, ser el representante legal y **que el menor fue oído**— y escribir el consentimiento con la **fecha del servidor** (FR-017, FR-021)
+- [X] T042 [US2] Implementar el aviso de vuelta al mismo canal tras un canje (garantía C9). No impide un enlace mal dirigido; lo hace **descubrible por el acudiente**
+- [X] T043 [US2] Implementar `revocar`, accesible **desde el canal del acudiente sin cuenta de entrenador** (garantía C10), registrando `revocadoEn` con fecha de servidor
+- [X] T044 [US2] Añadir a `firebase/firestore.rules` las colecciones `consentimientos/{nadadorId}`, su subcolección `historial/` y `solicitudes/{solicitudId}`: **ninguna escritura del cliente**, solo lectura según la tabla de `data-model.md`
 
 ### Pruebas del servidor y de las reglas
 
-- [ ] T045 [P] [US2] Escribir en `firebase/functions/test/consentimiento.test.js` la garantía C1: con cuenta de nadador, emitir una solicitud y cambiar el canal de una existente. **Las dos se deniegan.** Es la garantía que cierra el agujero de que un niño ponga un correo suyo
-- [ ] T046 [P] [US2] Escribir la garantía C2: canjear dos veces el mismo token deja **exactamente un** consentimiento y el segundo intento se rechaza
-- [ ] T047 [P] [US2] Escribir la garantía C3: con el reloj adelantado más allá del vencimiento, el canje se rechaza
-- [ ] T048 [P] [US2] Escribir la garantía C4: tras emitir, el documento **no contiene el token** y lo que hay no permite reconstruirlo
-- [ ] T049 [P] [US2] Escribir la garantía C5: canjear con el reloj del cliente adelantado un año registra **la fecha del servidor**
-- [ ] T050 [P] [US2] Escribir la garantía C7: canjear sin la constancia de que el menor fue oído se rechaza
-- [ ] T051 [P] [US2] Escribir la garantía C8: tras revocar, el historial conserva quién otorgó y cuándo, y `vigente` pasa a falso
-- [ ] T052 [P] [US2] Escribir en `firebase/test/reglas.test.js` que ninguna cuenta —ni la del entrenador— puede escribir en `consentimientos` ni en `solicitudes`
+- [X] T045 [P] [US2] Escribir en `firebase/functions/test/consentimiento.test.js` la garantía C1: con cuenta de nadador, emitir una solicitud y cambiar el canal de una existente. **Las dos se deniegan.** Es la garantía que cierra el agujero de que un niño ponga un correo suyo
+- [X] T046 [P] [US2] Escribir la garantía C2: canjear dos veces el mismo token deja **exactamente un** consentimiento y el segundo intento se rechaza
+- [X] T047 [P] [US2] Escribir la garantía C3: con el reloj adelantado más allá del vencimiento, el canje se rechaza
+- [X] T048 [P] [US2] Escribir la garantía C4: tras emitir, el documento **no contiene el token** y lo que hay no permite reconstruirlo
+- [X] T049 [P] [US2] Escribir la garantía C5: canjear con el reloj del cliente adelantado un año registra **la fecha del servidor**
+- [X] T050 [P] [US2] Escribir la garantía C7: canjear sin la constancia de que el menor fue oído se rechaza
+- [X] T051 [P] [US2] Escribir la garantía C8: tras revocar, el historial conserva quién otorgó y cuándo, y `vigente` pasa a falso
+- [X] T052 [P] [US2] Escribir en `firebase/test/reglas.test.js` que ninguna cuenta —ni la del entrenador— puede escribir en `consentimientos` ni en `solicitudes`
 
 ### La interfaz
 
-- [ ] T053 [US2] Crear `lib/ui/consentimiento/pantalla_confirmacion.dart`: la ruta que abre el acudiente, **en español**, con el texto informativo versionado, la declaración y la casilla de que el menor fue oído
-- [ ] T054 [US2] Crear el primer texto informativo versionado en `assets/consentimiento/texto_v1.md`, marcado como **pendiente de revisión jurídica**, con su versión registrada en cada consentimiento que se otorgue bajo él
-- [ ] T055 [US2] Crear `lib/ui/consentimiento/panel_estado.dart`: lo que el entrenador ve de cada nadador —sin consentimiento, solicitud enviada, vigente, revocado— y desde donde emite la solicitud con el canal de su matrícula
+- [X] T053 [US2] Crear `lib/ui/consentimiento/pantalla_confirmacion.dart`: la ruta que abre el acudiente, **en español**, con el texto informativo versionado, la declaración y la casilla de que el menor fue oído
+- [X] T054 [US2] Crear el primer texto informativo versionado en `assets/consentimiento/texto_v1.md`, marcado como **pendiente de revisión jurídica**, con su versión registrada en cada consentimiento que se otorgue bajo él
+- [X] T055 [US2] Crear `lib/ui/consentimiento/panel_estado.dart`: lo que el entrenador ve de cada nadador —sin consentimiento, solicitud enviada, vigente, revocado— y desde donde emite la solicitud con el canal de su matrícula
 
 **Checkpoint**: se puede pedir y registrar un consentimiento. **La puerta todavía no está
 puesta**, así que esto aún no protege nada por sí solo.
@@ -232,7 +232,7 @@ comprobando que lo exportado es legible y que **los planes del entrenador siguen
 
 - [ ] T076 [US5] Implementar la consulta de qué se guarda sobre un nadador, **en términos comprensibles para un acudiente** y no como un volcado técnico (FR-036)
 - [ ] T077 [US5] Conectar la exportación de los datos del nadador reutilizando `lib/datos/exportacion.dart`, que la feature 001 ya construyó (FR-037)
-- [ ] T078 [US5] Implementar la eliminación de los datos personales de un nadador, apoyándose en `RepositorioRegistros.eliminarDe` que ya existe desde la 003 (FR-038)
+- [ ] T078 [US5] Implementar la eliminación de los datos personales de un nadador, apoyándose en `RepositorioRegistros.eliminarDe` que ya existe desde la 003 (FR-038). **Ojo con las subcolecciones**: en Firestore no se borran con su documento padre, se quedan huérfanas pero legibles. Apareció al escribir las pruebas de consentimiento, donde el historial sobrevivía a la limpieza. Borrar el consentimiento de un nadador sin recorrer su `historial/` dejaría en pie justo lo que hay que borrar
 - [ ] T079 [P] [US5] Escribir en `test/datos/borrado_sin_destruir_test.dart` el criterio SC-014: eliminados los datos personales de un nadador, **los planes del entrenador siguen siendo consultables**
 
 ---
