@@ -92,15 +92,15 @@ quickstart).
 
 ### Pruebas de reglas — se escriben primero y tienen que fallar
 
-- [ ] T020 [P] [US3] Escribir en `firebase/test/reglas.test.js` los casos negativos de la garantía A4, uno por uno: leer el plan de otro, leer el registro de otro, escribir un registro con el `nadadorId` de otro, leer un plan en `borrador`, leer uno `aprobado` sin publicar, leer uno publicado sin asignar
-- [ ] T021 [P] [US3] Escribir los casos de la garantía A3: con cuenta de nadador, intentar escribir `estado: 'aprobado'` y `estado: 'publicado'` sobre un plan. Las dos se deniegan
-- [ ] T022 [P] [US3] Escribir el caso de la garantía A5: **con la cuenta del entrenador, escribir un registro se deniega**. Es un cambio respecto de la feature 003, donde era lo único permitido
-- [ ] T023 [P] [US3] Escribir los casos de la garantía A6: sin autenticar, leer **cada** colección del esquema. Todas deniegan
+- [X] T020 [P] [US3] Escribir en `firebase/test/reglas.test.js` los casos negativos de la garantía A4, uno por uno: leer el plan de otro, leer el registro de otro, escribir un registro con el `nadadorId` de otro, leer un plan en `borrador`, leer uno `aprobado` sin publicar, leer uno publicado sin asignar
+- [X] T021 [P] [US3] Escribir los casos de la garantía A3: con cuenta de nadador, intentar escribir `estado: 'aprobado'` y `estado: 'publicado'` sobre un plan. Las dos se deniegan
+- [X] T022 [P] [US3] Escribir el caso de la garantía A5: **con la cuenta del entrenador, escribir un registro se deniega**. Es un cambio respecto de la feature 003, donde era lo único permitido
+- [X] T023 [P] [US3] Escribir los casos de la garantía A6: sin autenticar, leer **cada** colección del esquema. Todas deniegan
 
 ### Implementación
 
-- [ ] T024 [US3] Reescribir `firebase/firestore.rules` para que compare contra `request.auth.uid`: un nadador lee y escribe solo sus registros, y lee solo los planes `publicado` que le están asignados. Retirar el comentario de limitación conocida que la feature 003 dejó escrito
-- [ ] T025 [US3] Añadir a `firebase/firestore.rules` la colección `usuarios/{uid}` con el vínculo cuenta ↔ `nadadorId`, legible por su dueño y por el entrenador de su comunidad, y **no escribible por el cliente**
+- [X] T024 [US3] Reescribir `firebase/firestore.rules` para que compare contra `request.auth.uid`: un nadador lee y escribe solo sus registros, y lee solo los planes `publicado` que le están asignados. Retirar el comentario de limitación conocida que la feature 003 dejó escrito
+- [X] T025 [US3] Añadir a `firebase/firestore.rules` la colección `usuarios/{uid}` con el vínculo cuenta ↔ `nadadorId`, legible por su dueño y por el entrenador de su comunidad, y **no escribible por el cliente**
 - [ ] T026 [US3] Crear `lib/ui/acceso/estado_sesion.dart`, que expone la cuenta activa a la interfaz y reacciona a `Identidad.cambios`
 - [ ] T027 [US3] Crear `lib/ui/acceso/pantalla_acceso.dart`: entrar con una cuenta propia. **Ningún campo de esta pantalla, ni ninguna prueba, contiene una credencial real**
 - [ ] T028 [US3] Hacer que `lib/main.dart` arranque según haya sesión o no, conservando la propiedad de que la app arranca aunque Firebase no esté configurado (la que se arregló en el PR #5)
