@@ -251,15 +251,15 @@ consentimiento, y comprobar que lo único bloqueado es la entrega.
 
 ## Phase 9: Polish & Cross-Cutting Concerns
 
-- [ ] T082 **Retirar `lib/ui/nadadores/aviso_consentimiento.dart`** y sus usos. Lleva escrito en su propia documentación: «debe retirarse cuando la feature de cuentas implemente el consentimiento verificable, **no antes**». Ahora es antes
-- [ ] T083 Retirar de `specs/003-consumo-del-nadador/plan.md` la desviación declarada del principio V, dejando constancia de en qué tarea de esta feature se cerró
-- [ ] T084 [P] Actualizar `README.md` y `docs/DEVELOPMENT.md`, **en inglés**, con las cuentas, los roles y la superficie de servidor
-- [ ] T085 [P] Revisar que ningún archivo del repositorio contenga credenciales, claves ni tokens, incluidos los de prueba de las funciones
-- [ ] T086 Recorrer entero [quickstart.md](quickstart.md) y marcar cada escenario con lo que lo cubre
-- [ ] T087 Desplegar en Firebase Hosting, que es lo que esta feature existe para desbloquear
+- [X] T082 **Retirar `lib/ui/nadadores/aviso_consentimiento.dart`** y sus usos. Lleva escrito en su propia documentación: «debe retirarse cuando la feature de cuentas implemente el consentimiento verificable, **no antes**». Ahora es antes
+- [X] T083 Retirar de `specs/003-consumo-del-nadador/plan.md` la desviación declarada del principio V, dejando constancia de en qué tarea de esta feature se cerró
+- [X] T084 [P] Actualizar `README.md` y `docs/DEVELOPMENT.md`, **en inglés**, con las cuentas, los roles y la superficie de servidor
+- [X] T085 [P] Revisar que ningún archivo del repositorio contenga credenciales, claves ni tokens, incluidos los de prueba de las funciones
+- [X] T086 Recorrer entero [quickstart.md](quickstart.md) y marcar cada escenario con lo que lo cubre
+- [ ] T087 Desplegar en Firebase Hosting, que es lo que esta feature existe para desbloquear. **Bloqueada el 2026-10-15, no por falta de trabajo**: la cuenta no tiene ningún proyecto de Firebase para esta app —solo `languages-buildlark` y `preciojusto-a70ab`, que son de otros productos—, y desplegar las reglas en cualquiera de ellos **sobrescribiría las reglas de seguridad de ese producto**. Hace falta crear un proyecto propio, con plan Blaze para las funciones, y generar `lib/firebase_options.dart`. Los pasos exactos están en `docs/DEVELOPMENT.md`, sección Deploying
 - [ ] T088 **Cerrar T071 de la feature 003**: verificar los escenarios C1 y C2 en un dispositivo real con el modo avión puesto. Lleva pendiente desde que no había dónde desplegar
 - [ ] T089 Verificar C7 y C8 de esta feature **en un dispositivo real**: hermanos compartiendo teléfono y sesión caducada al borde de la piscina. No se pueden comprobar de verdad en un navegador de escritorio
-- [ ] T090 Pasar las cuatro puertas de calidad en orden: `flutter analyze`, `flutter test`, `npm --prefix firebase test` y `dart run tool/verificar_metodologia.dart`
+- [X] T090 Pasar las cuatro puertas de calidad en orden: `flutter analyze`, `flutter test`, `npm --prefix firebase test` y `dart run tool/verificar_metodologia.dart`
 
 ---
 
