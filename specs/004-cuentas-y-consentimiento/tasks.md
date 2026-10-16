@@ -230,10 +230,10 @@ ejercer.
 comprobando que lo exportado es legible y que **los planes del entrenador siguen ahí**
 (escenario V14).
 
-- [ ] T076 [US5] Implementar la consulta de qué se guarda sobre un nadador, **en términos comprensibles para un acudiente** y no como un volcado técnico (FR-036)
-- [ ] T077 [US5] Conectar la exportación de los datos del nadador reutilizando `lib/datos/exportacion.dart`, que la feature 001 ya construyó (FR-037)
-- [ ] T078 [US5] Implementar la eliminación de los datos personales de un nadador, apoyándose en `RepositorioRegistros.eliminarDe` que ya existe desde la 003 (FR-038). **Ojo con las subcolecciones**: en Firestore no se borran con su documento padre, se quedan huérfanas pero legibles. Apareció al escribir las pruebas de consentimiento, donde el historial sobrevivía a la limpieza. Borrar el consentimiento de un nadador sin recorrer su `historial/` dejaría en pie justo lo que hay que borrar
-- [ ] T079 [P] [US5] Escribir en `test/datos/borrado_sin_destruir_test.dart` el criterio SC-014: eliminados los datos personales de un nadador, **los planes del entrenador siguen siendo consultables**
+- [X] T076 [US5] Implementar la consulta de qué se guarda sobre un nadador, **en términos comprensibles para un acudiente** y no como un volcado técnico (FR-036)
+- [X] T077 [US5] Conectar la exportación de los datos del nadador reutilizando `lib/datos/exportacion.dart`, que la feature 001 ya construyó (FR-037)
+- [X] T078 [US5] Implementar la eliminación de los datos personales de un nadador, apoyándose en `RepositorioRegistros.eliminarDe` que ya existe desde la 003 (FR-038). **Ojo con las subcolecciones**: en Firestore no se borran con su documento padre, se quedan huérfanas pero legibles. Apareció al escribir las pruebas de consentimiento, donde el historial sobrevivía a la limpieza. Borrar el consentimiento de un nadador sin recorrer su `historial/` dejaría en pie justo lo que hay que borrar
+- [X] T079 [P] [US5] Escribir en `test/datos/borrado_sin_destruir_test.dart` el criterio SC-014: eliminados los datos personales de un nadador, **los planes del entrenador siguen siendo consultables**
 
 ---
 
@@ -244,8 +244,8 @@ comprobando que lo exportado es legible y que **los planes del entrenador siguen
 **Independent Test**: generar, auditar y aprobar un plan sin ningún nadador con
 consentimiento, y comprobar que lo único bloqueado es la entrega.
 
-- [ ] T080 [US6] Comprobar que generar, auditar, aprobar y guardar un plan **no consulta la puerta en ningún punto**: el trabajo del entrenador es su obra profesional y no son datos personales de nadie
-- [ ] T081 [P] [US6] Escribir en `test/ui/planes/trabajar_sin_consentimientos_test.dart` el recorrido completo sin un solo nadador con consentimiento, terminando en el intento de publicar, que es el único que se deniega
+- [X] T080 [US6] Comprobar que generar, auditar, aprobar y guardar un plan **no consulta la puerta en ningún punto**: el trabajo del entrenador es su obra profesional y no son datos personales de nadie
+- [X] T081 [P] [US6] Escribir en `test/ui/planes/trabajar_sin_consentimientos_test.dart` el recorrido completo sin un solo nadador con consentimiento, terminando en el intento de publicar, que es el único que se deniega
 
 ---
 
